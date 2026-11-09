@@ -24,8 +24,8 @@ In Progress — Module 3
 - [x] Create the project repository
 - [x] Create a Python virtual environment
 - [x] Install required packages
-- [ ] Verify PyTorch installation
-- [ ] Check GPU availability
+- [x] Verify PyTorch installation (v2.15.0)
+- [x] Check GPU availability (Apple Metal MPS: True)
 - [x] Verify image libraries
 - [x] Configure Git
 - [x] Create initial folders
