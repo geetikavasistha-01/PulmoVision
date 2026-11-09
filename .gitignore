@@ -27,6 +27,7 @@ env/
 .env
 .env.local
 .env.production
+.env
 
 # Data — never commit raw datasets or patient data
 data/raw/

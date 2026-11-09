@@ -12,3 +12,4 @@
 | **Grad-CAM** | Shows correlated regions, not causal explanations |
 | **Deployment** | CPU-only inference may be slow for large uploads |
 | **Single dataset** | No multi-source external validation unless explicitly added |
+

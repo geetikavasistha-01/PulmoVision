@@ -18,32 +18,32 @@ In Progress — Module 0
 - [x] Understand project limitations
 - [x] Create the initial README
 - [x] Create the project roadmap
-- [ ] Complete knowledge assessment
+- [x] Complete knowledge assessment
 
 ### Module 1 — Development Environment
-- [ ] Create the project repository
-- [ ] Create a Python virtual environment
-- [ ] Install required packages
+- [x] Create the project repository
+- [x] Create a Python virtual environment
+- [x] Install required packages
 - [ ] Verify PyTorch installation
 - [ ] Check GPU availability
-- [ ] Verify image libraries
-- [ ] Configure Git
-- [ ] Create initial folders
-- [ ] Run a small test script
-- [ ] Document environment versions
+- [x] Verify image libraries
+- [x] Configure Git
+- [x] Create initial folders
+- [x] Run a small test script
+- [x] Document environment versions
 
 ### Module 2 — Dataset Discovery and Audit
-- [ ] Explore available dataset APIs
-- [ ] Configure programmatic access
-- [ ] Discover the selected dataset
-- [ ] Inspect metadata
-- [ ] Inspect image formats
-- [ ] Inspect sample images
-- [ ] Understand all class labels
-- [ ] Identify patient identifiers
-- [ ] Identify duplicate records
-- [ ] Check class distribution
-- [ ] Generate an audit report
+- [x] Explore available dataset APIs
+- [x] Configure programmatic access
+- [x] Discover the selected dataset
+- [x] Inspect metadata
+- [x] Inspect image formats
+- [x] Inspect sample images
+- [x] Understand all class labels
+- [x] Identify patient identifiers
+- [x] Identify duplicate records
+- [x] Check class distribution
+- [x] Generate an audit report
 - [ ] Approve the dataset for processing
 
 ### Module 3 — Medical Image Processing

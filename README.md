@@ -89,3 +89,4 @@ Educational research project. Dataset used under CC BY 4.0.
 ## Disclaimer
 
 This application is a research prototype for educational purposes only. It does not provide medical advice, diagnosis, or treatment recommendations.
+
