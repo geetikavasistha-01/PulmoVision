@@ -1,10 +1,10 @@
 # PulmoVision Progress Tracker
 
 ## Current Module
-Module 0 — Project Foundations
+Module 3 — Medical Image Processing
 
 ## Overall Progress
-In Progress — Module 0
+In Progress — Module 3
 
 ## Module Checklist
 
@@ -44,7 +44,7 @@ In Progress — Module 0
 - [x] Identify duplicate records
 - [x] Check class distribution
 - [x] Generate an audit report
-- [ ] Approve the dataset for processing
+- [x] Approve the dataset for processing
 
 ### Module 3 — Medical Image Processing
 - [ ] Load sample images
@@ -185,13 +185,14 @@ In Progress — Module 0
 - [ ] Prepare technical interview explanations
 
 ## Current Concept
-Module 0 — Knowledge assessment (final item)
+Module 3, Concept 1 — 16-bit CT Intensities, Windowing & Normalisation
 
 ## Concepts Completed
 - 2D vs 2.5D vs 3D modelling
 - System architecture (training pipeline + inference app)
-- Dataset selection: COVID-CTset approved
+- Dataset selection: COVID-CTset (Primary) + InRad (External)
 - Project limitations documented
+- Dataset Audit & Zero-Leakage Split verification
 
 ## Pending Questions
 - None
@@ -206,8 +207,10 @@ Module 0 — Knowledge assessment (final item)
 - [x] docs/PROJECT_PROGRESS.md
 - [x] .gitignore
 - [x] .env.example
+- [x] reports/dataset_audit/COVID_CTSET_AUDIT.md
+- [x] src/data/dataset_audit.py
 - [x] Project folder structure
 
 ## Next Action
-Complete Module 0 knowledge assessment, then begin Module 1.
+Implement and validate the CT Preprocessing pipeline (Module 3).
 
