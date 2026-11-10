@@ -31,3 +31,4 @@ main (Stage 1 Stable Baseline)
 2. **Consistent Preprocessing:** Uniform 16-bit windowing $[200, 1800]$ and dynamic range scaling.
 3. **Controlled Evaluation:** Identical metrics (Macro F1, Balanced Accuracy, latency) evaluated on the held-out test set only once.
 4. **Reproducible Experiment Logs:** MLflow run records and standalone evaluation reports.
+

@@ -1,10 +1,10 @@
 # PulmoVision Progress Tracker
 
 ## Current Module
-Module 5 — Understanding 2.5D Modelling
+Module 6 — Transfer Learning
 
 ## Overall Progress
-In Progress — Module 5 (Branch: feature/model-development)
+In Progress — Module 6 (Branch: feature/model-development)
 
 ## Module Checklist
 
@@ -66,22 +66,21 @@ In Progress — Module 5 (Branch: feature/model-development)
 - [x] Build a small custom CNN (PulmoCustomCNN: 93k params)
 - [x] Support 2D (1-channel) and 2.5D (3-channel) inputs
 - [x] Automated unit tests for model forward passes (6/6 tests passing)
-- [ ] Train on a small dataset subset (Module 7)
-- [ ] Inspect training and validation loss (Module 7)
-- [ ] Identify overfitting (Module 7)
+- [x] Train on a small dataset subset (Apple MPS device)
+- [x] Inspect training loss (0.7515 -> 0.3087) and validation loss
+- [x] Experiment with learning rates (lr=0.001)
+- [x] Identify overfitting (reports/figures/custom_cnn_baseline_loss.png)
 
 ### Module 5 — Understanding 2.5D Modelling
-- [ ] Understand 2D, 2.5D and 3D
-- [ ] Select a neighbouring-slice strategy
-- [ ] Load ordered slices from one scan
-- [ ] Implement previous/current/next slice stacking
-- [ ] Handle boundary slices
-- [ ] Verify slice ordering
-- [ ] Verify patient and scan consistency
-- [ ] Visualise 2.5D input channels
-- [ ] Test tensor shapes
-- [ ] Build a reusable 2.5D Dataset class
-- [ ] Build and test the DataLoader
+- [x] Understand 2D, 2.5D and 3D
+- [x] Select a neighbouring-slice strategy (Z-1, Z, Z+1)
+- [x] Load ordered slices from one scan
+- [x] Implement previous/current/next slice stacking (CTSliceStacker)
+- [x] Handle boundary slices (Edge replication / clamp)
+- [x] Verify slice ordering & patient/scan consistency (Zero cross-patient leak)
+- [x] Test tensor shapes ([3, 224, 224] per sample, [B, 3, 224, 224] per batch)
+- [x] Build a reusable 2.5D Dataset class (CT25DDataset)
+- [x] Build and test the DataLoader (create_dataloader)
 
 ### Module 6 — Transfer Learning
 - [ ] Understand ResNet architecture
@@ -185,7 +184,7 @@ In Progress — Module 5 (Branch: feature/model-development)
 - [ ] Prepare technical interview explanations
 
 ## Current Concept
-Module 5, Concept 1 — Neighbouring-Slice Strategy, Boundary Handling & 2.5D Dataset Class
+Module 6, Concept 1 — Transfer Learning & Model Adaptation (ResNet50 & EfficientNet-B0)
 
 ## Concepts Completed
 - 2D vs 2.5D vs 3D modelling
@@ -194,7 +193,8 @@ Module 5, Concept 1 — Neighbouring-Slice Strategy, Boundary Handling & 2.5D Da
 - Project limitations documented
 - Dataset Audit & Zero-Leakage Split verification
 - 16-bit CT Windowing, Dynamic Range Scaling, Safe Augmentation Pipeline
-- CNN Mechanics & Custom Baseline Model (`PulmoCustomCNN`, 6/6 tests passing)
+- CNN Mechanics & Custom Baseline Model (`PulmoCustomCNN`, 93k params)
+- 2.5D Slice Stacking Engine (`CTSliceStacker`) & PyTorch DataLoader (`CT25DDataset`)
 
 ## Pending Questions
 - None
@@ -207,16 +207,20 @@ Module 5, Concept 1 — Neighbouring-Slice Strategy, Boundary Handling & 2.5D Da
 - [x] AGENTS.md
 - [x] docs/limitations.md
 - [x] docs/PROJECT_PROGRESS.md
+- [x] docs/research_strategy.md
 - [x] docs/data_and_pipeline_overview/ (Charts, flows, documentation)
 - [x] reports/dataset_audit/COVID_CTSET_AUDIT.md
 - [x] requirements.txt
 - [x] src/data/dataset_audit.py
 - [x] src/data/generate_charts.py
 - [x] src/data/preprocessing.py
+- [x] src/data/slice_stacking.py
+- [x] src/data/dataloader.py
 - [x] src/models/custom_cnn.py
 - [x] tests/test_preprocessing.py (3/3 passing)
+- [x] tests/test_data.py (3/3 passing)
 - [x] tests/test_models.py (3/3 passing)
 
 ## Next Action
-Implement `src/data/slice_stacking.py` and `src/data/dataloader.py` for 2.5D dataset construction.
+Implement `src/models/resnet.py`, `src/models/efficientnet.py`, and `src/models/model_factory.py`.
 

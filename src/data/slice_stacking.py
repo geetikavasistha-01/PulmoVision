@@ -102,3 +102,4 @@ class CTSliceStacker:
                 triplets.append((p_prev, p_curr, p_next, lbl))
 
         return triplets
+
