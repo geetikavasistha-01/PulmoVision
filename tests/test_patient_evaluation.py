@@ -67,3 +67,4 @@ def test_patient_aggregation_strategies():
     # Strategy 3: mean_prob with threshold 0.35 -> should be 1 (0.40 >= 0.35)
     res3 = compute_patient_level_metrics(slice_preds, slice_targets, patient_ids, slice_scores=slice_scores, strategy="mean_prob", threshold=0.35)
     assert res3["per_patient_summary"]["patient_x"]["pred_label"] == 1
+

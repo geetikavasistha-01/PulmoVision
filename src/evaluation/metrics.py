@@ -5,17 +5,36 @@ Computes both:
 2. Patient-level aggregated diagnostic performance with unweighted per-patient accounting.
 """
 
-from typing import Dict, List, Any, Optional
+from typing import Dict, List, Any, Optional, Tuple
 import numpy as np
+
+
+def compute_wilson_ci(k: int, n: int, confidence: float = 0.95) -> Tuple[float, float]:
+    """
+    Computes Wilson score confidence interval for binomial proportion k/n.
+    Particularly robust for small sample sizes (e.g. small positive test cohorts).
+    """
+    if n == 0:
+        return 0.0, 0.0
+    import scipy.stats as stats
+    z = 1.95996  # 95% standard normal quantile
+    p = k / n
+    denominator = 1 + (z**2) / n
+    centre = (p + (z**2) / (2 * n)) / denominator
+    spread = (z * np.sqrt((p * (1 - p) / n) + (z**2) / (4 * n**2))) / denominator
+    lower = max(0.0, float(centre - spread))
+    upper = min(1.0, float(centre + spread))
+    return lower, upper
 
 
 def compute_classification_metrics(
     y_true: List[int],
     y_pred: List[int],
     y_scores: Optional[List[float]] = None,
-) -> Dict[str, float]:
+) -> Dict[str, Any]:
     """
     Computes diagnostic performance metrics for binary classification (0 = Normal, 1 = COVID).
+    Includes Wilson score confidence intervals for Sensitivity and Specificity.
     """
     y_t = np.array(y_true)
     y_p = np.array(y_pred)
@@ -30,9 +49,11 @@ def compute_classification_metrics(
 
     # Sensitivity / Recall (Class 1)
     sensitivity = tp / (tp + fn) if (tp + fn) > 0 else 0.0
+    sens_ci_low, sens_ci_high = compute_wilson_ci(tp, tp + fn)
 
     # Specificity (Class 0 True Negative Rate)
     specificity = tn / (tn + fp) if (tn + fp) > 0 else 0.0
+    spec_ci_low, spec_ci_high = compute_wilson_ci(tn, tn + fp)
 
     # Positive Predictive Value / Precision
     precision = tp / (tp + fp) if (tp + fp) > 0 else 0.0
@@ -50,7 +71,9 @@ def compute_classification_metrics(
     res = {
         "accuracy": accuracy,
         "sensitivity_recall": sensitivity,
+        "sensitivity_ci_95": (sens_ci_low, sens_ci_high),
         "specificity": specificity,
+        "specificity_ci_95": (spec_ci_low, spec_ci_high),
         "precision": precision,
         "f1_covid": f1_covid,
         "f1_normal": f1_normal,

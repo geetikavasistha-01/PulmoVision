@@ -69,3 +69,4 @@ def test_isolated_slice_fallback_mode():
     mode, meta = CTUploadValidator.validate_triplet_provenance(f_curr)
     assert mode == InferenceMode.ISOLATED_FALLBACK
     assert meta["patient_id"] == "patient100"
+

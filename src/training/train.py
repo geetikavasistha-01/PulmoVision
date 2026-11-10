@@ -132,6 +132,13 @@ def train_model(
 
     print("=" * 70)
     print(f"Training Complete! Best Validation Macro F1: {best_val_f1:.4f}")
+
+    # Restore best validation checkpoint prior to returning
+    if os.path.exists(save_path):
+        ckpt = torch.load(save_path, map_location=device)
+        model.load_state_dict(ckpt["model_state_dict"])
+        print(f"[Checkpoint] Successfully restored best weights from Epoch {ckpt['epoch']} (Val F1: {ckpt['metrics']['val_f1']:.4f})")
+
     return history
 
 
@@ -141,9 +148,10 @@ def create_real_dataloaders(
     train_manifest: str = "train_split.csv",
     val_manifest: str = "val_split.csv",
     batch_size: int = 16,
+    in_channels: int = 3,
 ) -> Tuple[DataLoader, DataLoader]:
     """
-    Constructs genuine 2.5D DataLoaders from extracted COVID-CTset files and approved split manifests.
+    Constructs genuine 2D or 2.5D DataLoaders from extracted COVID-CTset files and approved split manifests.
     Enforces that test1.csv is NEVER used as a validation partition.
     """
     import glob
@@ -180,8 +188,8 @@ def create_real_dataloaders(
     train_prep = CTPreprocessor(target_size=(224, 224), is_training=True)
     val_prep = CTPreprocessor(target_size=(224, 224), is_training=False)
 
-    train_loader = create_dataloader(train_triplets, preprocessor=train_prep, batch_size=batch_size, shuffle=True)
-    val_loader = create_dataloader(val_triplets, preprocessor=val_prep, batch_size=batch_size, shuffle=False)
+    train_loader = create_dataloader(train_triplets, preprocessor=train_prep, batch_size=batch_size, shuffle=True, in_channels=in_channels)
+    val_loader = create_dataloader(val_triplets, preprocessor=val_prep, batch_size=batch_size, shuffle=False, in_channels=in_channels)
 
     return train_loader, val_loader
 
@@ -215,7 +223,11 @@ if __name__ == "__main__":
             print(f"[Warning] '{args.data_dir}/TrainValidation' not found. Falling back to dry-run synthetic mode.")
         t_loader, v_loader = create_synthetic_dataloaders(batch_size=cfg["data"]["batch_size"])
     else:
-        t_loader, v_loader = create_real_dataloaders(data_dir=args.data_dir, batch_size=cfg["data"]["batch_size"])
+        t_loader, v_loader = create_real_dataloaders(
+            data_dir=args.data_dir,
+            batch_size=cfg["data"]["batch_size"],
+            in_channels=cfg["data"].get("in_channels", 3),
+        )
         
     train_model(cfg, t_loader, v_loader)
 

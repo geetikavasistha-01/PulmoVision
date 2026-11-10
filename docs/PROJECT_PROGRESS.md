@@ -1,7 +1,10 @@
 # PulmoVision — Master Progress Tracker
 
 ## Current Status
-🎉 **STAGE 1 COMPLETE (100% Roadmap Completed)**
+🎉 **PHASE 3 COMPLETE: FULL BASELINE EXPERIMENTAL BENCHMARK CONDUCTED**  
+- Official COVID-CTset Fold 1 archive (12,058 16-bit TIFF slices) verified and extracted.
+- Sequential benchmark of 4 architectures (Custom CNN 2D, ResNet50 2D, ResNet50 2.5D, EfficientNet-B0 2.5D) completed.
+- Full comparative research evaluation report published: `reports/experiments/EVALUATION_REPORT.md`.
 
 ## Overall Progress
 - **Module 0 — Project Foundations:** ✅ Completed
@@ -145,6 +148,28 @@
 
 ---
 
+## Phase 3 Baseline Experimental Benchmark Results
+
+- [x] **Phase 3A — Dataset Ingestion & Verification:**
+  - Complete COVID-CTset Fold 1 archive downloaded and extracted (12,058 16-bit TIFF scans).
+  - 100.0% path resolution across Train ($2,959$), Val ($777$), and Held-Out Test ($8,322$).
+  - Post-download audit published: [`reports/dataset_audit/COVID_CTSET_POST_DOWNLOAD_AUDIT.md`](file:///Users/geetikavasistha/PulmoVision/reports/dataset_audit/COVID_CTSET_POST_DOWNLOAD_AUDIT.md).
+- [x] **Phase 3B — Real-Data Smoke Test:**
+  - Executed on Custom CNN 2D: verified finite gradients, loss reduction, checkpoint restoration, and zero test-set access.
+- [x] **Phase 3C — Sequential Baseline Model Training:**
+  - **Custom CNN 2D:** $93\text{K}$ params, Best Val F1: $0.8124$, Val Acc: $81.3\%$, Frozen $\tau = 0.50$.
+  - **ResNet50 2D:** $23.5\text{M}$ params, Best Val F1: $0.9562$, Val Acc: $95.6\%$, Frozen $\tau = 0.45$.
+  - **ResNet50 2.5D:** $23.5\text{M}$ params, Best Val F1: $0.9793$, Val Acc: $97.9\%$, Frozen $\tau = 0.20$.
+  - **EfficientNet-B0 2.5D:** $4.0\text{M}$ params, Best Val F1: $0.9728$, Val Acc: $97.3\%$, Frozen $\tau = 0.20$.
+- [x] **Phase 3D — Final Held-Out Test Evaluation (`test1.csv`: 255 patients, 8,322 slices):**
+  - **ResNet50 2.5D:** Slice Acc $96.7\%$, Macro F1 $0.8727$, Spec $96.9\%$. Patient Acc **$94.1\%$**, Macro F1 **$0.8307$**, Spec **$94.1\%$** ($17/18$ TP, $223/237$ TN).
+  - **EfficientNet-B0 2.5D:** Slice Acc $96.9\%$, Macro F1 $0.8697$, Spec $97.4\%$. Patient Acc **$94.1\%$**, Macro F1 **$0.8307$**, Spec **$94.1\%$** ($17/18$ TP, $223/237$ TN) with **$82.9\%$ fewer parameters**.
+  - **Failure of 2D Custom CNN:** Test specificity collapsed to $32.1\%$ ($161$ false positive normal patients).
+  - **Single False Negative Analysis:** Only `patient11` missed across deep models due to single-slice representation (`slice_count: 1`). For all multi-slice patients, sensitivity was **$100.0\%$ (17/17)**.
+  - Published comprehensive report: [`reports/experiments/EVALUATION_REPORT.md`](file:///Users/geetikavasistha/PulmoVision/reports/experiments/EVALUATION_REPORT.md).
+
+---
+
 ## Next Milestone: Stage 2 Architecture Research
-Stage 1 is complete and ready to merge into `main`.  
+Stage 1 baselines are fully trained, verified, and benchmarked on real data.  
 Stage 2 experimental research branches (`research/cnn-lstm`, `research/3d-cnn`, `research/transformers`) will follow per [`docs/research_strategy.md`](file:///Users/geetikavasistha/PulmoVision/docs/research_strategy.md).

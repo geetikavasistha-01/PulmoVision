@@ -1,0 +1,277 @@
+{
+  "config": {
+    "id": "exp2_resnet50_2d",
+    "name": "resnet50",
+    "display_name": "ResNet50 2D",
+    "in_channels": 1,
+    "pretrained": true,
+    "lr": 0.0003,
+    "weight_decay": 0.0001,
+    "batch_size": 16,
+    "epochs": 10,
+    "patience": 3,
+    "dropout": 0.2
+  },
+  "parameter_count": 23505858,
+  "training_time_sec": 1337.2342100143433,
+  "best_epoch": 4,
+  "history": {
+    "train_loss": [
+      0.21898634754179216,
+      0.07614045920913196,
+      0.05228190734831729,
+      0.0342543985749412,
+      0.018310352446442617,
+      0.008350793868309987,
+      0.00722191394639756
+    ],
+    "val_loss": [
+      0.1925738411348831,
+      0.1779523779212742,
+      0.1537549740901756,
+      0.13478913990167682,
+      0.19225209271293964,
+      0.33456729985500316,
+      0.20738789483828868
+    ],
+    "val_acc": [
+      0.9279279279279279,
+      0.9356499356499357,
+      0.9343629343629344,
+      0.9562419562419563,
+      0.9086229086229086,
+      0.9176319176319176,
+      0.9124839124839125
+    ],
+    "val_f1": [
+      0.9274200005337746,
+      0.9355721393034826,
+      0.9341517764414009,
+      0.9561809158583352,
+      0.9084864862174846,
+      0.917630689723713,
+      0.912482607831445
+    ]
+  },
+  "frozen_threshold": 0.45000000000000007,
+  "val_slice_metrics": {
+    "accuracy": 0.9562419562419563,
+    "sensitivity_recall": 0.9861878453038674,
+    "sensitivity_ci_95": [
+      0.9680792408698397,
+      0.9940862178040905
+    ],
+    "specificity": 0.9301204819277108,
+    "specificity_ci_95": [
+      0.9014433779416118,
+      0.9509078060078857
+    ],
+    "precision": 0.9248704663212435,
+    "f1_covid": 0.9545454545454546,
+    "f1_normal": 0.9578163771712159,
+    "macro_f1": 0.9561809158583352,
+    "balanced_accuracy": 0.9581541636157891,
+    "tp": 357,
+    "tn": 386,
+    "fp": 29,
+    "fn": 5,
+    "total_samples": 777
+  },
+  "val_patient_metrics": {
+    "accuracy": 1.0,
+    "sensitivity_recall": 1.0,
+    "sensitivity_ci_95": [
+      0.7961173589253616,
+      1.0
+    ],
+    "specificity": 1.0,
+    "specificity_ci_95": [
+      0.7008558040328856,
+      1.0
+    ],
+    "precision": 1.0,
+    "f1_covid": 1.0,
+    "f1_normal": 1.0,
+    "macro_f1": 1.0,
+    "balanced_accuracy": 1.0,
+    "tp": 15,
+    "tn": 9,
+    "fp": 0,
+    "fn": 0,
+    "total_samples": 24,
+    "strategy": "positive_slice_ratio",
+    "threshold": 0.45000000000000007,
+    "total_patients": 24,
+    "per_patient_summary": {
+      "patient1": {
+        "true_label": 1,
+        "pred_label": 1,
+        "slice_count": 68,
+        "positive_slices": 68,
+        "agg_score": 1.0
+      },
+      "patient3": {
+        "true_label": 1,
+        "pred_label": 1,
+        "slice_count": 31,
+        "positive_slices": 31,
+        "agg_score": 1.0
+      },
+      "patient40": {
+        "true_label": 1,
+        "pred_label": 1,
+        "slice_count": 5,
+        "positive_slices": 5,
+        "agg_score": 1.0
+      },
+      "patient55": {
+        "true_label": 1,
+        "pred_label": 1,
+        "slice_count": 2,
+        "positive_slices": 2,
+        "agg_score": 1.0
+      },
+      "patient58": {
+        "true_label": 1,
+        "pred_label": 1,
+        "slice_count": 11,
+        "positive_slices": 11,
+        "agg_score": 1.0
+      },
+      "patient61": {
+        "true_label": 1,
+        "pred_label": 1,
+        "slice_count": 53,
+        "positive_slices": 50,
+        "agg_score": 0.9433962264150944
+      },
+      "patient68": {
+        "true_label": 1,
+        "pred_label": 1,
+        "slice_count": 15,
+        "positive_slices": 15,
+        "agg_score": 1.0
+      },
+      "patient75": {
+        "true_label": 1,
+        "pred_label": 1,
+        "slice_count": 7,
+        "positive_slices": 7,
+        "agg_score": 1.0
+      },
+      "patient84": {
+        "true_label": 1,
+        "pred_label": 1,
+        "slice_count": 31,
+        "positive_slices": 31,
+        "agg_score": 1.0
+      },
+      "patient86": {
+        "true_label": 1,
+        "pred_label": 1,
+        "slice_count": 34,
+        "positive_slices": 34,
+        "agg_score": 1.0
+      },
+      "patient97": {
+        "true_label": 1,
+        "pred_label": 1,
+        "slice_count": 47,
+        "positive_slices": 46,
+        "agg_score": 0.9787234042553191
+      },
+      "patient127": {
+        "true_label": 1,
+        "pred_label": 1,
+        "slice_count": 19,
+        "positive_slices": 19,
+        "agg_score": 1.0
+      },
+      "patient134": {
+        "true_label": 1,
+        "pred_label": 1,
+        "slice_count": 11,
+        "positive_slices": 11,
+        "agg_score": 1.0
+      },
+      "patient136": {
+        "true_label": 1,
+        "pred_label": 1,
+        "slice_count": 16,
+        "positive_slices": 15,
+        "agg_score": 0.9375
+      },
+      "patient142": {
+        "true_label": 1,
+        "pred_label": 1,
+        "slice_count": 12,
+        "positive_slices": 12,
+        "agg_score": 1.0
+      },
+      "patient149": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 36,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient151": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 31,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient158": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 36,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient160": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 40,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient166": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 28,
+        "positive_slices": 1,
+        "agg_score": 0.03571428571428571
+      },
+      "patient169": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 78,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient184": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 58,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient190": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 64,
+        "positive_slices": 28,
+        "agg_score": 0.4375
+      },
+      "patient191": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 44,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      }
+    }
+  },
+  "checkpoint_path": "reports/experiments/exp2_resnet50_2d/best_checkpoint.pth"
+}

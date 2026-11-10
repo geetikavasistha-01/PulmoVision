@@ -106,3 +106,4 @@ class CTUploadValidator:
             "indices": (idx_prev, idx_curr, idx_next),
             "status": "Provenance verified successfully.",
         }
+
