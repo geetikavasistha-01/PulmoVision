@@ -1,10 +1,10 @@
 # PulmoVision Progress Tracker
 
 ## Current Module
-Module 4 — Understanding CNNs
+Module 5 — Understanding 2.5D Modelling
 
 ## Overall Progress
-In Progress — Module 4 (Branch: feature/model-development)
+In Progress — Module 5 (Branch: feature/model-development)
 
 ## Module Checklist
 
@@ -185,7 +185,7 @@ In Progress — Module 4 (Branch: feature/model-development)
 - [ ] Prepare technical interview explanations
 
 ## Current Concept
-Module 4, Concept 1 — CNN Mechanics: Tensors, Convolutions, Kernels & Baseline Custom CNN Architecture
+Module 5, Concept 1 — Neighbouring-Slice Strategy, Boundary Handling & 2.5D Dataset Class
 
 ## Concepts Completed
 - 2D vs 2.5D vs 3D modelling
@@ -194,6 +194,7 @@ Module 4, Concept 1 — CNN Mechanics: Tensors, Convolutions, Kernels & Baseline
 - Project limitations documented
 - Dataset Audit & Zero-Leakage Split verification
 - 16-bit CT Windowing, Dynamic Range Scaling, Safe Augmentation Pipeline
+- CNN Mechanics & Custom Baseline Model (`PulmoCustomCNN`, 6/6 tests passing)
 
 ## Pending Questions
 - None
@@ -212,8 +213,10 @@ Module 4, Concept 1 — CNN Mechanics: Tensors, Convolutions, Kernels & Baseline
 - [x] src/data/dataset_audit.py
 - [x] src/data/generate_charts.py
 - [x] src/data/preprocessing.py
+- [x] src/models/custom_cnn.py
 - [x] tests/test_preprocessing.py (3/3 passing)
+- [x] tests/test_models.py (3/3 passing)
 
 ## Next Action
-Design and implement the baseline Custom CNN architecture in `src/models/custom_cnn.py`.
+Implement `src/data/slice_stacking.py` and `src/data/dataloader.py` for 2.5D dataset construction.
 
