@@ -147,27 +147,45 @@ def main():
             st.subheader("Upload 3 Adjacent CT Slices (2.5D Triplet)")
             st.caption("For genuine 2.5D spatial context, upload Slice Z-1, Slice Z, and Slice Z+1 from the same scan series.")
 
+            from src.inference.upload_validator import CTUploadValidator, UploadValidationError, InferenceMode
+
             up_prev = st.file_uploader("1. Previous Slice (Z - 1) [Optional fallback]", type=["tif", "tiff", "png", "jpg"])
             up_curr = st.file_uploader("2. Target Slice (Z) [Required]", type=["tif", "tiff", "png", "jpg"])
             up_next = st.file_uploader("3. Next Slice (Z + 1) [Optional fallback]", type=["tif", "tiff", "png", "jpg"])
 
             if up_curr is not None:
-                if st.button("Analyze Uploaded Scans"):
-                    with st.spinner("Processing scans..."):
-                        curr_arr = np.array(Image.open(up_curr), dtype=np.float32)
-                        prev_arr = np.array(Image.open(up_prev), dtype=np.float32) if up_prev else curr_arr
-                        next_arr = np.array(Image.open(up_next), dtype=np.float32) if up_next else curr_arr
+                # Validate Provenance and Filenames
+                try:
+                    mode, meta = CTUploadValidator.validate_triplet_provenance(
+                        fname_curr=up_curr.name,
+                        fname_prev=up_prev.name if up_prev else None,
+                        fname_next=up_next.name if up_next else None,
+                    )
+                    
+                    if mode == InferenceMode.FULL_25D:
+                        st.info(f"✅ **Provenance Verified:** Patient `{meta['patient_id']}`, Series `{meta['series_id']}` (Indices: {meta['indices']}) — **{mode.value}**")
+                    else:
+                        st.warning(f"⚠️ **Single-Slice Fallback Active:** Clamping target slice boundaries to simulate 3 channels.")
 
-                        res = predictor.predict(slice_z=curr_arr, slice_prev=prev_arr, slice_next=next_arr)
+                    if st.button("Analyze Uploaded Scans"):
+                        with st.spinner("Processing scans..."):
+                            curr_arr = np.array(Image.open(up_curr), dtype=np.float32)
+                            prev_arr = np.array(Image.open(up_prev), dtype=np.float32) if up_prev else curr_arr
+                            next_arr = np.array(Image.open(up_next), dtype=np.float32) if up_next else curr_arr
 
-                    st.success(f"Analysis Complete: **{res['prediction']}** ({res['confidence']:.1%} confidence)")
-                    u_col1, u_col2, u_col3 = st.columns(3)
-                    with u_col1:
-                        st.image(res["display_slice"], caption="Preprocessed Slice", use_container_width=True)
-                    with u_col2:
-                        st.image(res["heatmap"], caption="Grad-CAM Heatmap", use_container_width=True, clamp=True)
-                    with u_col3:
-                        st.image(res["overlay"], caption="Attention Overlay", use_container_width=True)
+                            res = predictor.predict(slice_z=curr_arr, slice_prev=prev_arr, slice_next=next_arr)
+
+                        st.success(f"Analysis Complete: **{res['prediction']}** ({res['confidence']:.1%} confidence)")
+                        u_col1, u_col2, u_col3 = st.columns(3)
+                        with u_col1:
+                            st.image(res["display_slice"], caption="Preprocessed Slice", use_container_width=True)
+                        with u_col2:
+                            st.image(res["heatmap"], caption="Grad-CAM Heatmap", use_container_width=True, clamp=True)
+                        with u_col3:
+                            st.image(res["overlay"], caption="Attention Overlay", use_container_width=True)
+
+                except UploadValidationError as e:
+                    st.error(f"❌ **Validation Rejected:** {str(e)}")
 
     # -------------------------------------------------------------
     # PAGE 3: MODEL INFORMATION

@@ -45,3 +45,4 @@ if __name__ == "__main__":
     # Test MPS if available
     if torch.backends.mps.is_available():
         benchmark_inference("mps", num_runs=20)
+

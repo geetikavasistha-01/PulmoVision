@@ -135,6 +135,57 @@ def train_model(
     return history
 
 
+def create_real_dataloaders(
+    data_dir: str = "data/raw",
+    metadata_dir: str = "data/metadata/Annotation/CSV",
+    train_manifest: str = "train_split.csv",
+    val_manifest: str = "val_split.csv",
+    batch_size: int = 16,
+) -> Tuple[DataLoader, DataLoader]:
+    """
+    Constructs genuine 2.5D DataLoaders from extracted COVID-CTset files and approved split manifests.
+    Enforces that test1.csv is NEVER used as a validation partition.
+    """
+    import glob
+    import pandas as pd
+    from src.data.slice_stacking import CTSliceStacker
+    from src.data.dataloader import create_dataloader
+    from src.data.preprocessing import CTPreprocessor
+    from src.data.patient_split import validate_split_integrity
+
+    train_csv = os.path.join(metadata_dir, train_manifest)
+    val_csv = os.path.join(metadata_dir, val_manifest)
+
+    # 1. Critical Anti-Leakage Safeguard
+    validate_split_integrity(val_csv, "Validation Partition")
+
+    if not (os.path.exists(train_csv) and os.path.exists(val_csv)):
+        raise FileNotFoundError(
+            f"Split manifests not found: '{train_csv}' or '{val_csv}'. "
+            f"Please run 'python src/data/patient_split.py' first."
+        )
+
+    df_train = pd.read_csv(train_csv)
+    df_val = pd.read_csv(val_csv)
+
+    # Locate image files on disk
+    train_paths = [os.path.join(data_dir, "TrainValidation", f) for f in df_train["filename"] if os.path.exists(os.path.join(data_dir, "TrainValidation", f))]
+    val_paths = [os.path.join(data_dir, "TrainValidation", f) for f in df_val["filename"] if os.path.exists(os.path.join(data_dir, "TrainValidation", f))]
+
+    print(f"[DataLoader] Found {len(train_paths):,} train slice files, {len(val_paths):,} val slice files on disk.")
+
+    train_triplets = CTSliceStacker.generate_triplets(train_paths)
+    val_triplets = CTSliceStacker.generate_triplets(val_paths)
+
+    train_prep = CTPreprocessor(target_size=(224, 224), is_training=True)
+    val_prep = CTPreprocessor(target_size=(224, 224), is_training=False)
+
+    train_loader = create_dataloader(train_triplets, preprocessor=train_prep, batch_size=batch_size, shuffle=True)
+    val_loader = create_dataloader(val_triplets, preprocessor=val_prep, batch_size=batch_size, shuffle=False)
+
+    return train_loader, val_loader
+
+
 def create_synthetic_dataloaders(batch_size: int = 16) -> Tuple[DataLoader, DataLoader]:
     """
     Creates mock 2.5D [3, 224, 224] dataloaders for verification & pipeline dry-runs.
@@ -154,9 +205,17 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="PulmoVision Model Training")
     parser.add_argument("--config", type=str, default="configs/training.yaml")
     parser.add_argument("--dry-run", action="store_true", help="Run with synthetic verification batches")
+    parser.add_argument("--data-dir", type=str, default="data/raw", help="Path to raw dataset directory")
     args = parser.parse_args()
 
     cfg = load_config(args.config)
-    t_loader, v_loader = create_synthetic_dataloaders(batch_size=cfg["data"]["batch_size"])
+    
+    if args.dry_run or not os.path.exists(os.path.join(args.data_dir, "TrainValidation")):
+        if not args.dry_run:
+            print(f"[Warning] '{args.data_dir}/TrainValidation' not found. Falling back to dry-run synthetic mode.")
+        t_loader, v_loader = create_synthetic_dataloaders(batch_size=cfg["data"]["batch_size"])
+    else:
+        t_loader, v_loader = create_real_dataloaders(data_dir=args.data_dir, batch_size=cfg["data"]["batch_size"])
+        
     train_model(cfg, t_loader, v_loader)
 

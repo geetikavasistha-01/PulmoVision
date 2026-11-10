@@ -101,12 +101,32 @@
 - [x] Publish deployment guide: `docs/deployment_guide.md`
 
 ### Module 12 — Testing, Documentation & Packaging
-- [x] Automated test suite: **20/20 unit tests passing**
+- [x] Automated test suite: **32/32 unit tests passing**
 - [x] Formal Model Card: `docs/model_card.md`
 - [x] System Architecture Document: `docs/architecture.md`
 - [x] Medical AI Methodology Document: `docs/methodology.md`
 - [x] Technical Interview Q&A Guide: `docs/interview_guide.md`
 - [x] Two-Stage Research Strategy Document: `docs/research_strategy.md`
+
+---
+
+## Phase 1 Audit & Pre-Training Corrections
+- [x] **Patient-Level Split Stratification (`src/data/patient_split.py`):**
+  - Partitioned `train1.csv` development set (122 patients) into Train (98 patients) and Val (24 patients) using fixed seed (42).
+  - Preserved class proportions: Train (62 Pos, 36 Neg; 2,959 slices), Val (15 Pos, 9 Neg; 777 slices).
+  - Maintained complete zero-overlap across all 3 sets ($\text{Train} \cap \text{Val} = \emptyset$, $\text{Train} \cap \text{Test} = \emptyset$, $\text{Val} \cap \text{Test} = \emptyset$).
+  - `test1.csv` remains strictly untouched (255 patients, 8,322 slices).
+  - Enforced `validate_split_integrity()` safeguards in `src/training/train.py` to prevent test-set data leakage.
+- [x] **Patient-Level Evaluation Suite (`src/evaluation/metrics.py`):**
+  - Added `compute_patient_level_metrics()` supporting `positive_slice_ratio`, `mean_prob`, and `majority_vote`.
+  - Enforced unweighted equal patient evaluation ($1.0$ weight per patient regardless of slice count).
+- [x] **Streamlit Upload Validation & Provenance (`src/inference/upload_validator.py`):**
+  - Validates image extensions (`.tif`, `.tiff`, `.png`, `.jpg`, `.jpeg`).
+  - Verifies cross-slice patient and series provenance; enforces slice index ordering.
+  - Distinct mode display: Full 2.5D Mode vs Isolated-Slice Fallback Mode.
+- [x] **Automated Regression & Verification Tests:**
+  - Added 12 new tests across patient splitting, patient metrics, and upload validation.
+  - Complete test suite: **32 passed in ~12s**.
 
 ---
 

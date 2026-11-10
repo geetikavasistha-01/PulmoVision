@@ -70,3 +70,4 @@ This guide prepares you to discuss the architecture, engineering decisions, and 
 > 2. **Full 3D CNNs:** Benchmarking volumetric 3D kernels against our 2.5D baseline.
 > 3. **Vision Transformers (ViT / Swin):** Evaluating self-attention across CT patches to capture global contextual relationships.  
 > All experiments will strictly reuse the identical patient-level split to ensure fair, scientific comparisons.
+

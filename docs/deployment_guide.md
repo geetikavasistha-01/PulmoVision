@@ -81,3 +81,4 @@ docker run -p 8501:8501 pulmovision:latest
 | **Headless UI** | `.streamlit/config.toml` (`headless = true`, `gatherUsageStats = false`) | Strips browser telemetries and disables CORS restrictions |
 | **Pruned Requirements** | `requirements-deploy.txt` ($< 300\text{MB}$) | Eliminates developer/test dependencies (`pytest`, `six`, etc.) |
 | **Single-Slice Clamp Fallback** | `CTSliceStacker` edge replication | Prevents crashes when users upload single 2D slices |
+

@@ -33,7 +33,12 @@ Following the Model Cards for Model Reporting framework (Mitchell et al., 2019).
 - **Primary Dataset:** COVID-CTset (Rahimzadeh et al., 2021)
 - **Source Center:** Negin Medical Center, Sari, Iran (Siemens SOMATOM Scope HRCT)
 - **Cohort Size:** 377 unique patients (95 Positive, 282 Negative)
-- **Data Partitioning:** Strict patient-level split (Fold 1: 122 train patients, 255 held-out test patients; **0 patient overlap**)
+- **Data Partitioning Protocol (Zero Leakage):**
+  - **Train Partition (`train_split.csv`):** 98 patients (62 Pos, 36 Neg) | 2,959 slices
+  - **Internal Validation (`val_split.csv`):** 24 patients (15 Pos, 9 Neg) | 777 slices
+  - **Held-Out Test (`test1.csv`):** 255 patients | 8,322 slices (**Untouched**)
+  - **Patient Overlaps:** Train ∩ Val = 0, Train ∩ Test = 0, Val ∩ Test = 0.
+- **Important Checkpoint Note:** The baseline weights in `models/best_model.pth` were generated via **synthetic verification batches** to validate Apple Metal MPS acceleration, loss convergence, and Grad-CAM hooks. Full-scale model training across all 377 patients will follow in Phase 3.
 - **Preprocessing:** 16-bit TIFF radiodensity windowing $[200, 1800]$, dynamic range scaling to $[0.0, 1.0]$, bilinear resize to $224 \times 224$.
 
 ---
@@ -58,3 +63,4 @@ Evaluated on held-out patient-level test split:
 1. **Single-Institution Bias:** Data originated from a single center in Iran; models trained on this cohort may degrade when presented with scans from different scanner manufacturers (GE, Philips, Toshiba) or differing slice thickness protocols.
 2. **Imbalanced Classes:** The $\approx 1:3$ ratio necessitates class-weighted cross-entropy loss.
 3. **Interpretability Caution:** Grad-CAM displays areas of high activation, but these correlate with statistical patterns, not verified clinical pathology.
+
