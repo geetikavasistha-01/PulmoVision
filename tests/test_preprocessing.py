@@ -48,3 +48,4 @@ def test_compare_normalizations():
     for name, arr in res.items():
         assert arr.shape == (100, 100)
         assert 0.0 <= arr.min() <= arr.max() <= 1.0
+

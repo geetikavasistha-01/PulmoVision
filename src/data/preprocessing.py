@@ -110,3 +110,4 @@ def compare_normalizations(raw_arr: np.ndarray) -> dict:
         "percentile_1_99": percentile,
         "lung_window": windowed,
     }
+
