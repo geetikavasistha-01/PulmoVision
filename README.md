@@ -7,7 +7,7 @@
 
 ---
 
-## 📋 Developer & Architecture Guide (FAQ)
+## 📋 Developer & Architecture Guide 
 
 ### 1. What does this project do?
 PulmoVision classifies chest CT scans into research categories (COVID-19 vs. Normal) using **2.5D deep learning**. Instead of analyzing single isolated 2D slices or requiring computationally heavy 3D convolutions, it stacks adjacent anatomical slices into multi-channel inputs, capturing through-plane spatial depth while generating Grad-CAM visual heatmaps.
