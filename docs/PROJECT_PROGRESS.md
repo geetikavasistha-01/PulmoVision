@@ -1,10 +1,10 @@
 # PulmoVision Progress Tracker
 
 ## Current Module
-Module 3 — Medical Image Processing
+Module 4 — Understanding CNNs
 
 ## Overall Progress
-In Progress — Module 3
+In Progress — Module 4 (Branch: feature/model-development)
 
 ## Module Checklist
 
@@ -59,16 +59,16 @@ In Progress — Module 3
 - [x] Validate preprocessing outputs (automated pytest: 3/3 passed)
 
 ### Module 4 — Understanding CNNs
-- [ ] Understand tensor shapes
-- [ ] Implement a convolution operation
-- [ ] Visualise feature maps
-- [ ] Understand pooling
-- [ ] Build a small CNN
-- [ ] Train on a small dataset subset
-- [ ] Inspect training loss
-- [ ] Inspect validation loss
-- [ ] Experiment with learning rates
-- [ ] Identify overfitting
+- [x] Understand tensor shapes [B, C, H, W]
+- [x] Implement a convolution operation & ConvBlock
+- [x] Visualise feature maps & pooling transitions
+- [x] Understand pooling & global average pooling
+- [x] Build a small custom CNN (PulmoCustomCNN: 93k params)
+- [x] Support 2D (1-channel) and 2.5D (3-channel) inputs
+- [x] Automated unit tests for model forward passes (6/6 tests passing)
+- [ ] Train on a small dataset subset (Module 7)
+- [ ] Inspect training and validation loss (Module 7)
+- [ ] Identify overfitting (Module 7)
 
 ### Module 5 — Understanding 2.5D Modelling
 - [ ] Understand 2D, 2.5D and 3D
@@ -185,7 +185,7 @@ In Progress — Module 3
 - [ ] Prepare technical interview explanations
 
 ## Current Concept
-Module 3, Concept 1 — 16-bit CT Intensities, Windowing & Normalisation
+Module 4, Concept 1 — CNN Mechanics: Tensors, Convolutions, Kernels & Baseline Custom CNN Architecture
 
 ## Concepts Completed
 - 2D vs 2.5D vs 3D modelling
@@ -193,6 +193,7 @@ Module 3, Concept 1 — 16-bit CT Intensities, Windowing & Normalisation
 - Dataset selection: COVID-CTset (Primary) + InRad (External)
 - Project limitations documented
 - Dataset Audit & Zero-Leakage Split verification
+- 16-bit CT Windowing, Dynamic Range Scaling, Safe Augmentation Pipeline
 
 ## Pending Questions
 - None
@@ -201,16 +202,18 @@ Module 3, Concept 1 — 16-bit CT Intensities, Windowing & Normalisation
 - None
 
 ## Deliverables
-- [x] README.md
+- [x] README.md (including 8-question developer Q&A)
 - [x] AGENTS.md
 - [x] docs/limitations.md
 - [x] docs/PROJECT_PROGRESS.md
-- [x] .gitignore
-- [x] .env.example
+- [x] docs/data_and_pipeline_overview/ (Charts, flows, documentation)
 - [x] reports/dataset_audit/COVID_CTSET_AUDIT.md
+- [x] requirements.txt
 - [x] src/data/dataset_audit.py
-- [x] Project folder structure
+- [x] src/data/generate_charts.py
+- [x] src/data/preprocessing.py
+- [x] tests/test_preprocessing.py (3/3 passing)
 
 ## Next Action
-Implement and validate the CT Preprocessing pipeline (Module 3).
+Design and implement the baseline Custom CNN architecture in `src/models/custom_cnn.py`.
 
