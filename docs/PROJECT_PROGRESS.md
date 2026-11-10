@@ -95,15 +95,15 @@ In Progress — Module 6 (Branch: feature/model-development)
 - [x] Verify model output dimensions (Shape [B, 2])
 
 ### Module 7 — Model Training
-- [ ] Create training configuration (configs/training.yaml)
-- [ ] Implement training loop (src/training/train.py)
-- [ ] Implement validation loop (src/training/validate.py)
-- [ ] Configure loss function with class weighting
-- [ ] Configure optimizer & learning-rate scheduling
-- [ ] Add checkpoint saving and early stopping
-- [ ] Track experiments (MLflow / logs)
-- [ ] Train 2.5D EfficientNet-B0 on Apple Metal MPS
-- [ ] Save best validation checkpoint (models/best_model.pth)
+- [x] Create training configuration (configs/training.yaml)
+- [x] Implement training loop (src/training/train.py)
+- [x] Implement validation loop (src/training/validate.py)
+- [x] Configure loss function with class weighting ([0.67, 2.0] for 1:3 ratio)
+- [x] Configure optimizer & learning-rate scheduling (AdamW + CosineAnnealingLR)
+- [x] Add checkpoint saving and early stopping (src/training/checkpoint.py)
+- [x] Track experiments (Training epoch metrics & Macro F1 logs)
+- [x] Train 2.5D EfficientNet-B0 on Apple Metal MPS
+- [x] Save best validation checkpoint (models/best_model.pth: 46MB)
 
 ### Module 8 — Model Evaluation
 - [ ] Evaluate on the validation set
