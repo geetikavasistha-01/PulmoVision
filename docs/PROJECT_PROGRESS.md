@@ -83,32 +83,27 @@ In Progress — Module 6 (Branch: feature/model-development)
 - [x] Build and test the DataLoader (create_dataloader)
 
 ### Module 6 — Transfer Learning
-- [ ] Understand ResNet architecture
-- [ ] Understand DenseNet architecture
-- [ ] Understand EfficientNet architecture
-- [ ] Load pretrained weights
-- [ ] Replace classification heads
-- [ ] Understand input-channel requirements
-- [ ] Compare parameter counts
-- [ ] Compare inference requirements
-- [ ] Run initial forward passes
-- [ ] Verify model output dimensions
+- [x] Understand ResNet architecture (Residual skip connections)
+- [x] Understand DenseNet architecture (Dense feature reuse)
+- [x] Understand EfficientNet architecture (Compound scaling)
+- [x] Load pretrained weights (Torchvision ImageNet-1K)
+- [x] Replace classification heads (Dropout 0.3 + Linear in_features -> 2)
+- [x] Understand input-channel requirements (3 channels for 2.5D CT stack)
+- [x] Compare parameter counts (Custom: 93k, EfficientNet: 4M, DenseNet: 6.9M, ResNet: 23.5M)
+- [x] Compare inference requirements (EfficientNet-B0 selected for deployment)
+- [x] Run initial forward passes (Automated test suite: 16/16 passed)
+- [x] Verify model output dimensions (Shape [B, 2])
 
 ### Module 7 — Model Training
-- [ ] Create training configuration
-- [ ] Implement training loop
-- [ ] Implement validation loop
-- [ ] Configure loss function
-- [ ] Configure optimizer
-- [ ] Add learning-rate scheduling
-- [ ] Add checkpoint saving
-- [ ] Add early stopping
-- [ ] Track experiments with MLflow
-- [ ] Train the baseline
-- [ ] Train 2.5D ResNet
-- [ ] Train 2.5D EfficientNet
-- [ ] Compare experiments
-- [ ] Save the best validation checkpoint
+- [ ] Create training configuration (configs/training.yaml)
+- [ ] Implement training loop (src/training/train.py)
+- [ ] Implement validation loop (src/training/validate.py)
+- [ ] Configure loss function with class weighting
+- [ ] Configure optimizer & learning-rate scheduling
+- [ ] Add checkpoint saving and early stopping
+- [ ] Track experiments (MLflow / logs)
+- [ ] Train 2.5D EfficientNet-B0 on Apple Metal MPS
+- [ ] Save best validation checkpoint (models/best_model.pth)
 
 ### Module 8 — Model Evaluation
 - [ ] Evaluate on the validation set

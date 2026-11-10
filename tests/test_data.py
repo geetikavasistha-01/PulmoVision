@@ -86,3 +86,4 @@ def test_dataset_and_dataloader_batch_shape():
     assert batch_tensors.shape == (2, 3, 224, 224), f"Expected (2, 3, 224, 224), got {batch_tensors.shape}"
     assert batch_labels.shape == (2,)
     assert not torch.isnan(batch_tensors).any()
+

@@ -59,3 +59,4 @@ class PulmoResNet50(nn.Module):
         total = sum(p.numel() for p in self.parameters())
         trainable = sum(p.numel() for p in self.parameters() if p.requires_grad)
         return total, trainable
+
