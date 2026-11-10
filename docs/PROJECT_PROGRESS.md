@@ -126,13 +126,13 @@ In Progress — Module 6 (Branch: feature/model-development)
 - [x] Document interpretability limitations
 
 ### Module 10 — Streamlit Application
-- [ ] Create Streamlit entry point (app/streamlit_app.py)
-- [ ] Design landing page with project overview & disclaimers
-- [ ] Add CT image upload with 2.5D neighbour slice validation
-- [ ] Implement preprocessing & cached model loading
-- [ ] Display predictions, class probabilities, and Grad-CAM
-- [ ] Add model info, methodology & limitations tabs
-- [ ] Test application responsiveness
+- [x] Create Streamlit entry point (app/streamlit_app.py)
+- [x] Design landing page with project overview & disclaimers
+- [x] Add CT image upload with 2.5D neighbour slice validation
+- [x] Implement preprocessing & cached model loading (@st.cache_resource)
+- [x] Display predictions, class probabilities, and Grad-CAM
+- [x] Add model info, methodology & limitations tabs
+- [x] Test application responsiveness (20/20 unit tests passing)
 
 ### Module 11 — Deployment and Optimisation
 - [ ] Create deployment requirements
@@ -168,7 +168,7 @@ In Progress — Module 6 (Branch: feature/model-development)
 - [ ] Prepare technical interview explanations
 
 ## Current Concept
-Module 6, Concept 1 — Transfer Learning & Model Adaptation (ResNet50 & EfficientNet-B0)
+Module 10 Completed — Ready for Modules 11 & 12 (Deployment & Final Packaging)
 
 ## Concepts Completed
 - 2D vs 2.5D vs 3D modelling
@@ -179,6 +179,11 @@ Module 6, Concept 1 — Transfer Learning & Model Adaptation (ResNet50 & Efficie
 - 16-bit CT Windowing, Dynamic Range Scaling, Safe Augmentation Pipeline
 - CNN Mechanics & Custom Baseline Model (`PulmoCustomCNN`, 93k params)
 - 2.5D Slice Stacking Engine (`CTSliceStacker`) & PyTorch DataLoader (`CT25DDataset`)
+- Transfer Learning Backbones (ResNet50, EfficientNet-B0, DenseNet121) & Unified Model Factory
+- Model Training Loop, Class-Weighted Loss, Early Stopping & Checkpoint Saving
+- Quantitative Evaluation (Macro F1, Sensitivity, Specificity, Confusion Matrix)
+- Explainable AI: Hook-based Grad-CAM & Multi-Panel Visualization
+- Interactive Multi-Page Streamlit Web Application
 
 ## Pending Questions
 - None
@@ -194,17 +199,32 @@ Module 6, Concept 1 — Transfer Learning & Model Adaptation (ResNet50 & Efficie
 - [x] docs/research_strategy.md
 - [x] docs/data_and_pipeline_overview/ (Charts, flows, documentation)
 - [x] reports/dataset_audit/COVID_CTSET_AUDIT.md
+- [x] reports/experiments/EVALUATION_REPORT.md
+- [x] reports/figures/confusion_matrix.png
+- [x] reports/figures/gradcam_sample.png
 - [x] requirements.txt
+- [x] configs/training.yaml
 - [x] src/data/dataset_audit.py
 - [x] src/data/generate_charts.py
 - [x] src/data/preprocessing.py
 - [x] src/data/slice_stacking.py
 - [x] src/data/dataloader.py
 - [x] src/models/custom_cnn.py
-- [x] tests/test_preprocessing.py (3/3 passing)
-- [x] tests/test_data.py (3/3 passing)
-- [x] tests/test_models.py (3/3 passing)
+- [x] src/models/resnet.py
+- [x] src/models/efficientnet.py
+- [x] src/models/densenet.py
+- [x] src/models/model_factory.py
+- [x] src/training/checkpoint.py
+- [x] src/training/train.py
+- [x] src/training/validate.py
+- [x] src/evaluation/metrics.py
+- [x] src/evaluation/confusion_matrix.py
+- [x] src/evaluation/error_analysis.py
+- [x] src/explainability/gradcam.py
+- [x] src/inference/predictor.py
+- [x] app/streamlit_app.py
+- [x] tests/ (20/20 unit tests passing)
 
 ## Next Action
-Implement `src/models/resnet.py`, `src/models/efficientnet.py`, and `src/models/model_factory.py`.
+Proceed with Modules 11 & 12 (Deployment Optimization, Model Card, and Final Portfolio Documentation).
 
