@@ -47,16 +47,16 @@ In Progress — Module 3
 - [x] Approve the dataset for processing
 
 ### Module 3 — Medical Image Processing
-- [ ] Load sample images
-- [ ] Visualise CT slices
-- [ ] Inspect image dimensions
-- [ ] Understand pixel intensity
-- [ ] Learn windowing
-- [ ] Implement preprocessing
-- [ ] Compare different normalisation approaches
-- [ ] Implement safe augmentation
-- [ ] Visualise before-and-after images
-- [ ] Validate preprocessing outputs
+- [x] Load sample images
+- [x] Visualise CT slices
+- [x] Inspect image dimensions
+- [x] Understand pixel intensity
+- [x] Learn windowing
+- [x] Implement preprocessing
+- [x] Compare different normalisation approaches
+- [x] Implement safe augmentation
+- [x] Visualise before-and-after images
+- [x] Validate preprocessing outputs (automated pytest: 3/3 passed)
 
 ### Module 4 — Understanding CNNs
 - [ ] Understand tensor shapes

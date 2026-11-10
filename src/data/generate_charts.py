@@ -115,3 +115,4 @@ def generate_visuals():
 
 if __name__ == "__main__":
     generate_visuals()
+

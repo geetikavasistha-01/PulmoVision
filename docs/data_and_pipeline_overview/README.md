@@ -83,3 +83,4 @@ flowchart TD
    ```bash
    python src/data/generate_charts.py
    ```
+
