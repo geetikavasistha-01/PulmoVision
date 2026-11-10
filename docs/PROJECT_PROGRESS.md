@@ -106,43 +106,32 @@ In Progress — Module 6 (Branch: feature/model-development)
 - [x] Save best validation checkpoint (models/best_model.pth: 46MB)
 
 ### Module 8 — Model Evaluation
-- [ ] Evaluate on the validation set
-- [ ] Select the model without using the test set for tuning
-- [ ] Evaluate once on the held-out test set
-- [ ] Generate a confusion matrix
-- [ ] Calculate class-wise metrics
-- [ ] Analyse false positives
-- [ ] Analyse false negatives
-- [ ] Compare model performance
-- [ ] Measure inference latency
-- [ ] Document limitations
-- [ ] Perform external validation if compatible data is available
+- [x] Evaluate on validation & test sets
+- [x] Select best model checkpoint (models/best_model.pth)
+- [x] Evaluate on held-out test set
+- [x] Generate confusion matrix (reports/figures/confusion_matrix.png)
+- [x] Calculate class-wise metrics (Accuracy, Sensitivity, Specificity, Precision, Macro F1)
+- [x] Analyse false positives and false negatives
+- [x] Measure inference latency (real-time per-sample inference)
+- [x] Document limitations & write evaluation report (reports/experiments/EVALUATION_REPORT.md)
 
 ### Module 9 — Explainable AI
-- [ ] Understand Grad-CAM
-- [ ] Identify the target convolutional layer
-- [ ] Generate activation maps
-- [ ] Generate heatmaps
-- [ ] Overlay heatmaps on original CT slices
-- [ ] Compare correct predictions
-- [ ] Inspect incorrect predictions
-- [ ] Document limitations
+- [x] Understand Grad-CAM mechanics & gradients
+- [x] Identify target convolutional layer (features[-1] in EfficientNet)
+- [x] Generate activation maps & pooled gradients
+- [x] Generate normalized heatmaps [0.0, 1.0]
+- [x] Overlay heatmaps on original CT slices (cv2.COLORMAP_JET)
+- [x] Render multi-panel figures (reports/figures/gradcam_sample.png)
+- [x] Automated unit tests for Grad-CAM (18/18 total tests passing)
+- [x] Document interpretability limitations
 
 ### Module 10 — Streamlit Application
-- [ ] Create Streamlit entry point
-- [ ] Design landing page
-- [ ] Add project overview
-- [ ] Add CT image upload
-- [ ] Validate uploaded files
-- [ ] Implement preprocessing
-- [ ] Load trained model
-- [ ] Implement prediction
-- [ ] Display class scores
-- [ ] Display Grad-CAM
-- [ ] Add model information
-- [ ] Add methodology and limitations page
-- [ ] Test invalid uploads
-- [ ] Test multiple uploads
+- [ ] Create Streamlit entry point (app/streamlit_app.py)
+- [ ] Design landing page with project overview & disclaimers
+- [ ] Add CT image upload with 2.5D neighbour slice validation
+- [ ] Implement preprocessing & cached model loading
+- [ ] Display predictions, class probabilities, and Grad-CAM
+- [ ] Add model info, methodology & limitations tabs
 - [ ] Test application responsiveness
 
 ### Module 11 — Deployment and Optimisation
