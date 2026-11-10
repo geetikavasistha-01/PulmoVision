@@ -97,3 +97,4 @@ def run_full_evaluation(checkpoint_path: str = "models/best_model.pth"):
 
 if __name__ == "__main__":
     run_full_evaluation()
+

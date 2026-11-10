@@ -29,3 +29,4 @@ def test_gradcam_overlay():
     overlay = GradCAM.overlay_heatmap(dummy_heatmap, dummy_slice)
     assert overlay.shape == (224, 224, 3)
     assert overlay.dtype == np.uint8
+

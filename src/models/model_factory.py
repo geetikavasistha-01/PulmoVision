@@ -73,3 +73,4 @@ def compare_model_parameters(in_channels: int = 3, num_classes: int = 2) -> Dict
             "trainable_params": trainable
         }
     return comparison
+

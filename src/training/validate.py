@@ -71,3 +71,4 @@ def compute_macro_f1(preds: List[int], targets: List[int], num_classes: int = 2)
         f1_scores.append(f1)
 
     return sum(f1_scores) / max(1, len(f1_scores))
+

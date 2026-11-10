@@ -38,3 +38,4 @@ def test_predictor_single_slice_fallback():
     res = predictor.predict(slice_z=single_slice)
     assert res["prediction"] in ["Normal", "COVID-19"]
     assert res["overlay"].shape == (224, 224, 3)
+

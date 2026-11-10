@@ -52,3 +52,4 @@ def load_checkpoint(
 
     print(f"[Checkpoint] Loaded '{checkpoint.get('model_name')}' from {filepath} (Epoch {checkpoint.get('epoch')})")
     return checkpoint
+

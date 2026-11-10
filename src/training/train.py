@@ -159,3 +159,4 @@ if __name__ == "__main__":
     cfg = load_config(args.config)
     t_loader, v_loader = create_synthetic_dataloaders(batch_size=cfg["data"]["batch_size"])
     train_model(cfg, t_loader, v_loader)
+

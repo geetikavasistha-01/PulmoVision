@@ -119,3 +119,4 @@ class PulmoPredictor:
             "latency_ms": latency_ms,
             "device": str(self.device),
         }
+

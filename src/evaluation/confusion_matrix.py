@@ -61,3 +61,4 @@ if __name__ == "__main__":
     y_t = [0] * 30 + [1] * 10
     y_p = [0] * 28 + [1] * 2 + [0] * 2 + [1] * 8
     plot_confusion_matrix(y_t, y_p)
+
