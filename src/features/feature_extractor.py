@@ -176,12 +176,40 @@ class PretrainedFeatureExtractor:
         series_output: Dict[str, Dict[str, Any]] = {}
         patients_output: Dict[str, Dict[str, Any]] = {}
         total_slices_processed = 0
+        total_duplicates_resolved = 0
+        duplicate_provenance_map: Dict[str, Any] = {}
 
         for pid, sid in sorted_keys:
             slices = series_groups[(pid, sid)]
-            # Strict craniocaudal sorting within each series: IM00001 -> IM00084
-            slices_sorted = sorted(slices, key=lambda s: s["slice_idx"])
+            # Anatomical deduplication within (patient_id, series_id):
+            # COVID-CTset manifest contains duplicate archive prefix entries (e.g. normal1 vs normal5)
+            # with bit-for-bit identical content. Retain exactly one canonical slice per slice_idx
+            # using deterministic lexicographical filepath preference.
+            slices_by_idx: Dict[int, Dict[str, Any]] = {}
+            for s in sorted(slices, key=lambda x: x["filepath"]):
+                sidx = s["slice_idx"]
+                if sidx in slices_by_idx:
+                    total_duplicates_resolved += 1
+                    slices_by_idx[sidx].setdefault("duplicate_aliases", []).append(s["filepath"])
+                else:
+                    s_copy = s.copy()
+                    s_copy["duplicate_aliases"] = []
+                    slices_by_idx[sidx] = s_copy
+
+            # Strict craniocaudal sorting: ascending slice_idx
+            slices_sorted = [slices_by_idx[sidx] for sidx in sorted(slices_by_idx.keys())]
             paths = [s["filepath"] for s in slices_sorted]
+
+            for s in slices_sorted:
+                if s.get("duplicate_aliases"):
+                    k_str = f"{pid}_{sid}_IM{s['slice_idx']:05d}"
+                    duplicate_provenance_map[k_str] = {
+                        "canonical_filename": os.path.basename(s["filepath"]),
+                        "duplicate_aliases": [os.path.basename(a) for a in s["duplicate_aliases"]],
+                        "patient_id": pid,
+                        "series_id": sid,
+                        "slice_idx": s["slice_idx"],
+                    }
 
             label_str = slices_sorted[0]["label"]
             label_bin = 1 if "covid" in label_str.lower() else 0
@@ -199,6 +227,10 @@ class PretrainedFeatureExtractor:
                 "num_slices": len(slices_sorted),
                 "slice_indices": [s["slice_idx"] for s in slices_sorted],
                 "slice_filenames": [os.path.basename(p) for p in paths],
+                "duplicate_aliases": {
+                    s["slice_idx"]: [os.path.basename(a) for a in s["duplicate_aliases"]]
+                    for s in slices_sorted if s.get("duplicate_aliases")
+                },
                 "embeddings": embs,
             }
             series_output[series_key] = series_rec
@@ -218,6 +250,8 @@ class PretrainedFeatureExtractor:
 
         metadata = {
             "source_manifest": manifest_csv,
+            "deduplication_protocol": "Option 1 — Anatomical De-duplication (canonical single instance per (patient_id, series_id, slice_idx); duplicate archive entries preserved in duplicate_provenance)",
+            "canonical_selection_rule": "lexicographical_filepath_ascending (sorted(files)[0])",
             "backbone_identifier": self.WEIGHTS_ID,
             "weights_url": self.weights_url,
             "weights_sha256": self.get_weights_sha256(),
@@ -231,6 +265,8 @@ class PretrainedFeatureExtractor:
             "total_patients": len(patients_output),
             "total_series": len(series_output),
             "total_slices": total_slices_processed,
+            "total_manifest_rows": len(df),
+            "duplicate_slices_resolved": total_duplicates_resolved,
             "feature_dim": 1280,
             "extraction_timestamp": datetime.now(timezone.utc).isoformat(),
         }
@@ -239,6 +275,7 @@ class PretrainedFeatureExtractor:
             "metadata": metadata,
             "patients": patients_output,
             "series": series_output,
+            "duplicate_provenance": duplicate_provenance_map,
         }
 
         if output_path is not None:
