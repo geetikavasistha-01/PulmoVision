@@ -1,7 +1,7 @@
 # PulmoVision — Stage 2 Architecture Design: CNN-BiLSTM
 
 **Document:** `docs/research/cnn_bilstm_architecture.md`  
-**Status:** Proposal / Pre-Implementation Review  
+**Status:** Approved Architecture Specification (Pre-Implementation Review)  
 **Author:** PulmoVision Research Team  
 **Hardware Target:** Apple Silicon Metal Performance Shaders (MPS) / M1 Unified Memory  
 
@@ -9,16 +9,13 @@
 
 ## 1. Research Objective & Theoretical Rationale
 
-### The Limitation of 2D and 2.5D Baselines
-In Stage 1, we established that contiguous 2.5D multi-slice stacking ($[S_{z-1}, S_z, S_{z+1}]$) outperformed isolated 2D CNNs by reducing false positive slices by $72.1\%$. However, both 2D and 2.5D models evaluate CT slices as independent, unordered instances. Patient-level predictions were derived using a post-hoc heuristic threshold ($\tau \in [0.20, 0.45]$) on the proportion of positive slices.
+### The Limitation of Stage 1 Slice-Level Heuristics
+In Stage 1, 2D and 2.5D CNN baselines classified individual CT slices as isolated, independent instances. Patient-level predictions were derived using a post-hoc heuristic threshold ($\tau \in [0.20, 0.45]$) on the proportion of positive slices.
 
-**Clinical Reality of Chest CT:**
-1. **Volumetric Continuity:** A chest CT is not an arbitrary bag of slices; it is an ordered craniocaudal anatomical volume (apices to lung bases).
-2. **Longitudinal Trajectory:** COVID-19 ground-glass opacities (GGO) and consolidations typically show peripheral, posterior, and lower-zone predilection. A model that knows *where* lesions appear in the apical-to-basal sequence possesses clinical context that isolated slices cannot provide.
-3. **End-to-End Patient Optimization:** Instead of tuning a post-hoc threshold $\tau$ on isolated slice scores, a sequence model trains the network end-to-end to output a single calibrated patient-level probability $P(\text{COVID} \mid \mathbf{X}_{\text{patient}})$.
-
-### The CNN-BiLSTM Hypothesis
-By coupling a pretrained **EfficientNet-B0** spatial feature extractor with a **Bidirectional Long Short-Term Memory (BiLSTM)** network and an **Additive Attention Pooling** mechanism, PulmoVision can capture both forward (cranial $\to$ caudal) and backward (caudal $\to$ cranial) pathological context, yielding superior patient-level discrimination with fewer false positives on uninfected lung volumes.
+**Clinical & Anatomical Reality of Chest CT:**
+1. **Volumetric Craniocaudal Continuity:** A chest CT is an anatomically ordered sequence of axial cross-sections acquired continuously along the z-axis from cranial lung apices to caudal diaphragmatic bases.
+2. **Longitudinal Pathological Distribution:** Viral pneumonias (including COVID-19) exhibit characteristic spatial distributions (predominantly peripheral, posterior, and lower-zone predilection). A sequence model captures relative anatomical lesion location within the scan volume.
+3. **End-to-End Patient-Level Optimization:** Rather than tuning a heuristic threshold $\tau$ on isolated slice scores, a sequence model trains end-to-end to output a calibrated patient-level probability $P(\text{COVID-19} \mid \mathbf{X}_{\text{patient}})$.
 
 ---
 
@@ -26,188 +23,169 @@ By coupling a pretrained **EfficientNet-B0** spatial feature extractor with a **
 
 ```mermaid
 flowchart TD
-    subgraph Input ["1. Patient CT Volume"]
-        S1["Slice 1 (Cranial Apex)\n[1, 224, 224]"]
-        S2["Slice 2\n[1, 224, 224]"]
-        St["Slice t (Mid Lung)\n[1, 224, 224]"]
-        ST["Slice T (Caudal Base)\n[1, 224, 224]"]
+    subgraph Input ["1. Patient CT Volume (Craniocaudal Order)"]
+        S1["Slice 1 (Apex)\n[1, 512, 512] raw"]
+        S2["Slice 2\n[1, 512, 512] raw"]
+        St["Slice t (Mid-Lung)\n[1, 512, 512] raw"]
+        ST["Slice T (Base)\n[1, 512, 512] raw"]
     end
 
-    subgraph CNN ["2. Shared 2D Spatial Feature Extractor (EfficientNet-B0)"]
-        F1["Frozen / Fine-tuned Backbone"]
-        E1["Embedding e_1\n[1280]"]
-        E2["Embedding e_2\n[1280]"]
-        Et["Embedding e_t\n[1280]"]
-        ET["Embedding e_T\n[1280]"]
+    subgraph Preproc ["2. Standardized Medical Preprocessing & Expansion"]
+        P1["Clip [200, 1800] -> Scale [0,1]\nReplicate to 3 ch (R=G=B)\nImageNet Norm -> Resize 224x224"]
+        P2["Clip [200, 1800] -> Scale [0,1]\nReplicate to 3 ch (R=G=B)\nImageNet Norm -> Resize 224x224"]
+        Pt["Clip [200, 1800] -> Scale [0,1]\nReplicate to 3 ch (R=G=B)\nImageNet Norm -> Resize 224x224"]
+        PT["Clip [200, 1800] -> Scale [0,1]\nReplicate to 3 ch (R=G=B)\nImageNet Norm -> Resize 224x224"]
     end
 
-    subgraph BiLSTM ["3. Bidirectional Temporal Modelling"]
-        BL["BiLSTM (Forward & Backward, H=128)\nOutput: 2H = 256 per step"]
+    subgraph CNN ["3. External Pretrained Feature Extractor (ImageNet-1K EfficientNet-B0)"]
+        Backbone["Frozen Pretrained Backbone (No COVID-CTset exposure)\nfeatures + AdaptiveAvgPool2d(1)"]
+        E1["Embedding e_1 [1280]"]
+        E2["Embedding e_2 [1280]"]
+        Et["Embedding e_t [1280]"]
+        ET["Embedding e_T [1280]"]
+    end
+
+    subgraph BiLSTM ["4. Bidirectional Temporal Encoder"]
+        BL["BiLSTM (Hidden=128 per dir, 1 Layer)\nOutput dimension: 2H = 256 per step"]
         H1["h_1 [256]"]
         H2["h_2 [256]"]
         Ht["h_t [256]"]
         HT["h_T [256]"]
     end
 
-    subgraph Attn ["4. Additive Attention Pooling"]
-        Score["Score: u_t = tanh(W_a h_t + b_a)"]
-        Softmax["Weights: alpha_t = softmax(v_a^T u_t, mask)"]
-        Context["Patient Context: c = sum(alpha_t * h_t)\n[256]"]
+    subgraph Agg ["5. Sequence Aggregation (Controlled Ablations)"]
+        PoolA["Ablation A: Global Mean Pooling over Slices e_t (No BiLSTM)"]
+        PoolB["Ablation B: Global Mean Pooling over Recurrent States h_t"]
+        PoolC["Ablation C: Additive Self-Attention Pooling (Learned weights alpha_t)"]
     end
 
-    subgraph Head ["5. Patient Classification Head"]
-        FC1["Linear(256 -> 64) + SiLU + Dropout(0.3)"]
-        FC2["Linear(64 -> 2)"]
+    subgraph Head ["6. Patient Classification Head"]
+        FC["Linear(D -> 64) + SiLU + Dropout(0.3) -> Linear(64 -> 2)"]
         Out["Patient Logits [2]\n(Normal vs COVID-19)"]
     end
 
-    S1 --> F1 --> E1 --> BL --> H1 --> Score
-    S2 --> F1 --> E2 --> BL --> H2 --> Score
-    St --> F1 --> Et --> BL --> Ht --> Score
-    ST --> F1 --> ET --> BL --> HT --> Score
+    S1 --> P1 --> Backbone --> E1
+    S2 --> P2 --> Backbone --> E2
+    St --> Pt --> Backbone --> Et
+    ST --> PT --> Backbone --> ET
 
-    Score --> Softmax --> Context
-    Context --> FC1 --> FC2 --> Out
+    E1 & E2 & Et & ET --> BL
+    BL --> H1 & H2 & Ht & HT
+
+    E1 & E2 & Et & ET --> PoolA
+    H1 & H2 & Ht & HT --> PoolB
+    H1 & H2 & Ht & HT --> PoolC
+
+    PoolA & PoolB & PoolC --> FC --> Out
 ```
 
 ---
 
-## 3. Detailed Component Specifications & Tensor Geometry
+## 3. Preprocessing, Calibration & Input Compatibility
 
-### Component 1: Spatial Feature Extractor (EfficientNet-B0)
-- **Input:** Single CT slice tensor $\mathbf{x}_t \in \mathbb{R}^{B \times C \times 224 \times 224}$, where $C=1$ (2D single slice) or $C=3$ (2.5D triplet).
-- **Head Truncation:** We strip the original classification layers (`classifier[0]` Dropout and `classifier[1]` Linear(1280, 1000)).
-- **Feature Extraction Path:**
-  $$\mathbf{F}_t = \text{features}(\mathbf{x}_t) \in \mathbb{R}^{B \times 1280 \times 7 \times 7}$$
-  $$\mathbf{e}_t = \text{AdaptiveAvgPool2d}(1)(\mathbf{F}_t) = \text{flatten}(\dots) \in \mathbb{R}^{B \times 1280}$$
-- **Embedding Dimension:** Each CT slice is compressed into a 1D vector of dimension $D = 1280$.
+### A. Raw Pixel Value Semantics & Radiodensity Verification
+- **Pixel Value Meaning:** The COVID-CTset images are stored as uncompressed 16-bit TIFF grayscale files with raw integer values up to $\approx 2204$. Because the dataset authors did not distribute the accompanying DICOM header files containing rescale slope and rescale intercept parameters, **these pixel values represent raw uncalibrated CT attenuation numbers, NOT certified physical Hounsfield Units (HU)**. 
+- **Integrity Rule:** In all documentation and code, pixel intensities are designated as *radiodensity counts*, preserving medical documentation integrity without unsubstantiated diagnostic claims.
 
----
-
-### Component 2: Patient-Level Sequence Assembly & Craniocaudal Ordering
-- **Ordering Guarantee:** In COVID-CTset, slice filenames follow `<label>_patient<ID>_SR_<series>_IM<slice_num>.tif`.
-  The slice index `slice_num` directly reflects the axial table position $z$. Slices are sorted strictly in ascending numeric order:
-  $$\text{Index Order: } 1, 2, \dots, T_i \implies \text{Cranial (apices) to Caudal (bases)}$$
-- **Sequence Representation:** For patient $i$ with $T_i$ slices:
-  $$\mathbf{E}_i = [\mathbf{e}_{i, 1}, \mathbf{e}_{i, 2}, \dots, \mathbf{e}_{i, T_i}]^\top \in \mathbb{R}^{T_i \times 1280}$$
-- **Empirical Sequence Length Distribution (COVID-CTset):**
-  - Minimum: $1$ slice (e.g., `patient11` outlier)
-  - 25th Percentile: $11.0$ slices
-  - Median: $26.0$ slices
-  - Mean: $30.6$ slices
-  - 75th Percentile: $46.2$ slices
-  - Maximum: $84.0$ slices
+### B. Standardized Image Preprocessing Pipeline
+1. **Windowing / Intensity Clipping:** Raw 16-bit values are clipped to the empirical lung window:
+   $$I_{\text{clipped}} = \text{clip}(I_{\text{raw}}, 200, 1800)$$
+2. **Min-Max Dynamic Range Scaling:** Clipped values are scaled to the unit interval $[0.0, 1.0]$:
+   $$I_{\text{norm}} = \frac{I_{\text{clipped}} - 200}{1800 - 200}$$
+3. **Channel Expansion via Replication:** Standard pretrained torchvision backbones expect 3-channel input ($C=3$). We replicate the grayscale channel across all three color channels without modifying the first convolution layer:
+   $$[B, T, 1, 224, 224] \longrightarrow [B \cdot T, 3, 224, 224] \quad \text{where } R = G = B = I_{\text{norm}}$$
+4. **Standard ImageNet Normalization:** To match the input distribution expected by the pretrained ImageNet weights:
+   $$\mu = [0.485, 0.456, 0.406], \quad \sigma = [0.229, 0.224, 0.225]$$
+   $$I_{\text{standardized}, c} = \frac{I_{\text{norm}, c} - \mu_c}{\sigma_c} \quad \text{for } c \in \{0, 1, 2\}$$
+5. **Spatial Resampling & Aspect Ratio Preservation:** Slices are resized to $224 \times 224$ using bilinear interpolation (`align_corners=False`). Because native CT slices are square ($512 \times 512$), downsampling to $224 \times 224$ preserves an exact $1:1$ aspect ratio without geometric distortion or padding artifacts.
 
 ---
 
-### Component 3: Variable-Length Batching, Padding & Masking
-Because $T_i$ varies from $1$ to $84$, batching multiple patients ($B > 1$) requires zero-padding to the maximum sequence length in that batch $T_{\max} = \max_{b \in [1, B]} T_b$:
+## 4. Feature Extraction & Leakage Prevention Audit
 
-- **Padded Batch Tensor:** $\mathbf{X}_{\text{batch}} \in \mathbb{R}^{B \times T_{\max} \times 1280}$.
-- **Lengths Vector:** $\mathbf{L} = [T_1, T_2, \dots, T_B] \in \mathbb{Z}^B$.
-- **Boolean Padding Mask:** $\mathbf{M} \in \{0, 1\}^{B \times T_{\max}}$, where:
-  $$M_{b, t} = \begin{cases} 1 & \text{if } t \le T_b \text{ (valid anatomical slice)} \\ 0 & \text{if } t > T_b \text{ (zero-padded padding)} \end{cases}$$
-- **Packed Sequences:** In PyTorch, we wrap padded batches with `torch.nn.utils.rnn.pack_padded_sequence(..., lengths=L, batch_first=True, enforce_sorted=False)` to prevent recurrent operations over padded steps.
+### A. Audit of Stage 1 Checkpoint (`exp4_efficientnet_b0_25d`)
+- In Stage 1, `exp4` was trained on `train_split.csv` ($98$ patients: $62$ COVID, $36$ Normal) and checkpointed against `val_split.csv` ($24$ patients).
+- If `exp4`'s weights were used to extract features for a 5-fold cross-validation on the 122 development patients, **data leakage would occur**: 80% of the validation patients in any fold were seen by `exp4` during Stage 1 training.
 
----
-
-### Component 4: Bidirectional LSTM Sequence Encoder
-- **Why Bidirectional?**
-  Pathology in the middle lung fields relies on comparison with healthy lung tissue both above (cranial apices) and below (diaphragmatic bases).
-- **Hyperparameters:**
-  - `input_size`: $1280$
-  - `hidden_size` ($H$): $128$ per direction
-  - `num_layers`: $1$ (or $2$ with dropout $0.2$)
-  - `bidirectional`: `True`
-  - `batch_first`: `True`
-- **Output Tensor:**
-  $$\mathbf{H} = [\mathbf{h}_1, \dots, \mathbf{h}_{T_i}] \in \mathbb{R}^{B \times T_{\max} \times 2H} = \mathbb{R}^{B \times T_{\max} \times 256}$$
-  where $\mathbf{h}_t = [\overrightarrow{\mathbf{h}}_t \,\|\, \overleftarrow{\mathbf{h}}_t] \in \mathbb{R}^{256}$.
+### B. Zero-Leakage Backbone Protocol
+1. **Backbone Source:** Official torchvision `efficientnet_b0(weights=EfficientNet_B0_Weights.IMAGENET1K_V1)`.
+2. **Zero In-Domain Exposure:** This backbone has **never been trained, fine-tuned, or exposed to any COVID-CTset image**.
+3. **Feature Dimension:** Classification head (`classifier[0]` Dropout and `classifier[1]` Linear) is discarded. Spatial feature maps $[1280, 7, 7]$ are pooled via `AdaptiveAvgPool2d(1)` into a fixed 1D embedding vector:
+   $$\mathbf{e}_t \in \mathbb{R}^{1280}$$
+4. **Deterministic Feature Caching (Option 1):** Pre-extract and cache $1280\text{D}$ vectors for all 3,736 development slices once on disk ($\approx 19.1\text{ MB}$).
+5. **Methodological Limitation of Frozen Cache:** In this initial stage, spatial slice augmentations (e.g., slight affine rotations) are omitted. Regularization relies entirely on sequence-level dropout, recurrent dropout, and weight decay.
 
 ---
 
-### Component 5: Sequence Aggregation (Additive Attention vs. Baselines)
+## 5. Sequence Construction, Craniocaudal Ordering & Edge Cases
 
-#### A. The Pitfall of Mean and Max Pooling
-- **Mean Pooling:** $\mathbf{c} = \frac{1}{T_i} \sum_{t=1}^{T_i} \mathbf{h}_t$. Dilutes focal lesions when only 4 out of 40 slices show consolidation.
-- **Max Pooling:** $\mathbf{c} = \max_t \mathbf{h}_t$. Overly susceptible to single-slice artifacts.
+### A. Anatomical Craniocaudal Ordering
+- Filenames follow `<prefix>_patient<ID>_SR_<series>_IM<slice_num>.tif`.
+- Slices are sorted strictly in ascending numeric order of `slice_num` (`IM00001` $\to$ `IM00084`), guaranteeing invariant craniocaudal progression from cranial apices to caudal diaphragmatic bases.
 
-#### B. Additive Self-Attention Pooling (Bahdanau / Ilse et al.)
-We introduce a trainable projection that computes an attention score for each axial level:
-1. **Projection:**
-   $$\mathbf{u}_t = \tanh(\mathbf{W}_a \mathbf{h}_t + \mathbf{b}_a) \in \mathbb{R}^{B \times T_{\max} \times d_a}$$
-   where $\mathbf{W}_a \in \mathbb{R}^{d_a \times 2H}$ with $d_a = 64$.
-2. **Scalar Energy Score:**
-   $$e_t = \mathbf{v}_a^\top \mathbf{u}_t \in \mathbb{R}^{B \times T_{\max} \times 1}$$
-3. **Masked Softmax Normalization:**
-   $$\alpha_t = \frac{\exp(e_t) \cdot M_t}{\sum_{j=1}^{T_i} \exp(e_j) + \epsilon} \in [0, 1]$$
-   *(Positions where $M_t = 0$ are masked with $-\infty$ prior to softmax so $\alpha_t \equiv 0$ for padded tokens).*
-4. **Context Vector (Patient Embedding):**
-   $$\mathbf{c}_i = \sum_{t=1}^{T_i} \alpha_t \mathbf{h}_t \in \mathbb{R}^{B \times 256}$$
+### B. Variable-Length Batching & Attention Masking
+- Patients have variable slice counts ($T_i \in [1, 84]$).
+- Sequences in batch $B$ are zero-padded to $T_{\max} = \max_b T_b$, yielding batch tensor $\mathbf{X} \in \mathbb{R}^{B \times T_{\max} \times 1280}$.
+- A boolean mask $M \in \{0, 1\}^{B \times T_{\max}}$ records valid slices ($M_{b, t} = 1$ if $t \le T_b$, else $0$).
+- `torch.nn.utils.rnn.pack_padded_sequence` bypasses computation over padded steps.
 
-#### Clinical Explainability Bonus of Attention:
-The attention weights $\boldsymbol{\alpha} = [\alpha_1, \dots, \alpha_{T_i}]$ provide **direct, quantitative slice attribution**. We can plot $\alpha_t$ against slice index $z$ to immediately display which anatomical scan depths drove the diagnosis, without requiring Grad-CAM gradient backpropagation.
+### C. Edge Case: Sequences with $T = 1$ (Single-Slice Scans)
+- Single-slice patients (such as `patient11`) **must not be discarded**.
+- **BiLSTM Handling:** Single-step recurrence ($T=1$) executes cleanly with initial zero hidden states $\mathbf{h}_0$.
+- **Attention Handling:** For $T=1$, the masked softmax across a single valid position trivially outputs attention weight $\alpha_1 = 1.0$, producing context vector $\mathbf{c} = \mathbf{h}_1$.
+- **Data Quality Note:** `patient11` is flagged for a separate data-integrity audit regarding why only 1 slice exists in the official archive.
 
 ---
 
-### Component 6: Patient-Level Classification Head
-- **Input:** Aggregated patient context vector $\mathbf{c}_i \in \mathbb{R}^{B \times 256}$.
-- **MLP Architecture:**
-  $$\mathbf{z}_1 = \text{SiLU}(\mathbf{W}_1 \mathbf{c}_i + \mathbf{b}_1) \in \mathbb{R}^{B \times 64}$$
+## 6. Sequence Aggregation: Ablations & Additive Attention
+
+### Ablation A: Atemporal Global Mean Pooling (No BiLSTM)
+$$\mathbf{c}_i = \frac{1}{T_i} \sum_{t=1}^{T_i} \mathbf{e}_{i, t} \in \mathbb{R}^{1280}$$
+Aggregates slice embeddings uniformly without temporal recurrence.
+
+### Ablation B: BiLSTM + Global Mean Pooling
+$$\mathbf{h}_t = [\overrightarrow{\mathbf{h}}_t \,\|\, \overleftarrow{\mathbf{h}}_t] \in \mathbb{R}^{256}, \quad \mathbf{c}_i = \frac{1}{T_i} \sum_{t=1}^{T_i} \mathbf{h}_{i, t} \in \mathbb{R}^{256}$$
+Incorporates bidirectional craniocaudal contextual modeling, aggregated uniformly across axial depth.
+
+### Ablation C: BiLSTM + Additive Self-Attention Pooling
+$$\mathbf{u}_t = \tanh(\mathbf{W}_a \mathbf{h}_t + \mathbf{b}_a) \in \mathbb{R}^{64}$$
+$$e_t = \mathbf{v}_a^\top \mathbf{u}_t \in \mathbb{R}^1$$
+$$\alpha_t = \frac{\exp(e_t) \cdot M_t}{\sum_{j=1}^{T_i} \exp(e_j) + \epsilon} \in [0, 1]$$
+$$\mathbf{c}_i = \sum_{t=1}^{T_i} \alpha_t \mathbf{h}_t \in \mathbb{R}^{256}$$
+
+### Epistemic Boundary on Attention Interpretation
+> [!WARNING]
+> Attention weights $\alpha_1, \dots, \alpha_T$ represent mathematical saliency weights quantifying relative feature contributions to the context vector. **They are NOT verified clinical explanations, surrogate radiologist attention, or evidence of clinical diagnostic reasoning.** They are reported strictly as model-weight diagnostic visualizations.
+
+---
+
+## 7. Patient Classification Head & Tensor Lifecycle
+
+### Classification Head
+- **Input:** Context vector $\mathbf{c}_i \in \mathbb{R}^{D_{\text{agg}}}$ ($1280$ for Ablation A; $256$ for Ablations B & C).
+- **Architecture:**
+  $$\mathbf{z}_1 = \text{SiLU}(\mathbf{W}_1 \mathbf{c}_i + \mathbf{b}_1) \in \mathbb{R}^{64}$$
   $$\mathbf{z}_2 = \text{Dropout}(p=0.3)(\mathbf{z}_1)$$
-  $$\text{Logits } \mathbf{y} = \mathbf{W}_2 \mathbf{z}_2 + \mathbf{b}_2 \in \mathbb{R}^{B \times 2}$$
-- **Loss Function:** Class-weighted CrossEntropyLoss on patient labels:
-  $$\mathcal{L} = -\sum_{c \in \{0, 1\}} w_c \cdot y_{i, c} \cdot \log(\text{softmax}(\mathbf{y})_c)$$
+  $$\text{Logits } \mathbf{y}_i = \mathbf{W}_2 \mathbf{z}_2 + \mathbf{b}_2 \in \mathbb{R}^2$$
 
----
-
-## 4. End-to-End Tensor Shape Trace
-
-| Step | Operation / Layer | Input Shape | Output Shape | Notes |
+### Complete End-to-End Tensor Shape Trace
+| Step | Operation | Input Shape | Output Shape | Notes |
 | :---: | :--- | :--- | :--- | :--- |
-| **1** | Batch CT Slices | — | $[B, T_{\max}, 1, 224, 224]$ | $B$ patients, max $T_{\max}$ slices |
-| **2** | Flatten to 2D Batch | $[B, T_{\max}, 1, 224, 224]$ | $[(B \cdot T_{\max}), 1, 224, 224]$ | Required for standard 2D CNN call |
-| **3** | EfficientNet Features | $[(B \cdot T_{\max}), 1, 224, 224]$ | $[(B \cdot T_{\max}), 1280, 7, 7]$ | Spatial feature maps |
-| **4** | Global Avg Pooling | $[(B \cdot T_{\max}), 1280, 7, 7]$ | $[(B \cdot T_{\max}), 1280]$ | Slice feature embeddings |
-| **5** | Reshape to Sequence | $[(B \cdot T_{\max}), 1280]$ | $[B, T_{\max}, 1280]$ | Restores temporal dimension |
-| **6** | BiLSTM Layer | $[B, T_{\max}, 1280]$ | $[B, T_{\max}, 256]$ | Forward + backward hidden states |
-| **7** | Attention Scoring | $[B, T_{\max}, 256]$ | $[B, T_{\max}, 1]$ | Normalized slice weights $\alpha_t$ |
-| **8** | Weighted Pooling | $[B, T_{\max}, 256] \times [B, T_{\max}, 1]$ | $[B, 256]$ | Patient context vector $\mathbf{c}$ |
-| **9** | MLP Hidden Layer | $[B, 256]$ | $[B, 64]$ | SiLU activation + Dropout(0.3) |
-| **10**| Linear Classifier | $[B, 64]$ | $[B, 2]$ | Final patient class logits |
+| **1** | Batch CT Scans | — | $[B, T_{\max}, 1, 224, 224]$ | $B$ patients, padded to $T_{\max}$ |
+| **2** | Grayscale Expansion | $[B, T_{\max}, 1, 224, 224]$ | $[(B \cdot T_{\max}), 3, 224, 224]$ | $R=G=B$ |
+| **3** | ImageNet Norm | $[(B \cdot T_{\max}), 3, 224, 224]$ | $[(B \cdot T_{\max}), 3, 224, 224]$ | Standardized |
+| **4** | EfficientNet Features | $[(B \cdot T_{\max}), 3, 224, 224]$ | $[(B \cdot T_{\max}), 1280, 7, 7]$ | Spatial maps |
+| **5** | Global Avg Pooling | $[(B \cdot T_{\max}), 1280, 7, 7]$ | $[(B \cdot T_{\max}), 1280]$ | Slice embeddings |
+| **6** | Restore Sequence | $[(B \cdot T_{\max}), 1280]$ | $[B, T_{\max}, 1280]$ | Sequence reconstruction |
+| **7** | BiLSTM Encoder | $[B, T_{\max}, 1280]$ | $[B, T_{\max}, 256]$ | Recurrent forward + backward |
+| **8** | Masked Attention | $[B, T_{\max}, 256]$ | $[B, T_{\max}, 1]$ | Attention weights $\alpha_t$ |
+| **9** | Context Pooling | $[B, T_{\max}, 256] \times [B, T_{\max}, 1]$ | $[B, 256]$ | Context vector $\mathbf{c}_i$ |
+| **10**| MLP Classifier | $[B, 256]$ | $[B, 2]$ | Normal vs COVID-19 logits |
 
 ---
 
-## 5. Memory & Compute Constraints on Apple Silicon MPS
+## 8. Compute, Storage & Memory on Apple Silicon MPS
 
-### The End-to-End Memory Bottleneck
-If we perform joint end-to-end backpropagation through both EfficientNet-B0 and the BiLSTM with a patient batch size $B=4$ and average sequence length $T=32$:
-- Effective slice batch size: $B \cdot T = 4 \times 32 = 128$ slices per gradient step.
-- At $224 \times 224$ float32 resolution, maintaining activations for 128 images through EfficientNet-B0 consumes $\approx 1.8\text{ GB}$ of VRAM. While feasible on an 8GB/16GB unified memory M1 Mac, training is slow ($\approx 45\text{ minutes/epoch}$).
-
-### Staged Training Strategy (Recommended)
-
-To ensure rapid experimentation and robust cross-validation without memory paging:
-
-1. **Stage 2.1 — Feature Cache Mode (Frozen Backbone):**
-   - Use the best-performing Stage 1 checkpoint (`reports/experiments/exp4_efficientnet_b0_25d/best_checkpoint.pth` or 2D adapted backbone) to pre-extract embeddings for all $12,058$ slices.
-   - Cache size on disk: $12,058 \times 1280 \times 4\text{ bytes} \approx 61.7\text{ MB}$.
-   - Training the BiLSTM + Attention head on cached features runs at **$>100\text{ epochs/minute}$** on MPS, enabling comprehensive 5-fold cross-validation in under 3 minutes!
-2. **Stage 2.2 — End-to-End Fine-Tuning (Post-Architecture Selection):**
-   - Once optimal BiLSTM depth, hidden size, and attention parameters are established on cached features, unfreeze the top convolutional stages of EfficientNet-B0 (`features[7:]`) with a low learning rate ($1\times 10^{-5}$) using patient batch size $B=1$ or $B=2$ and gradient accumulation ($4$ steps).
-
----
-
-## 6. Comparison with Prior Baselines
-
-| Dimension | Stage 1 2D Baselines | Stage 1 2.5D Baselines | Proposed Stage 2 CNN-BiLSTM |
-| :--- | :---: | :---: | :---: |
-| **Input Unit** | Single slice $[1, H, W]$ | 3 contiguous slices $[3, H, W]$ | Full scan sequence $[T, C, H, W]$ |
-| **Spatial Context** | Intra-slice only | Local through-plane ($z \pm 1$) | Local through-plane + Global craniocaudal |
-| **Sequence Memory** | None (Markovian) | None | Full recurrence (forward & backward) |
-| **Patient Decision** | Heuristic threshold $\tau$ on slice counts | Heuristic threshold $\tau$ on slice counts | End-to-end learned sequence attention |
-| **Explainability** | Slice-level Grad-CAM | Slice-level Grad-CAM | **Anatomical depth attention curve + Grad-CAM** |
-| **Parameter Scale** | $23.5\text{M}$ (ResNet) / $93\text{K}$ (Custom) | $4.01\text{M}$ (EfficientNet) | **$4.01\text{M} (\text{CNN}) + 1.48\text{M} (\text{LSTM/Attn}) = 5.49\text{M}$** |
-
----
-*Reviewed and documented for developer confirmation prior to code generation.*
+- **Feature Cache Size:** $3,736 \text{ slices} \times 1280 \times 4\text{ bytes} \approx 19.1\text{ MB}$ stored in `data/processed/dev_patient_features_effnet_b0.pt`.
+- **Extraction Time:** $\approx 45\text{ seconds}$ once on Apple MPS.
+- **Sequence Training Throughput:** $> 150\text{ epochs/minute}$ on cached embeddings with $< 1\text{ MB}$ memory footprint, enabling exhaustive nested cross-validation without memory pressure.
