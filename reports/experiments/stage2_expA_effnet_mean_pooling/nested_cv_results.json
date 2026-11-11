@@ -1,0 +1,1191 @@
+{
+  "model_name": "effnet_b0_mean_pooling",
+  "per_fold_metrics": {
+    "fold_1": {
+      "accuracy": 0.92,
+      "sensitivity_recall": 0.875,
+      "sensitivity_ci_95": [
+        0.6397722851278604,
+        0.9650224305625954
+      ],
+      "specificity": 1.0,
+      "specificity_ci_95": [
+        0.7008558040328856,
+        1.0
+      ],
+      "precision": 1.0,
+      "f1_covid": 0.9333333333333333,
+      "f1_normal": 0.9,
+      "macro_f1": 0.9166666666666667,
+      "balanced_accuracy": 0.9375,
+      "tp": 14,
+      "tn": 9,
+      "fp": 0,
+      "fn": 2,
+      "total_samples": 25,
+      "roc_auc": 0.9444444444444444,
+      "pr_auc": 0.9791666666666666,
+      "optimal_threshold": 0.5,
+      "inner_best_macro_f1": 0.797979797979798
+    },
+    "fold_2": {
+      "accuracy": 0.76,
+      "sensitivity_recall": 0.8125,
+      "sensitivity_ci_95": [
+        0.5699117202151349,
+        0.9340838761935784
+      ],
+      "specificity": 0.6666666666666666,
+      "specificity_ci_95": [
+        0.35420266530928485,
+        0.8794159360350102
+      ],
+      "precision": 0.8125,
+      "f1_covid": 0.8125,
+      "f1_normal": 0.6666666666666666,
+      "macro_f1": 0.7395833333333333,
+      "balanced_accuracy": 0.7395833333333333,
+      "tp": 13,
+      "tn": 6,
+      "fp": 3,
+      "fn": 3,
+      "total_samples": 25,
+      "roc_auc": 0.7222222222222223,
+      "pr_auc": 0.8126588327131805,
+      "optimal_threshold": 0.5,
+      "inner_best_macro_f1": 0.8465473145780051
+    },
+    "fold_3": {
+      "accuracy": 0.7916666666666666,
+      "sensitivity_recall": 0.6666666666666666,
+      "sensitivity_ci_95": [
+        0.4171359449129176,
+        0.8482365080622029
+      ],
+      "specificity": 1.0,
+      "specificity_ci_95": [
+        0.7008558040328856,
+        1.0
+      ],
+      "precision": 1.0,
+      "f1_covid": 0.8,
+      "f1_normal": 0.782608695652174,
+      "macro_f1": 0.791304347826087,
+      "balanced_accuracy": 0.8333333333333333,
+      "tp": 10,
+      "tn": 9,
+      "fp": 0,
+      "fn": 5,
+      "total_samples": 24,
+      "roc_auc": 0.8666666666666667,
+      "pr_auc": 0.9408793820558525,
+      "optimal_threshold": 0.5,
+      "inner_best_macro_f1": 0.8399999999999999
+    },
+    "fold_4": {
+      "accuracy": 0.875,
+      "sensitivity_recall": 0.8,
+      "sensitivity_ci_95": [
+        0.5481460512166723,
+        0.9295243641385447
+      ],
+      "specificity": 1.0,
+      "specificity_ci_95": [
+        0.7008558040328856,
+        1.0
+      ],
+      "precision": 1.0,
+      "f1_covid": 0.888888888888889,
+      "f1_normal": 0.8571428571428571,
+      "macro_f1": 0.873015873015873,
+      "balanced_accuracy": 0.9,
+      "tp": 12,
+      "tn": 9,
+      "fp": 0,
+      "fn": 3,
+      "total_samples": 24,
+      "roc_auc": 0.9185185185185186,
+      "pr_auc": 0.9602987861811392,
+      "optimal_threshold": 0.5,
+      "inner_best_macro_f1": 0.9466666666666668
+    },
+    "fold_5": {
+      "accuracy": 0.7916666666666666,
+      "sensitivity_recall": 0.7333333333333333,
+      "sensitivity_ci_95": [
+        0.4804961634927697,
+        0.891025270672399
+      ],
+      "specificity": 0.8888888888888888,
+      "specificity_ci_95": [
+        0.5650010145646878,
+        0.9801090552386675
+      ],
+      "precision": 0.9166666666666666,
+      "f1_covid": 0.8148148148148148,
+      "f1_normal": 0.761904761904762,
+      "macro_f1": 0.7883597883597884,
+      "balanced_accuracy": 0.8111111111111111,
+      "tp": 11,
+      "tn": 8,
+      "fp": 1,
+      "fn": 4,
+      "total_samples": 24,
+      "roc_auc": 0.9111111111111111,
+      "pr_auc": 0.9531559290382821,
+      "optimal_threshold": 0.5,
+      "inner_best_macro_f1": 0.8901098901098901
+    }
+  },
+  "cross_fold_summary": {
+    "macro_f1": {
+      "mean": 0.8217860018403498,
+      "std": 0.07146775837276614
+    },
+    "roc_auc": {
+      "mean": 0.8725925925925926,
+      "std": 0.0886029351079261
+    },
+    "pr_auc": {
+      "mean": 0.9292319193310241,
+      "std": 0.06662569954485983
+    },
+    "sensitivity_recall": {
+      "mean": 0.7775000000000001,
+      "std": 0.07980009746582745
+    },
+    "specificity": {
+      "mean": 0.9111111111111111,
+      "std": 0.14487116456005888
+    },
+    "balanced_accuracy": {
+      "mean": 0.8443055555555554,
+      "std": 0.07742105696597276
+    },
+    "precision": {
+      "mean": 0.9458333333333334,
+      "std": 0.08281086214313246
+    },
+    "accuracy": {
+      "mean": 0.8276666666666668,
+      "std": 0.06696392063392546
+    }
+  },
+  "pooled_oof_metrics": {
+    "accuracy": 0.8278688524590164,
+    "sensitivity_recall": 0.7792207792207793,
+    "sensitivity_ci_95": [
+      0.674569557448446,
+      0.8573358402912736
+    ],
+    "specificity": 0.9111111111111111,
+    "specificity_ci_95": [
+      0.7926645518227965,
+      0.9648888203672356
+    ],
+    "precision": 0.9375,
+    "f1_covid": 0.851063829787234,
+    "f1_normal": 0.7961165048543689,
+    "macro_f1": 0.8235901673208015,
+    "balanced_accuracy": 0.8451659451659452,
+    "tp": 60,
+    "tn": 41,
+    "fp": 4,
+    "fn": 17,
+    "total_samples": 122,
+    "roc_auc": 0.8652236652236651,
+    "pr_auc": 0.904628468861058
+  },
+  "bootstrap_cis_95": {
+    "macro_f1_ci_95": [
+      0.7518304325521079,
+      0.8861548743208623
+    ],
+    "sensitivity_ci_95": [
+      0.6835443037974683,
+      0.8684637730690362
+    ],
+    "specificity_ci_95": [
+      0.8199545454545454,
+      0.9777898550724637
+    ]
+  },
+  "oof_predictions": {
+    "patient1": {
+      "patient_id": "patient1",
+      "true_label": 1,
+      "pred_prob": 0.6487821936607361,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_1"
+    },
+    "patient125": {
+      "patient_id": "patient125",
+      "true_label": 1,
+      "pred_prob": 0.7252016663551331,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_1"
+    },
+    "patient126": {
+      "patient_id": "patient126",
+      "true_label": 1,
+      "pred_prob": 0.5024688839912415,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_1"
+    },
+    "patient137": {
+      "patient_id": "patient137",
+      "true_label": 1,
+      "pred_prob": 0.2770623564720154,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_1"
+    },
+    "patient140": {
+      "patient_id": "patient140",
+      "true_label": 1,
+      "pred_prob": 0.7321882247924805,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_1"
+    },
+    "patient141": {
+      "patient_id": "patient141",
+      "true_label": 1,
+      "pred_prob": 0.6646024584770203,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_1"
+    },
+    "patient147": {
+      "patient_id": "patient147",
+      "true_label": 0,
+      "pred_prob": 0.3496893048286438,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_1"
+    },
+    "patient151": {
+      "patient_id": "patient151",
+      "true_label": 0,
+      "pred_prob": 0.3750683665275574,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_1"
+    },
+    "patient158": {
+      "patient_id": "patient158",
+      "true_label": 0,
+      "pred_prob": 0.3720596432685852,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_1"
+    },
+    "patient167": {
+      "patient_id": "patient167",
+      "true_label": 0,
+      "pred_prob": 0.4723066985607147,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_1"
+    },
+    "patient170": {
+      "patient_id": "patient170",
+      "true_label": 0,
+      "pred_prob": 0.4372158944606781,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_1"
+    },
+    "patient176": {
+      "patient_id": "patient176",
+      "true_label": 0,
+      "pred_prob": 0.37913817167282104,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_1"
+    },
+    "patient180": {
+      "patient_id": "patient180",
+      "true_label": 0,
+      "pred_prob": 0.2838510274887085,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_1"
+    },
+    "patient181": {
+      "patient_id": "patient181",
+      "true_label": 0,
+      "pred_prob": 0.2902073860168457,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_1"
+    },
+    "patient183": {
+      "patient_id": "patient183",
+      "true_label": 0,
+      "pred_prob": 0.1368577927350998,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_1"
+    },
+    "patient29": {
+      "patient_id": "patient29",
+      "true_label": 1,
+      "pred_prob": 0.6080114841461182,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_1"
+    },
+    "patient42": {
+      "patient_id": "patient42",
+      "true_label": 1,
+      "pred_prob": 0.588395357131958,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_1"
+    },
+    "patient45": {
+      "patient_id": "patient45",
+      "true_label": 1,
+      "pred_prob": 0.49499329924583435,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_1"
+    },
+    "patient50": {
+      "patient_id": "patient50",
+      "true_label": 1,
+      "pred_prob": 0.8229736685752869,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_1"
+    },
+    "patient54": {
+      "patient_id": "patient54",
+      "true_label": 1,
+      "pred_prob": 0.7131829261779785,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_1"
+    },
+    "patient61": {
+      "patient_id": "patient61",
+      "true_label": 1,
+      "pred_prob": 0.5880044102668762,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_1"
+    },
+    "patient76": {
+      "patient_id": "patient76",
+      "true_label": 1,
+      "pred_prob": 0.6311691403388977,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_1"
+    },
+    "patient85": {
+      "patient_id": "patient85",
+      "true_label": 1,
+      "pred_prob": 0.5274730920791626,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_1"
+    },
+    "patient9": {
+      "patient_id": "patient9",
+      "true_label": 1,
+      "pred_prob": 0.5774852633476257,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_1"
+    },
+    "patient98": {
+      "patient_id": "patient98",
+      "true_label": 1,
+      "pred_prob": 0.761577308177948,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_1"
+    },
+    "patient133": {
+      "patient_id": "patient133",
+      "true_label": 1,
+      "pred_prob": 0.6656917929649353,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_2"
+    },
+    "patient136": {
+      "patient_id": "patient136",
+      "true_label": 1,
+      "pred_prob": 0.668475329875946,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_2"
+    },
+    "patient144": {
+      "patient_id": "patient144",
+      "true_label": 1,
+      "pred_prob": 0.8209682703018188,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_2"
+    },
+    "patient145": {
+      "patient_id": "patient145",
+      "true_label": 1,
+      "pred_prob": 0.75032639503479,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_2"
+    },
+    "patient146": {
+      "patient_id": "patient146",
+      "true_label": 0,
+      "pred_prob": 0.8644124865531921,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_2"
+    },
+    "patient148": {
+      "patient_id": "patient148",
+      "true_label": 0,
+      "pred_prob": 0.12196537852287292,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_2"
+    },
+    "patient166": {
+      "patient_id": "patient166",
+      "true_label": 0,
+      "pred_prob": 0.5658789873123169,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_2"
+    },
+    "patient172": {
+      "patient_id": "patient172",
+      "true_label": 0,
+      "pred_prob": 0.08283506333827972,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_2"
+    },
+    "patient174": {
+      "patient_id": "patient174",
+      "true_label": 0,
+      "pred_prob": 0.13766315579414368,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_2"
+    },
+    "patient177": {
+      "patient_id": "patient177",
+      "true_label": 0,
+      "pred_prob": 0.2112392783164978,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_2"
+    },
+    "patient184": {
+      "patient_id": "patient184",
+      "true_label": 0,
+      "pred_prob": 0.10364466160535812,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_2"
+    },
+    "patient189": {
+      "patient_id": "patient189",
+      "true_label": 0,
+      "pred_prob": 0.2846662402153015,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_2"
+    },
+    "patient190": {
+      "patient_id": "patient190",
+      "true_label": 0,
+      "pred_prob": 0.9177724123001099,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_2"
+    },
+    "patient22": {
+      "patient_id": "patient22",
+      "true_label": 1,
+      "pred_prob": 0.8286137580871582,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_2"
+    },
+    "patient28": {
+      "patient_id": "patient28",
+      "true_label": 1,
+      "pred_prob": 0.9210571050643921,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_2"
+    },
+    "patient34": {
+      "patient_id": "patient34",
+      "true_label": 1,
+      "pred_prob": 0.888469398021698,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_2"
+    },
+    "patient40": {
+      "patient_id": "patient40",
+      "true_label": 1,
+      "pred_prob": 0.88654625415802,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_2"
+    },
+    "patient49": {
+      "patient_id": "patient49",
+      "true_label": 1,
+      "pred_prob": 0.6528571248054504,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_2"
+    },
+    "patient63": {
+      "patient_id": "patient63",
+      "true_label": 1,
+      "pred_prob": 0.8016507625579834,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_2"
+    },
+    "patient68": {
+      "patient_id": "patient68",
+      "true_label": 1,
+      "pred_prob": 0.08596596121788025,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_2"
+    },
+    "patient7": {
+      "patient_id": "patient7",
+      "true_label": 1,
+      "pred_prob": 0.8544064164161682,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_2"
+    },
+    "patient84": {
+      "patient_id": "patient84",
+      "true_label": 1,
+      "pred_prob": 0.27175459265708923,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_2"
+    },
+    "patient89": {
+      "patient_id": "patient89",
+      "true_label": 1,
+      "pred_prob": 0.029059741646051407,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_2"
+    },
+    "patient91": {
+      "patient_id": "patient91",
+      "true_label": 1,
+      "pred_prob": 0.9528221487998962,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_2"
+    },
+    "patient92": {
+      "patient_id": "patient92",
+      "true_label": 1,
+      "pred_prob": 0.8931829333305359,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_2"
+    },
+    "patient124": {
+      "patient_id": "patient124",
+      "true_label": 1,
+      "pred_prob": 0.6180670261383057,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_3"
+    },
+    "patient127": {
+      "patient_id": "patient127",
+      "true_label": 1,
+      "pred_prob": 0.6135223507881165,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_3"
+    },
+    "patient139": {
+      "patient_id": "patient139",
+      "true_label": 1,
+      "pred_prob": 0.579108715057373,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_3"
+    },
+    "patient142": {
+      "patient_id": "patient142",
+      "true_label": 1,
+      "pred_prob": 0.4921708106994629,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_3"
+    },
+    "patient150": {
+      "patient_id": "patient150",
+      "true_label": 0,
+      "pred_prob": 0.3461605906486511,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_3"
+    },
+    "patient152": {
+      "patient_id": "patient152",
+      "true_label": 0,
+      "pred_prob": 0.4885600805282593,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_3"
+    },
+    "patient157": {
+      "patient_id": "patient157",
+      "true_label": 0,
+      "pred_prob": 0.34738826751708984,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_3"
+    },
+    "patient163": {
+      "patient_id": "patient163",
+      "true_label": 0,
+      "pred_prob": 0.467962384223938,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_3"
+    },
+    "patient173": {
+      "patient_id": "patient173",
+      "true_label": 0,
+      "pred_prob": 0.39782872796058655,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_3"
+    },
+    "patient186": {
+      "patient_id": "patient186",
+      "true_label": 0,
+      "pred_prob": 0.406010240316391,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_3"
+    },
+    "patient187": {
+      "patient_id": "patient187",
+      "true_label": 0,
+      "pred_prob": 0.41588690876960754,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_3"
+    },
+    "patient188": {
+      "patient_id": "patient188",
+      "true_label": 0,
+      "pred_prob": 0.42184585332870483,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_3"
+    },
+    "patient191": {
+      "patient_id": "patient191",
+      "true_label": 0,
+      "pred_prob": 0.38525134325027466,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_3"
+    },
+    "patient20": {
+      "patient_id": "patient20",
+      "true_label": 1,
+      "pred_prob": 0.6657753586769104,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_3"
+    },
+    "patient21": {
+      "patient_id": "patient21",
+      "true_label": 1,
+      "pred_prob": 0.5405471324920654,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_3"
+    },
+    "patient30": {
+      "patient_id": "patient30",
+      "true_label": 1,
+      "pred_prob": 0.550953209400177,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_3"
+    },
+    "patient41": {
+      "patient_id": "patient41",
+      "true_label": 1,
+      "pred_prob": 0.5607154369354248,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_3"
+    },
+    "patient5": {
+      "patient_id": "patient5",
+      "true_label": 1,
+      "pred_prob": 0.5234686136245728,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_3"
+    },
+    "patient55": {
+      "patient_id": "patient55",
+      "true_label": 1,
+      "pred_prob": 0.4140179753303528,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_3"
+    },
+    "patient59": {
+      "patient_id": "patient59",
+      "true_label": 1,
+      "pred_prob": 0.5245400071144104,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_3"
+    },
+    "patient65": {
+      "patient_id": "patient65",
+      "true_label": 1,
+      "pred_prob": 0.38401612639427185,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_3"
+    },
+    "patient70": {
+      "patient_id": "patient70",
+      "true_label": 1,
+      "pred_prob": 0.49950090050697327,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_3"
+    },
+    "patient77": {
+      "patient_id": "patient77",
+      "true_label": 1,
+      "pred_prob": 0.5302066206932068,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_3"
+    },
+    "patient83": {
+      "patient_id": "patient83",
+      "true_label": 1,
+      "pred_prob": 0.36556342244148254,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_3"
+    },
+    "patient128": {
+      "patient_id": "patient128",
+      "true_label": 1,
+      "pred_prob": 0.1735168844461441,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_4"
+    },
+    "patient130": {
+      "patient_id": "patient130",
+      "true_label": 1,
+      "pred_prob": 0.9366310238838196,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_4"
+    },
+    "patient131": {
+      "patient_id": "patient131",
+      "true_label": 1,
+      "pred_prob": 0.7011113166809082,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_4"
+    },
+    "patient138": {
+      "patient_id": "patient138",
+      "true_label": 1,
+      "pred_prob": 0.7744649648666382,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_4"
+    },
+    "patient155": {
+      "patient_id": "patient155",
+      "true_label": 0,
+      "pred_prob": 0.09168266505002975,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_4"
+    },
+    "patient160": {
+      "patient_id": "patient160",
+      "true_label": 0,
+      "pred_prob": 0.2749500572681427,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_4"
+    },
+    "patient161": {
+      "patient_id": "patient161",
+      "true_label": 0,
+      "pred_prob": 0.35622039437294006,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_4"
+    },
+    "patient164": {
+      "patient_id": "patient164",
+      "true_label": 0,
+      "pred_prob": 0.12467189878225327,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_4"
+    },
+    "patient165": {
+      "patient_id": "patient165",
+      "true_label": 0,
+      "pred_prob": 0.2605057656764984,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_4"
+    },
+    "patient168": {
+      "patient_id": "patient168",
+      "true_label": 0,
+      "pred_prob": 0.28654494881629944,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_4"
+    },
+    "patient171": {
+      "patient_id": "patient171",
+      "true_label": 0,
+      "pred_prob": 0.36374032497406006,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_4"
+    },
+    "patient175": {
+      "patient_id": "patient175",
+      "true_label": 0,
+      "pred_prob": 0.32186201214790344,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_4"
+    },
+    "patient185": {
+      "patient_id": "patient185",
+      "true_label": 0,
+      "pred_prob": 0.1461256742477417,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_4"
+    },
+    "patient26": {
+      "patient_id": "patient26",
+      "true_label": 1,
+      "pred_prob": 0.7857144474983215,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_4"
+    },
+    "patient32": {
+      "patient_id": "patient32",
+      "true_label": 1,
+      "pred_prob": 0.5998459458351135,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_4"
+    },
+    "patient43": {
+      "patient_id": "patient43",
+      "true_label": 1,
+      "pred_prob": 0.30722948908805847,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_4"
+    },
+    "patient51": {
+      "patient_id": "patient51",
+      "true_label": 1,
+      "pred_prob": 0.9726205468177795,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_4"
+    },
+    "patient58": {
+      "patient_id": "patient58",
+      "true_label": 1,
+      "pred_prob": 0.8191573619842529,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_4"
+    },
+    "patient69": {
+      "patient_id": "patient69",
+      "true_label": 1,
+      "pred_prob": 0.8589887619018555,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_4"
+    },
+    "patient75": {
+      "patient_id": "patient75",
+      "true_label": 1,
+      "pred_prob": 0.34060823917388916,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_4"
+    },
+    "patient80": {
+      "patient_id": "patient80",
+      "true_label": 1,
+      "pred_prob": 0.6086397171020508,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_4"
+    },
+    "patient86": {
+      "patient_id": "patient86",
+      "true_label": 1,
+      "pred_prob": 0.9505749344825745,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_4"
+    },
+    "patient96": {
+      "patient_id": "patient96",
+      "true_label": 1,
+      "pred_prob": 0.9734441637992859,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_4"
+    },
+    "patient99": {
+      "patient_id": "patient99",
+      "true_label": 1,
+      "pred_prob": 0.908017635345459,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_4"
+    },
+    "patient129": {
+      "patient_id": "patient129",
+      "true_label": 1,
+      "pred_prob": 0.3485833704471588,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_5"
+    },
+    "patient134": {
+      "patient_id": "patient134",
+      "true_label": 1,
+      "pred_prob": 0.4347411096096039,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_5"
+    },
+    "patient135": {
+      "patient_id": "patient135",
+      "true_label": 1,
+      "pred_prob": 0.7777081727981567,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_5"
+    },
+    "patient149": {
+      "patient_id": "patient149",
+      "true_label": 0,
+      "pred_prob": 0.24925479292869568,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_5"
+    },
+    "patient153": {
+      "patient_id": "patient153",
+      "true_label": 0,
+      "pred_prob": 0.5230638384819031,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_5"
+    },
+    "patient154": {
+      "patient_id": "patient154",
+      "true_label": 0,
+      "pred_prob": 0.33351072669029236,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_5"
+    },
+    "patient156": {
+      "patient_id": "patient156",
+      "true_label": 0,
+      "pred_prob": 0.4953894019126892,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_5"
+    },
+    "patient162": {
+      "patient_id": "patient162",
+      "true_label": 0,
+      "pred_prob": 0.16833150386810303,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_5"
+    },
+    "patient169": {
+      "patient_id": "patient169",
+      "true_label": 0,
+      "pred_prob": 0.3353424370288849,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_5"
+    },
+    "patient178": {
+      "patient_id": "patient178",
+      "true_label": 0,
+      "pred_prob": 0.38844728469848633,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_5"
+    },
+    "patient179": {
+      "patient_id": "patient179",
+      "true_label": 0,
+      "pred_prob": 0.18726769089698792,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_5"
+    },
+    "patient182": {
+      "patient_id": "patient182",
+      "true_label": 0,
+      "pred_prob": 0.14571966230869293,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_5"
+    },
+    "patient24": {
+      "patient_id": "patient24",
+      "true_label": 1,
+      "pred_prob": 0.8552924990653992,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_5"
+    },
+    "patient3": {
+      "patient_id": "patient3",
+      "true_label": 1,
+      "pred_prob": 0.9100967049598694,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_5"
+    },
+    "patient31": {
+      "patient_id": "patient31",
+      "true_label": 1,
+      "pred_prob": 0.6290871500968933,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_5"
+    },
+    "patient33": {
+      "patient_id": "patient33",
+      "true_label": 1,
+      "pred_prob": 0.5444309711456299,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_5"
+    },
+    "patient35": {
+      "patient_id": "patient35",
+      "true_label": 1,
+      "pred_prob": 0.6770351529121399,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_5"
+    },
+    "patient57": {
+      "patient_id": "patient57",
+      "true_label": 1,
+      "pred_prob": 0.6775776743888855,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_5"
+    },
+    "patient60": {
+      "patient_id": "patient60",
+      "true_label": 1,
+      "pred_prob": 0.5781930088996887,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_5"
+    },
+    "patient74": {
+      "patient_id": "patient74",
+      "true_label": 1,
+      "pred_prob": 0.30328038334846497,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_5"
+    },
+    "patient78": {
+      "patient_id": "patient78",
+      "true_label": 1,
+      "pred_prob": 0.47385895252227783,
+      "pred_binary": 0,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_5"
+    },
+    "patient81": {
+      "patient_id": "patient81",
+      "true_label": 1,
+      "pred_prob": 0.6736822724342346,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_5"
+    },
+    "patient82": {
+      "patient_id": "patient82",
+      "true_label": 1,
+      "pred_prob": 0.6519384980201721,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_5"
+    },
+    "patient97": {
+      "patient_id": "patient97",
+      "true_label": 1,
+      "pred_prob": 0.6065893769264221,
+      "pred_binary": 1,
+      "threshold_applied": 0.5,
+      "outer_fold": "fold_5"
+    }
+  }
+}

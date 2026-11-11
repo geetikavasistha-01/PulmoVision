@@ -1,10 +1,11 @@
 # PulmoVision — Master Progress Tracker
 
 ## Current Status
-🎉 **PHASE 3 COMPLETE: FULL BASELINE EXPERIMENTAL BENCHMARK CONDUCTED**  
-- Official COVID-CTset Fold 1 archive (12,058 16-bit TIFF slices) verified and extracted.
-- Sequential benchmark of 4 architectures (Custom CNN 2D, ResNet50 2D, ResNet50 2.5D, EfficientNet-B0 2.5D) completed.
-- Full comparative research evaluation report published: `reports/experiments/EVALUATION_REPORT.md`.
+🎉 **STAGE 2 RESEARCH COMPLETE: CNN-BiLSTM CROSS-VALIDATION BENCHMARK EXECUTED**  
+- Official Stage 2 5-fold outer cross-validation with inner validation holdouts conducted across 3 architectures (15 total runs).
+- Provenance & Quarantine: ImageNet-1K EfficientNet-B0 frozen feature extraction on 3,132 deduplicated slices; zero leakage; `test1.csv` quarantined.
+- Key Finding: BiLSTM sequence modeling achieved **0.9461 Macro F1** and **98.7% Sensitivity** (76/77 COVID-19 patients detected), outperforming atemporal pooling (0.8236 Macro F1, 17 missed COVID patients).
+- Full Stage 2 research evaluation report published: `reports/experiments/STAGE_2_EVALUATION_REPORT.md`.
 
 ## Overall Progress
 - **Module 0 — Project Foundations:** ✅ Completed
@@ -20,6 +21,7 @@
 - **Module 10 — Streamlit Application:** ✅ Completed
 - **Module 11 — Deployment & Optimisation:** ✅ Completed
 - **Module 12 — Testing & Portfolio Packaging:** ✅ Completed
+- **Stage 2 Research — CNN-BiLSTM Sequence Modelling:** ✅ Completed
 
 ---
 

@@ -77,4 +77,21 @@ PYTHONPATH=. python3 src/features/audit_feature_cache.py
 source venv/bin/activate
 pytest tests/ -v
 ```
-* **Current Result:** 55 passed in 8.74s (32 Stage 1 + 13 Stage 2 infrastructure + 10 Stage 2 de-duplication tests).
+* **Current Result:** 61 passed in 15.27s (all unit, regression, deduplication, and patient-weighting tests).
+
+---
+
+## 4. Stage 2 Benchmark Results Summary
+
+* **Execution Date:** November 11, 2026
+* **Hardware:** Apple Silicon Metal Performance Shaders (MPS)
+* **Total Benchmark Time:** 46.46s (15 total runs)
+
+| Experiment | Architecture | Pooled Macro F1 (95% CI) | ROC-AUC | Sensitivity | Specificity | Out-of-Fold Confusion |
+| :--- | :--- | :---: | :---: | :---: | :---: | :---: |
+| **Exp A** | Atemporal Mean Pooling | 0.8236 [0.7518, 0.8862] | 0.8652 | 77.92% | 91.11% | TP=60, FP=4, TN=41, FN=17 |
+| **Exp B** | BiLSTM + Mean Pooling | **0.9461** [0.8984, 0.9820] | **0.9688** | **98.70%** | 88.89% | TP=76, FP=5, TN=40, FN=1 |
+| **Exp C** | BiLSTM + Additive Attention | 0.9211 [0.8644, 0.9645] | 0.9466 | 93.51% | **91.11%** | TP=72, FP=4, TN=41, FN=5 |
+
+*Full comparative report available at `reports/experiments/STAGE_2_EVALUATION_REPORT.md`.*
+
