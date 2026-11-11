@@ -28,8 +28,9 @@
 1. **Feature Extraction:** External ImageNet-1K EfficientNet-B0 only. Zero in-domain exposure.
 2. **Preprocessing:** 16-bit radiodensity clipping $[200, 1800]$, scaling to $[0, 1]$, channel replication $R=G=B$, ImageNet standardization, bilinear resize to $224 \times 224$.
 3. **Anatomical De-duplication (Option 1):** Verified byte-identical redundant files across archive subfolders (`normal1` vs `normal5` / `normal4`) resolved to 1 canonical record with full duplicate alias provenance.
-4. **Cross-Validation:** Nested 5-fold CV with inner-validation for model selection and threshold tuning; outer validation evaluated once for unbiased OOF predictions.
-5. **Test Quarantine:** `test1.csv` remains strictly isolated as historical benchmark comparator.
+4. **Cross-Validation:** 5-Fold Outer Cross-Validation with Inner Validation Holdout; outer validation evaluated once for out-of-fold predictions generated without outer-validation leakage.
+5. **Equal Patient Weighting:** Patient-balanced loss aggregation $\mathcal{L}_{\text{batch}} = \frac{1}{B} \sum_{p=1}^B \left( \frac{1}{N_p} \sum_{s=1}^{N_p} \ell_{p, s} \right)$ guarantees equal patient influence across optimizer updates regardless of series count.
+6. **Test Quarantine:** `test1.csv` remains strictly isolated as historical benchmark comparator.
 
 ---
 

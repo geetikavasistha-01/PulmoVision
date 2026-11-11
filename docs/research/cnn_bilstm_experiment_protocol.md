@@ -54,9 +54,17 @@
 
 ---
 
-## 4. Decision 3: Nested Patient-Level Cross-Validation Design
+## 4. Decision 3: Five-Fold Outer Cross-Validation with Inner Validation Holdout
 
-To guarantee that out-of-fold performance estimates are completely unbiased by hyperparameter selection, early stopping, or threshold tuning, we implement **Nested Cross-Validation** across the $122$ development patients.
+### A. Architectural Terminology & Structure
+To prevent selection leakage while providing rapid, rigorous evaluation across the $122$ development patients, we implement **Five-Fold Outer Cross-Validation with an Inner Validation Holdout** (not full doubly-nested $5 \times 5$ cross-validation):
+* **Outer Structure:** 5 stratified outer patient folds (`cv_5fold_manifest.json`, `seed=42`).
+* **Inner Structure:** A single stratified 80/20 holdout split within each outer training fold (`seed = 100 + k`), yielding $\sim 78$ inner-training patients and $\sim 19–20$ inner-validation patients.
+* **Model Training Boundary:** Models are optimized strictly on the inner-training partition.
+* **Checkpoint & Threshold Selection:** Best model checkpoint and classification threshold $\tau^* \in [0.20, 0.80]$ are tuned strictly on the inner-validation partition.
+* **No Outer Refitting:** Models are **not** refitted on the combined outer-training partition, avoiding threshold and stopping-rule re-tuning leakage.
+* **Outer Evaluation Boundary:** The outer-validation patients remain completely untouched until final evaluation, evaluated **exactly once** using the frozen inner checkpoint and frozen $\tau^*$.
+* **Out-of-Fold Guarantee:** Pooling predictions across the 5 outer folds produces **out-of-fold predictions generated without outer-validation leakage** for all $122$ development patients.
 
 ```mermaid
 flowchart TD
@@ -64,7 +72,7 @@ flowchart TD
         D["77 COVID-19, 45 Normal"]
     end
 
-    subgraph Outer ["5-Fold Outer Cross-Validation (Unbiased Evaluation)"]
+    subgraph Outer ["5-Fold Outer Cross-Validation"]
         F1["Outer Fold 1: Train=97, Val=25"]
         F2["Outer Fold 2: Train=97, Val=25"]
         F3["Outer Fold 3: Train=98, Val=24"]
@@ -72,14 +80,14 @@ flowchart TD
         F5["Outer Fold 5: Train=98, Val=24"]
     end
 
-    subgraph Inner ["Inner Split (from Outer-Training Only)"]
-        IT["Inner Train (80% of Outer-Train: ~78 pts)\nGradient updates"]
-        IV["Inner Val (20% of Outer-Train: ~19-20 pts)\nEarly stopping, checkpoint selection, tau tuning"]
+    subgraph Inner ["Single Inner Holdout Split (from Outer-Training Only)"]
+        IT["Inner Train (80%: ~78 pts)\nGradient updates"]
+        IV["Inner Val (20%: ~19-20 pts)\nEarly stopping, checkpoint selection, tau tuning"]
     end
 
-    subgraph OOF ["Unbiased OOF Evaluation"]
+    subgraph OOF ["Evaluation Without Outer-Validation Leakage"]
         Eval["Evaluate Frozen Best Model ONCE on Outer Val Patients\nRecord Out-of-Fold Predictions & Probabilities"]
-        Pool["Pool All 122 OOF Predictions\nCompute Global Metrics & Bootstrap 95% CIs"]
+        Pool["Pool All 122 Predictions\nCompute Global Metrics & Bootstrap 95% CIs"]
     end
 
     Dev --> F1 & F2 & F3 & F4 & F5
@@ -90,19 +98,31 @@ flowchart TD
     Eval --> Pool
 ```
 
-### Protocol for Each Outer Fold $k \in \{1, \dots, 5\}$:
+### B. Equal Patient-Level Loss Formulation
+Because patients have variable numbers of scan series ($N_p \in \{1, 2, 3\}$, 55 patients with 1 series, 67 with multiple series), naive sample-level loss averaging would inflate the gradient influence of multi-series patients.
+
+To enforce **strict equal patient-level influence across optimizer updates**, batching is organized by patient units, and loss is aggregated at the patient level:
+1. For patient $p$ with $N_p$ series, let $\ell_{p, s}$ be the unreduced cross-entropy loss for series $s \in \{1, \dots, N_p\}$ using class weights derived exclusively from inner-training patient counts:
+   $$\mathcal{L}_p = \frac{1}{N_p} \sum_{s=1}^{N_p} \ell_{p, s}$$
+2. For a minibatch of $B$ patients, the backpropagated batch loss is the unweighted mean of patient-level losses:
+   $$\mathcal{L}_{\text{batch}} = \frac{1}{B} \sum_{p=1}^B \mathcal{L}_p = \frac{1}{B} \sum_{p=1}^B \left( \frac{1}{N_p} \sum_{s=1}^{N_p} \ell_{p, s} \right)$$
+3. **Mathematical Invariant:** Every patient in the minibatch contributes exactly $\frac{1}{B}$ to the objective:
+   $$\left\| \frac{\partial \mathcal{L}_{\text{batch}}}{\partial \mathcal{L}_p} \right\| = \frac{1}{B} \quad \forall p \in \{1, \dots, B\}$$
+   A patient with 3 series has each series weighted by $\frac{1}{3B}$, summing to $\frac{1}{B}$, identical to a patient with 1 series.
+
+### C. Protocol for Each Outer Fold $k \in \{1, \dots, 5\}$:
 1. **Outer Partition:** Outer training set ($\text{Train}_k$, ~97–98 patients) and Outer validation set ($\text{Val}_k$, ~24–25 patients).
 2. **Inner Split Creation:** From $\text{Train}_k$ alone, construct an inner stratified validation split ($80\%$ inner-train $\approx 78$ patients; $20\%$ inner-val $\approx 19–20$ patients) using fixed inner seed (`seed=100 + k`).
 3. **Inner Optimization Boundary:**
-   - Optimize model weights strictly on inner-train batches.
-   - Use inner-validation loss and inner-validation Macro F1 for **early stopping** (patience = 5 epochs) and **best checkpoint selection**.
-   - Use inner-validation probabilities to select the optimal patient classification threshold $\tau^* \in [0.10, 0.50]$.
+   - Optimize model weights strictly on inner-train patient batches using the patient-balanced loss $\mathcal{L}_{\text{batch}}$.
+   - Checkpoint selection: Best inner-validation Macro F1 at $\tau = 0.50$ (patience = 5 epochs, max 30 epochs).
+   - Threshold tuning: Grid search $\tau^* \in [0.20, 0.80]$ with step $0.05$ (13 candidates) on inner-validation patient probabilities with a deterministic tie-breaking rule toward $\tau = 0.50$.
 4. **Strict Outer Isolation:** Outer-validation patients ($\text{Val}_k$) are **never seen** during training, early stopping, checkpoint selection, or threshold search.
-5. **Single Unbiased Outer Evaluation:** Restore the best inner-validation checkpoint, apply the frozen threshold $\tau^*$, and evaluate on $\text{Val}_k$ **exactly once**.
+5. **Single Outer Evaluation:** Restore the best inner-validation checkpoint, apply the frozen threshold $\tau^*$, and evaluate on $\text{Val}_k$ **exactly once**.
 6. **OOF Storage:** Record predicted continuous probabilities and binary labels for all patients in $\text{Val}_k$.
 
 ### Complete Cohort Coverage:
-After all 5 outer folds complete, every one of the 122 development patients has **exactly one unbiased out-of-fold prediction**.
+After all 5 outer folds complete, every one of the 122 development patients has **exactly one out-of-fold prediction generated without outer-validation leakage**.
 
 ### Computational Implications:
 Nested CV trains $5$ models per experiment ($15$ models total for Experiments A, B, and C). Because feature vectors are pre-cached, each model trains in $\approx 2–5\text{ seconds}$ on Apple Silicon MPS. The entire 15-model nested benchmark completes in **under 2 minutes**.

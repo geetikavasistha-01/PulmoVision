@@ -164,10 +164,15 @@ def find_optimal_threshold(
 ) -> Tuple[float, float]:
     """
     Searches inner validation probabilities to find classification threshold tau*
-    that maximizes inner Macro F1.
+    that maximizes inner Macro F1 with a deterministic tie-breaking rule favoring tau = 0.50.
+    
+    Tie-breaking rule:
+    1. Maximum Macro F1.
+    2. If tied, threshold closest to canonical prior tau = 0.50.
+    3. If equidistant (e.g. 0.45 vs 0.55), pick the higher threshold for conservative specificity.
     """
     if threshold_grid is None:
-        threshold_grid = [float(t) for t in np.linspace(0.10, 0.90, 17)]
+        threshold_grid = [float(t) for t in np.linspace(0.20, 0.80, 13)]
         
     best_tau = 0.50
     best_f1 = -1.0
@@ -178,11 +183,48 @@ def find_optimal_threshold(
     for tau in threshold_grid:
         preds = (y_probs_arr >= tau).astype(int).tolist()
         m = compute_classification_metrics(y_true, preds)
-        if m["macro_f1"] > best_f1:
-            best_f1 = m["macro_f1"]
+        f1 = m["macro_f1"]
+        
+        if f1 > best_f1:
+            best_f1 = f1
             best_tau = tau
+        elif abs(f1 - best_f1) < 1e-6:
+            # Tie-break towards 0.50
+            if abs(tau - 0.50) < abs(best_tau - 0.50):
+                best_tau = tau
+            elif abs(abs(tau - 0.50) - abs(best_tau - 0.50)) < 1e-6:
+                best_tau = max(tau, best_tau)
             
     return best_tau, best_f1
+
+
+def compute_patient_balanced_loss(
+    logits: torch.Tensor,
+    series_patient_indices: torch.Tensor,
+    patient_labels: torch.Tensor,
+    criterion: nn.Module,
+) -> Tuple[torch.Tensor, torch.Tensor]:
+    """
+    Computes patient-balanced loss:
+    1. Evaluates individual series losses using unreduced class-weighted cross-entropy.
+    2. Aggregates series losses belonging to the same patient via exact mean.
+    3. Computes the arithmetic mean across patient-level losses.
+    
+    Guarantees:
+    - Every patient in the minibatch contributes exactly 1/B to the objective.
+    - A patient with N_p series contributes exactly 1/B * (1/N_p * sum(series_losses)).
+    - A patient with 1 series contributes exactly 1/B * series_loss.
+    """
+    B = patient_labels.size(0)
+    series_labels = patient_labels[series_patient_indices]
+    unreduced_loss = criterion(logits, series_labels) # [M]
+
+    patient_losses = torch.zeros(B, device=logits.device, dtype=logits.dtype)
+    for p_idx in range(B):
+        p_mask = (series_patient_indices == p_idx)
+        patient_losses[p_idx] = unreduced_loss[p_mask].mean()
+
+    return patient_losses.mean(), patient_losses
 
 
 def train_epoch(
@@ -192,15 +234,21 @@ def train_epoch(
     criterion: nn.Module,
     device: torch.device
 ) -> float:
-    """Trains sequence model for one epoch over variable-length sequence batches."""
+    """
+    Trains sequence model for one epoch over patient-balanced batches.
+    Enforces EQUAL PATIENT-LEVEL OPTIMIZATION:
+    All series for a patient are evaluated together; patient loss is the mean over
+    their series, and batch loss is the unweighted mean across the B patients.
+    """
     model.train()
     total_loss = 0.0
+    num_patients = 0
+
     for batch in loader:
         optimizer.zero_grad()
         x = batch["embeddings"].to(device)
         mask = batch["mask"].to(device)
         lengths = batch["lengths"].to(device)
-        labels = batch["labels"].to(device)
 
         # Handle models with or without lengths argument
         try:
@@ -208,12 +256,29 @@ def train_epoch(
         except TypeError:
             logits = model(x, mask=mask)
 
-        loss = criterion(logits, labels)
-        loss.backward()
-        optimizer.step()
-        total_loss += loss.item() * len(labels)
+        if "series_patient_indices" in batch and "patient_labels" in batch:
+            series_patient_indices = batch["series_patient_indices"].to(device)
+            patient_labels = batch["patient_labels"].to(device)
+            loss, p_losses = compute_patient_balanced_loss(
+                logits, series_patient_indices, patient_labels, criterion
+            )
+            b_pts = patient_labels.size(0)
+            loss.backward()
+            optimizer.step()
+            total_loss += p_losses.sum().item()
+            num_patients += b_pts
+        else:
+            labels = batch["labels"].to(device)
+            patient_weights = batch.get("patient_weights", torch.ones_like(labels, dtype=torch.float32)).to(device)
+            unreduced_loss = criterion(logits, labels)
+            weighted_loss = unreduced_loss * patient_weights
+            loss = weighted_loss.sum() / patient_weights.sum().clamp(min=1e-6)
+            loss.backward()
+            optimizer.step()
+            total_loss += weighted_loss.sum().item()
+            num_patients += len(labels)
 
-    return total_loss / len(loader.dataset)
+    return total_loss / max(num_patients, 1)
 
 
 @torch.no_grad()
@@ -223,41 +288,59 @@ def evaluate_patient_predictions(
     device: torch.device
 ) -> Dict[str, Dict[str, Any]]:
     """
-    Evaluates model on sequence batches, returning patient-aggregated probabilities.
-    For patients with multiple series, aggregates series probabilities via mean.
+    Evaluates model on patient-balanced sequence batches, returning patient-aggregated probabilities.
+    For each patient, computes the mean predicted probability across all their series.
     """
     model.eval()
-    patient_series_probs: Dict[str, List[float]] = {}
-    patient_labels: Dict[str, int] = {}
+    patient_results: Dict[str, Dict[str, Any]] = {}
 
     for batch in loader:
         x = batch["embeddings"].to(device)
         mask = batch["mask"].to(device)
         lengths = batch["lengths"].to(device)
-        labels = batch["labels"]
-        patient_ids = batch["patient_ids"]
 
         try:
             logits = model(x, mask=mask, lengths=lengths)
         except TypeError:
             logits = model(x, mask=mask)
 
-        probs = torch.softmax(logits, dim=1)[:, 1].cpu().tolist() # COVID-19 probability
+        probs = torch.softmax(logits, dim=1)[:, 1] # COVID-19 probability [M]
 
-        for pid, prob, lbl in zip(patient_ids, probs, labels.tolist()):
-            patient_series_probs.setdefault(pid, []).append(prob)
-            patient_labels[pid] = lbl
+        if "series_patient_indices" in batch and "patient_labels" in batch:
+            series_patient_indices = batch["series_patient_indices"].to(device)
+            patient_labels = batch["patient_labels"]
+            patient_ids = batch["patient_ids"]
 
-    # Aggregate by patient: mean series probability
-    patient_results = {}
-    for pid, probs_list in patient_series_probs.items():
-        patient_results[pid] = {
+            B = patient_labels.size(0)
+            for p_idx in range(B):
+                p_mask = (series_patient_indices == p_idx)
+                p_prob = probs[p_mask].mean().item()
+                pid = patient_ids[p_idx]
+                patient_results[pid] = {
+                    "patient_id": pid,
+                    "true_label": int(patient_labels[p_idx].item()),
+                    "pred_prob": float(p_prob),
+                    "num_series": int(p_mask.sum().item()),
+                }
+        else:
+            labels = batch["labels"].tolist()
+            patient_ids = batch["patient_ids"]
+            for pid, prob, lbl in zip(patient_ids, probs.cpu().tolist(), labels):
+                patient_results.setdefault(pid, {"probs": [], "label": lbl})["probs"].append(prob)
+
+    if not patient_results or "probs" not in next(iter(patient_results.values())):
+        return patient_results
+
+    # Fallback aggregation for non-patient-balanced loader
+    formatted = {}
+    for pid, data in patient_results.items():
+        formatted[pid] = {
             "patient_id": pid,
-            "true_label": patient_labels[pid],
-            "pred_prob": float(np.mean(probs_list)),
-            "num_series": len(probs_list),
+            "true_label": data["label"],
+            "pred_prob": float(np.mean(data["probs"])),
+            "num_series": len(data["probs"]),
         }
-    return patient_results
+    return formatted
 
 
 def run_nested_cv_benchmark(
@@ -313,22 +396,24 @@ def run_nested_cv_benchmark(
         inner_val_pids = fold_info["inner_val_patients"]
         outer_val_pids = fold_info["outer_val_patients"]
 
-        # Datasets
-        inner_train_ds = CachedEmbeddingDataset(cache, patient_ids=inner_train_pids)
-        inner_val_ds = CachedEmbeddingDataset(cache, patient_ids=inner_val_pids)
-        outer_val_ds = CachedEmbeddingDataset(cache, patient_ids=outer_val_pids)
+        # Datasets indexed directly by patient to enforce equal patient-level optimization
+        from src.data.sequence_dataset import PatientSequenceDataset, collate_patient_balanced_batch
+
+        inner_train_ds = PatientSequenceDataset(cache, patient_ids=inner_train_pids)
+        inner_val_ds = PatientSequenceDataset(cache, patient_ids=inner_val_pids)
+        outer_val_ds = PatientSequenceDataset(cache, patient_ids=outer_val_pids)
 
         inner_train_loader = DataLoader(
-            inner_train_ds, batch_size=batch_size, shuffle=True, collate_fn=collate_sequence_embeddings
+            inner_train_ds, batch_size=batch_size, shuffle=True, collate_fn=collate_patient_balanced_batch
         )
         inner_val_loader = DataLoader(
-            inner_val_ds, batch_size=batch_size, shuffle=False, collate_fn=collate_sequence_embeddings
+            inner_val_ds, batch_size=batch_size, shuffle=False, collate_fn=collate_patient_balanced_batch
         )
         outer_val_loader = DataLoader(
-            outer_val_ds, batch_size=batch_size, shuffle=False, collate_fn=collate_sequence_embeddings
+            outer_val_ds, batch_size=batch_size, shuffle=False, collate_fn=collate_patient_balanced_batch
         )
 
-        # Class weights from inner-training labels only
+        # Class weights calculated exclusively from inner-training PATIENT counts
         inner_train_labels = [item["label"] for item in inner_train_ds]
         n_covid = sum(inner_train_labels)
         n_norm = len(inner_train_labels) - n_covid
@@ -336,7 +421,7 @@ def run_nested_cv_benchmark(
         w_covid = len(inner_train_labels) / (2.0 * max(n_covid, 1))
         class_weights = torch.tensor([w_norm, w_covid], dtype=torch.float32).to(device)
 
-        criterion = nn.CrossEntropyLoss(weight=class_weights)
+        criterion = nn.CrossEntropyLoss(weight=class_weights, reduction="none")
         model = get_stage2_model(model_name).to(device)
         optimizer = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=weight_decay)
 
