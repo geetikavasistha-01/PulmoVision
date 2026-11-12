@@ -117,7 +117,7 @@ def main():
             
             However, real chest CT scans are **anatomically continuous volumetric sequences** along the axial 
             z-axis (from lung apices to diaphragmatic bases). When viral pneumonia features are localized to basal segments, 
-            simple atemporal averaging often **dilutes** focal visual signals into background slice noise.
+            simple atemporal averaging often attenuates focal visual signals across dozens of uninvolved slices.
             """)
 
             st.markdown("### Stage 2 Core Hypotheses")
@@ -223,8 +223,8 @@ Masked Global Mean Pooling over T: [B, 256]
   ↓
 MLP Classifier: Linear(256 -> 64) -> SiLU -> Dropout(0.3) -> Linear(64 -> 2)
   ↓
-Output: Patient Logits [B, 2] -> Calibrated Probability P(COVID-19)
-Total Trainable Parameters: 1,492,034 (~1.49M)
+Output: Patient Logits [B, 2] -> Predicted Probability P(COVID-19)
+Total Trainable Parameters: 1,460,418 (~1.46M)
             """, language="text")
 
         with tab_c:
@@ -243,7 +243,7 @@ Attention Weights: alpha_t = softmax(e_t) in [0, 1] (masked over padding)
 Context Vector: c = sum_t (alpha_t * h_t) in R^256
   ↓
 MLP Classifier: Linear(256 -> 64) -> SiLU -> Dropout(0.3) -> Linear(64 -> 2)
-Total Trainable Parameters: 1,508,483 (~1.51M)
+Total Trainable Parameters: 1,476,930 (~1.48M)
             """, language="text")
 
         with tab_a:
@@ -308,13 +308,15 @@ Total Trainable Parameters: 82,114 (~82K)
         predictor = get_sequence_predictor()
 
         sample_dir = "data/interim/sample_audit/TrainValidation"
-        sample_files = sorted(glob.glob(os.path.join(sample_dir, "*.tif"))) if os.path.exists(sample_dir) else []
+        sample_files = sorted(glob.glob("data/raw/TrainValidation/*patient100_SR_2*.tif"))[:5]
+        if not sample_files and os.path.exists(sample_dir):
+            sample_files = sorted(glob.glob(os.path.join(sample_dir, "*.tif")))
 
         tab1, tab2 = st.tabs(["⚡ One-Click Verified Sample Scan", "📤 Upload Custom CT Slices"])
 
         with tab1:
             if sample_files:
-                st.write(f"Found **{len(sample_files)}** sample slice(s) in repository cache.")
+                st.write(f"Found **{len(sample_files)}** sample slice(s) in development scan (`patient100_SR_2`).")
                 if st.button("🚀 Analyze Sample Sequence with BiLSTM", type="primary"):
                     with st.spinner("Executing sequence validation, feature extraction & BiLSTM inference..."):
                         res = predictor.predict_sequence(sample_files)
@@ -330,7 +332,10 @@ Total Trainable Parameters: 82,114 (~82K)
 
                     st.divider()
                     st.subheader("Craniocaudal Slice Visualizer")
-                    slice_idx = st.slider("Axial Slice Navigation (z-axis)", 0, res["num_slices"] - 1, 0)
+                    if res["num_slices"] > 1:
+                        slice_idx = st.slider("Axial Slice Navigation (z-axis)", 0, res["num_slices"] - 1, 0)
+                    else:
+                        slice_idx = 0
                     st.image(res["display_slices"][slice_idx], caption=f"Axial Slice {res['slice_indices'][slice_idx]} (Lung Window)", width=450)
             else:
                 st.info("No sample files found in interim cache. Please use the Upload tab.")
@@ -367,7 +372,10 @@ Total Trainable Parameters: 82,114 (~82K)
                         c3.metric("Total Latency", f"{res['inference_latency_ms']:.1f} ms")
 
                         st.subheader("Axial CT Cross-Section Viewer")
-                        nav_idx = st.slider("Select Slice", 0, res["num_slices"] - 1, 0, key="custom_slider")
+                        if res["num_slices"] > 1:
+                            nav_idx = st.slider("Select Slice", 0, res["num_slices"] - 1, 0, key="custom_slider")
+                        else:
+                            nav_idx = 0
                         st.image(res["display_slices"][nav_idx], caption=f"Slice {res['slice_indices'][nav_idx]}", width=450)
 
                 except SequenceValidationError as e:

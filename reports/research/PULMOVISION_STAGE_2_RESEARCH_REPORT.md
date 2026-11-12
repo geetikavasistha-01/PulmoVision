@@ -28,7 +28,7 @@ Experiment B demonstrated the strongest performance on the development cohort, a
 ### 2.1 Limitations of Heuristic Slice-Based Classification
 In Stage 1 baseline investigations, 2D and 2.5D Convolutional Neural Networks classified individual CT cross-sections in isolation. Patient-level diagnostic decisions were obtained post-hoc by applying an empirical threshold ($\tau = 0.20$) to the proportion of predicted positive slices within a scan. This paradigm exhibits fundamental limitations:
 1. **Volumetric Craniocaudal Discontinuity:** CT acquisitions represent continuous volumetric scans along the longitudinal z-axis (from cranial lung apices to caudal diaphragmatic bases). Treating slices as independent instances discards anatomical continuity.
-2. **The Dilution Effect:** Pulmonary viral manifestations (e.g., peripheral opacities) are often localized to specific basal segments. In atemporal uniform averaging, the distinctive feature signal of a few abnormal slices can be diluted by dozens of uninvolved slices.
+2. **Atemporal Pooling Limitations:** Pulmonary viral manifestations (e.g., peripheral opacities) are often localized to specific basal segments. In atemporal uniform averaging, assigning equal weight across all slices means features from non-involved parenchymal slices attenuate focal visual patterns, leading to reduced sensitivity.
 3. **Decoupled Training Objective:** The feature extractor and classifier in slice-based systems are optimized for slice discrimination, rather than end-to-end patient diagnosis.
 
 ### 2.2 Stage 2 Research Objectives
@@ -143,14 +143,14 @@ flowchart TD
 * **Aggregation:** Masked global mean pooling across the $T$ recurrent states:
   $$\mathbf{c}_p = \frac{1}{T_p} \sum_{t=1}^{T_p} \mathbf{h}_{p, t} \in \mathbb{R}^{256}$$
 * **Classifier:** $\text{Linear}(256 \to 64) \to \text{SiLU} \to \text{Dropout}(0.3) \to \text{Linear}(64 \to 2)$.
-* **Trainable Parameters:** $1,492,034$.
+* **Trainable Parameters:** $1,460,418$.
 
 ### 6.3 Experiment C: BiLSTM + Additive Attention Pooling (`effnet_b0_bilstm_attention`)
 * **Mechanism:** Identical 1-layer BiLSTM ($2H = 256$), followed by single-head Bahdanau additive attention:
   $$\mathbf{u}_t = \tanh(\mathbf{W}_a \mathbf{h}_t + \mathbf{b}_a) \in \mathbb{R}^{64}, \quad e_t = \mathbf{v}_a^\top \mathbf{u}_t \in \mathbb{R}^1$$
   $$\alpha_t = \frac{\exp(e_t) \cdot M_t}{\sum_{j=1}^{T_p} \exp(e_j) + \epsilon} \in [0, 1], \quad \mathbf{c}_p = \sum_{t=1}^{T_p} \alpha_t \mathbf{h}_t \in \mathbb{R}^{256}$$
 * **Classifier:** $\text{Linear}(256 \to 64) \to \text{SiLU} \to \text{Dropout}(0.3) \to \text{Linear}(64 \to 2)$.
-* **Trainable Parameters:** $1,508,483$.
+* **Trainable Parameters:** $1,476,930$.
 
 ---
 
@@ -272,7 +272,7 @@ Total                     46                   76            122
 ### 10.2 Forensic Error Inspection
 * **Systematic Normal False Positives:** Two patients labeled Normal (`patient146` and `patient190`) received high predicted COVID-19 probabilities across all three architectures ($P > 0.86$ in A, $P > 0.91$ in B, $P > 0.92$ in C). Visual inspection reveals substantial radiodensity variations and structural anomalies within these scans. However, **no diagnostic conclusion of fibrosis or non-COVID consolidation can be made without independent qualified radiologist review**.
 * **The Single False Negative in Experiment B:** `patient89` was the only COVID-19 patient missed by BiLSTM ($P = 0.222$). This patient was also missed by Model A ($P = 0.029$) and Model C ($P = 0.217$). In `patient89`, visible opacity is confined to only 2 slices, with the remaining 26 slices exhibiting normal visual characteristics.
-* **Empirical Observation on Recurrent Memory:** Experiment A missed 17 COVID-19 patients, whereas Experiment B missed only 1. While sequential modeling appears to prevent dilution of focal slice patterns, **this remains an empirical hypothesis requiring formal multi-dataset validation**.
+* **Empirical Observation on Recurrent Sequence Modeling:** Experiment A missed 17 COVID-19 patients, whereas Experiment B missed only 1 on this development cohort. While bidirectional recurrent modeling demonstrates higher sensitivity to focal abnormal slices than unweighted averaging, **this remains an empirical observation requiring multi-center external validation**.
 
 ---
 

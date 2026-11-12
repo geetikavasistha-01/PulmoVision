@@ -50,3 +50,21 @@ def test_sequence_predictor_single_slice_fallback():
     assert res["warning"] is not None
     assert "Single-slice input" in res["warning"]
 
+
+def test_sequence_predictor_real_tiff_file_inference():
+    import glob
+    pred = SequencePredictor()
+    real_files = sorted(glob.glob("data/raw/TrainValidation/*patient100_SR_2*.tif"))[:3]
+    if not real_files:
+        pytest.skip("Raw development TIFF files not found in local workspace")
+
+    res = pred.predict_sequence(real_files)
+    assert res["predicted_class"] in ["Normal", "COVID-19"]
+    assert 0.0 <= res["covid_19_probability"] <= 1.0
+    assert 0.0 <= res["normal_probability"] <= 1.0
+    assert res["num_slices"] == len(real_files)
+    assert res["is_single_slice"] is False
+    assert len(res["display_slices"]) == len(real_files)
+    assert res["inference_latency_ms"] > 0
+
+
