@@ -1,7 +1,8 @@
-"""
-PulmoVision — Clinical CT Viewport Component
-Renders axial CT slice cross-sections on a dedicated dark canvas in both Dark and Light themes.
+"""app/components/ct_viewer.py - Clinical CT Viewport Component.
+
+Renders axial CT slice cross-sections on a dedicated pitch-black canvas in both Dark and Light themes.
 Preserves isotropic 1:1 aspect ratio, radiodensity windowing display, and interactive slice navigation.
+Zero decorative emojis; uses Material Symbols for navigation controls.
 """
 
 from typing import List, Any, Optional
@@ -16,8 +17,8 @@ def render_ct_viewport(
     series_id: str = "Unknown",
     key_prefix: str = "ct_view"
 ) -> int:
-    """
-    Renders an interactive medical imaging viewport.
+    """Renders an interactive medical imaging viewport.
+
     Returns:
         The currently selected slice index (0 to len(slices)-1).
     """
@@ -26,9 +27,15 @@ def render_ct_viewport(
         st.markdown(
             """
             <div class="pv-workstation-panel" style="text-align: center; padding: 40px 20px;">
-                <div style="font-size: 2.2rem; margin-bottom: 8px;">🩻</div>
+                <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: #64748b; margin-bottom: 8px;">
+                    <rect width="18" height="18" x="3" y="3" rx="2"/>
+                    <path d="M9 3v18"/>
+                    <path d="M15 3v18"/>
+                    <path d="M3 9h18"/>
+                    <path d="M3 15h18"/>
+                </svg>
                 <div style="font-weight: 600; color: #f1f5f9; margin-bottom: 4px;">No CT Slices Loaded</div>
-                <div style="font-size: 0.82rem; color: #94a3b8;">Upload ordered 16-bit TIFF cross-sections to initialize the clinical viewport.</div>
+                <div style="font-size: 0.82rem; color: #94a3b8;">Upload ordered 16-bit TIFF cross-sections or select a sample series to initialize the viewport.</div>
             </div>
             """,
             unsafe_allow_html=True
@@ -45,6 +52,7 @@ def render_ct_viewport(
         st.session_state[state_key] = num_slices - 1
 
     current_idx = st.session_state[state_key]
+    anatomical_idx = slice_indices[current_idx] if current_idx < len(slice_indices) else current_idx + 1
 
     # Viewport Top Bar (Patient & Acquisition Metadata)
     st.markdown(
@@ -57,7 +65,7 @@ def render_ct_viewport(
                     <span style="font-family: var(--pv-font-mono); color: #38bdf8; font-size: 0.82rem;">SERIES: {series_id}</span>
                 </div>
                 <div style="font-family: var(--pv-font-mono); font-size: 0.80rem; color: #00b4d8;">
-                    SLICE: <strong>{current_idx + 1}</strong> / {num_slices} (ANATOMICAL INDEX: {slice_indices[current_idx]})
+                    SLICE: <strong>{current_idx + 1}</strong> / {num_slices} (ANATOMICAL INDEX: {anatomical_idx})
                 </div>
             </div>
         </div>
@@ -83,7 +91,7 @@ def render_ct_viewport(
 
     st.image(
         norm_slice,
-        caption=f"Axial Cross-Section {slice_indices[current_idx]} &bull; Display Window: [200, 1800] Radiodensity Counts",
+        caption=f"Axial Cross-Section {anatomical_idx} &bull; Display Window: [200, 1800] Radiodensity Counts",
         width=480
     )
 
@@ -92,10 +100,10 @@ def render_ct_viewport(
     # Slice Navigation Controls (Previous / Next Buttons & Slider)
     if num_slices > 1:
         st.markdown("<div style='margin-top: 10px;'></div>", unsafe_allow_html=True)
-        col_prev, col_slider, col_next = st.columns([1, 4, 1])
+        col_prev, col_slider, col_next = st.columns([1.2, 3.6, 1.2])
 
         with col_prev:
-            if st.button("◀ Prev Slice", key=f"{key_prefix}_prev_btn", use_container_width=True):
+            if st.button(":material/arrow_back: Previous", key=f"{key_prefix}_prev_btn", use_container_width=True):
                 if st.session_state[state_key] > 0:
                     st.session_state[state_key] -= 1
                     st.rerun()
@@ -114,7 +122,7 @@ def render_ct_viewport(
                 st.rerun()
 
         with col_next:
-            if st.button("Next Slice ▶", key=f"{key_prefix}_next_btn", use_container_width=True):
+            if st.button("Next :material/arrow_forward:", key=f"{key_prefix}_next_btn", use_container_width=True):
                 if st.session_state[state_key] < num_slices - 1:
                     st.session_state[state_key] += 1
                     st.rerun()
@@ -122,4 +130,3 @@ def render_ct_viewport(
         st.caption("Single-slice CT scan: axial z-axis slider disabled.")
 
     return st.session_state[state_key]
-

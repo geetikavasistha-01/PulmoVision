@@ -81,10 +81,10 @@ def render_metric_comparison_barchart() -> None:
         {"Experiment": "Exp A (Global Mean)", "Metric": "Sensitivity", "Score": 0.7792},
         {"Experiment": "Exp A (Global Mean)", "Metric": "Specificity", "Score": 0.9111},
         
-        {"Experiment": "Exp B (BiLSTM Mean) 🏆", "Metric": "Macro F1", "Score": 0.9461},
-        {"Experiment": "Exp B (BiLSTM Mean) 🏆", "Metric": "ROC-AUC", "Score": 0.9688},
-        {"Experiment": "Exp B (BiLSTM Mean) 🏆", "Metric": "Sensitivity", "Score": 0.9870},
-        {"Experiment": "Exp B (BiLSTM Mean) 🏆", "Metric": "Specificity", "Score": 0.8889},
+        {"Experiment": "Exp B (BiLSTM Mean) [Leader]", "Metric": "Macro F1", "Score": 0.9461},
+        {"Experiment": "Exp B (BiLSTM Mean) [Leader]", "Metric": "ROC-AUC", "Score": 0.9688},
+        {"Experiment": "Exp B (BiLSTM Mean) [Leader]", "Metric": "Sensitivity", "Score": 0.9870},
+        {"Experiment": "Exp B (BiLSTM Mean) [Leader]", "Metric": "Specificity", "Score": 0.8889},
         
         {"Experiment": "Exp C (BiLSTM Attn)", "Metric": "Macro F1", "Score": 0.9211},
         {"Experiment": "Exp C (BiLSTM Attn)", "Metric": "ROC-AUC", "Score": 0.9466},
@@ -102,7 +102,7 @@ def render_metric_comparison_barchart() -> None:
             color=alt.Color(
                 "Experiment:N",
                 scale=alt.Scale(
-                    domain=["Exp A (Global Mean)", "Exp B (BiLSTM Mean) 🏆", "Exp C (BiLSTM Attn)"],
+                    domain=["Exp A (Global Mean)", "Exp B (BiLSTM Mean) [Leader]", "Exp C (BiLSTM Attn)"],
                     range=["#64748b", "#00b4d8", "#f59e0b"]
                 ),
                 legend=alt.Legend(orient="bottom", title=None)

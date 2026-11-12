@@ -41,7 +41,7 @@ def render_overview_view() -> None:
     render_cohort_kpis()
 
     # 3. Leading Experiment Highlight
-    st.markdown("### Leading Architecture Benchmark (Experiment B: BiLSTM + Mean Pooling 🏆)")
+    st.markdown("### Leading Architecture Benchmark (Experiment B: BiLSTM + Mean Pooling — Selected Leader)")
     st.caption("Pooled out-of-fold performance across all 122 development patients (5 outer folds).")
     render_leader_benchmark_cards()
 

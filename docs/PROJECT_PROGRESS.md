@@ -7,8 +7,9 @@
 - Complete product-level redesign delivered: Modular hybrid Scientific AI Research Laboratory + Clinical Imaging Workstation.
 - Dual visual themes implemented: **Clinical Dark** and **Laboratory Light**, with high-contrast pitch-black radiological CT viewport invariant.
 - All 7 destinations fully implemented and verified: Research Overview, Dataset Explorer, Model Laboratory, Experiment Analytics, CT Workstation, Explainability & Boundaries, and Research Documentation.
-- Automated testing: **81 / 81 tests passing (100% green)** in 18.05 seconds. Full UI test suite in `tests/test_ui_modules.py`.
-- Comprehensive Implementation Report published: `reports/experiments/FINAL_APPLICATION_IMPLEMENTATION_REPORT.md`.
+- Automated testing: **95 / 95 tests passing (100% green)** in 13.22 seconds across data, deduplication, architectures, patient-balanced weighting, sequence validation, manifest adapter, and UI modules.
+- UI Refinement & Acceptance: Restored Dataset Explorer via `ManifestAdapter`, standardized Material Symbols across navigation (0 unicode emojis), and verified CT Workstation on real 16-bit development TIFF sequences.
+- Comprehensive Implementation Reports published: `reports/experiments/FINAL_APPLICATION_IMPLEMENTATION_REPORT.md` and `reports/experiments/FINAL_UI_IMPLEMENTATION_REPORT.md`.
 - Provenance & Quarantine: Sealed held-out test partition (`test1.csv`) preserved unopened with zero read exposure.
 
 ## Overall Progress

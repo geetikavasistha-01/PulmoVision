@@ -18,14 +18,16 @@ from app.utils.paths import (
     STAGE2_EXP_C_JSON,
     STAGE2_DEPLOYMENT_CKPT,
 )
+from app.utils.manifest_adapter import ManifestAdapter
 
 
 @st.cache_data
 def load_dev_manifest() -> pd.DataFrame:
     """Loads approved Stage 2 deduplicated development manifest (122 patients, 3,132 slices)."""
     if DEV_DEDUP_MANIFEST_CSV.exists():
-        df = pd.read_csv(DEV_DEDUP_MANIFEST_CSV)
-        return df
+        return ManifestAdapter.adapt_manifest(DEV_DEDUP_MANIFEST_CSV)
+    elif DEV_DEDUP_MANIFEST_JSON.exists():
+        return ManifestAdapter.adapt_manifest(DEV_DEDUP_MANIFEST_JSON)
     return pd.DataFrame()
 
 

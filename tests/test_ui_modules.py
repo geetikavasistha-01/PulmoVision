@@ -8,14 +8,21 @@ Verifies:
 5. All 7 view modules import cleanly
 6. Research report markdown availability
 7. Strict quarantine check: No UI module imports or reads quarantined test partition
+8. Zero emojis in application code: strict enforcement of Material Symbols
+9. Multi-directory import resolution
+10. Checkpoint hash integrity verification
 """
 
 import os
+import sys
+import re
+import hashlib
 from pathlib import Path
 import pytest
 
-from app.utils.paths import REPO_ROOT
+from app.utils.paths import REPO_ROOT, STAGE2_DEPLOYMENT_CKPT
 from app.styles.tokens import THEMES, CT_CANVAS_COLOR, FONT_FAMILY_BASE, FONT_FAMILY_MONO
+from app.components.navigation import DESTINATIONS
 from app.utils.data_loader import (
     load_dev_manifest,
     load_cv_splits,
@@ -65,6 +72,7 @@ def test_cached_manifest_loader():
     assert "patient_id" in df.columns
     assert "class" in df.columns
     assert "label" in df.columns
+    assert "canonical_filename" in df.columns
 
     unique_pts = df.drop_duplicates(subset=["patient_id"])
     assert len(unique_pts) == 122
@@ -123,6 +131,55 @@ def test_all_views_importable():
     assert callable(render_documentation_view)
 
 
+def test_navigation_material_icons():
+    """Verify all 7 navigation destinations use valid Material Symbols icons with zero emojis."""
+    assert len(DESTINATIONS) == 7
+    for name, icon in DESTINATIONS:
+        assert icon.startswith(":material/")
+        assert icon.endswith(":")
+        # Verify no emojis in name or icon
+        assert not re.search(r"[\U00010000-\U0010ffff\u2600-\u27bf]", name)
+        assert not re.search(r"[\U00010000-\U0010ffff\u2600-\u27bf]", icon)
+
+
+def test_zero_emojis_in_entire_app():
+    """Strictly verify zero unicode emojis exist in any application python source file."""
+    app_dir = REPO_ROOT / "app"
+    emoji_pattern = re.compile(r"[\U00010000-\U0010ffff\u2600-\u27bf]")
+    violations = []
+
+    for py_file in app_dir.rglob("*.py"):
+        content = py_file.read_text(encoding="utf-8")
+        found = emoji_pattern.findall(content)
+        if found:
+            violations.append(f"{py_file.name}: {found}")
+
+    assert len(violations) == 0, f"Found emoji violations in application code: {violations}"
+
+
+def test_multi_directory_import_resolution():
+    """Verify src and app modules resolve cleanly when sys.path includes REPO_ROOT."""
+    # Ensure REPO_ROOT is in sys.path
+    if str(REPO_ROOT) not in sys.path:
+        sys.path.insert(0, str(REPO_ROOT))
+
+    from src.inference.sequence_predictor import SequencePredictor
+    from src.inference.sequence_validator import CTSequenceValidator
+    assert SequencePredictor is not None
+    assert CTSequenceValidator is not None
+
+
+def test_checkpoint_hash_integrity():
+    """Verify Stage 2 deployment checkpoint exists and matches verified SHA-256 hash."""
+    assert STAGE2_DEPLOYMENT_CKPT.is_file()
+    hasher = hashlib.sha256()
+    with open(STAGE2_DEPLOYMENT_CKPT, "rb") as f:
+        while chunk := f.read(65536):
+            hasher.update(chunk)
+    file_hash = hasher.hexdigest()
+    assert file_hash == "0bd817319d99e0fbb22a318c458d9f86df77297f7bc4f5ec88f845e80ff1caed"
+
+
 def test_research_report_file_present():
     """Verify the research report manuscript is present on disk."""
     report_file = REPO_ROOT / "reports" / "research" / "PULMOVISION_STAGE_2_RESEARCH_REPORT.md"
@@ -134,8 +191,8 @@ def test_research_report_file_present():
 
 
 def test_strict_quarantine_no_test_partition_access():
-    """
-    Strict Quarantine Verification:
+    """Strict Quarantine Verification:
+
     Ensure no code under app/ reads or imports the sealed test manifest.
     """
     app_dir = REPO_ROOT / "app"

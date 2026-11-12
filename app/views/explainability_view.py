@@ -180,9 +180,13 @@ def render_explainability_view():
     with q_col1:
         st.markdown("""
         <div class="pv-card" style="text-align: center;">
-            <div style="font-size: 1.5rem; margin-bottom: 6px;">🔒</div>
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--pv-error); margin-bottom: 6px;">
+                <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            <br>
             <strong>Held-Out Cohort Status</strong>
-            <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 6px;"><code>data/metadata/.../test_partition</code></p>
+            <p style="color: var(--pv-text-muted); font-size: 0.85rem; margin-top: 6px;"><code>data/metadata/.../test_partition</code></p>
             <div style="margin-top: 10px;"><span class="pv-badge pv-badge-quarantine">SEALED & QUARANTINED</span></div>
         </div>
         """, unsafe_allow_html=True)
@@ -190,9 +194,12 @@ def render_explainability_view():
     with q_col2:
         st.markdown("""
         <div class="pv-card" style="text-align: center;">
-            <div style="font-size: 1.5rem; margin-bottom: 6px;">🛡️</div>
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--pv-success); margin-bottom: 6px;">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+            <br>
             <strong>Leakage Prevention</strong>
-            <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 6px;">Zero test access during hyperparameter selection or threshold tuning.</p>
+            <p style="color: var(--pv-text-muted); font-size: 0.85rem; margin-top: 6px;">Zero test access during hyperparameter selection or threshold tuning.</p>
             <div style="margin-top: 10px;"><span class="pv-badge pv-badge-verified">STRICT PATIENT BOUNDARY</span></div>
         </div>
         """, unsafe_allow_html=True)
@@ -200,9 +207,13 @@ def render_explainability_view():
     with q_col3:
         st.markdown("""
         <div class="pv-card" style="text-align: center;">
-            <div style="font-size: 1.5rem; margin-bottom: 6px;">📋</div>
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--pv-accent-primary); margin-bottom: 6px;">
+                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+            </svg>
+            <br>
             <strong>Audit Compliance</strong>
-            <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 6px;">Validated by automated SHA-256 integrity checks in test suite.</p>
+            <p style="color: var(--pv-text-muted); font-size: 0.85rem; margin-top: 6px;">Validated by automated SHA-256 integrity checks in test suite.</p>
             <div style="margin-top: 10px;"><span class="pv-badge pv-badge-prototype">RESEARCH COMPLIANT</span></div>
         </div>
         """, unsafe_allow_html=True)

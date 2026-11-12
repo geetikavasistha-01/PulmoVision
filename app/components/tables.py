@@ -61,13 +61,13 @@ def render_confusion_matrix_card(
 def render_cross_fold_summary_table() -> None:
     """Renders cross-fold variability (mean ± std dev across 5 outer folds)."""
     data = [
-        {"Metric": "Macro F1 Score", "Exp A (Global Mean)": "0.8218 ± 0.0715", "Exp B (BiLSTM Mean) 🏆": "0.9454 ± 0.0588", "Exp C (BiLSTM Attn)": "0.9200 ± 0.0740"},
-        {"Metric": "Accuracy", "Exp A (Global Mean)": "0.8277 ± 0.0670", "Exp B (BiLSTM Mean) 🏆": "0.9510 ± 0.0526", "Exp C (BiLSTM Attn)": "0.9263 ± 0.0663"},
-        {"Metric": "Sensitivity (Recall)", "Exp A (Global Mean)": "0.7775 ± 0.0798", "Exp B (BiLSTM Mean) 🏆": "0.9875 ± 0.0280", "Exp C (BiLSTM Attn)": "0.9342 ± 0.0817"},
-        {"Metric": "Specificity", "Exp A (Global Mean)": "0.9111 ± 0.1449", "Exp B (BiLSTM Mean) 🏆": "0.8889 ± 0.1111", "Exp C (BiLSTM Attn)": "0.9111 ± 0.1449"},
-        {"Metric": "Precision", "Exp A (Global Mean)": "0.9458 ± 0.0828", "Exp B (BiLSTM Mean) 🏆": "0.9404 ± 0.0588", "Exp C (BiLSTM Attn)": "0.9542 ± 0.0728"},
-        {"Metric": "ROC-AUC", "Exp A (Global Mean)": "0.8726 ± 0.0886", "Exp B (BiLSTM Mean) 🏆": "0.9804 ± 0.0358", "Exp C (BiLSTM Attn)": "0.9664 ± 0.0635"},
-        {"Metric": "PR-AUC", "Exp A (Global Mean)": "0.9292 ± 0.0666", "Exp B (BiLSTM Mean) 🏆": "0.9883 ± 0.0216", "Exp C (BiLSTM Attn)": "0.9767 ± 0.0449"},
+        {"Metric": "Macro F1 Score", "Exp A (Global Mean)": "0.8218 ± 0.0715", "Exp B (BiLSTM Mean) [Leader]": "0.9454 ± 0.0588", "Exp C (BiLSTM Attn)": "0.9200 ± 0.0740"},
+        {"Metric": "Accuracy", "Exp A (Global Mean)": "0.8277 ± 0.0670", "Exp B (BiLSTM Mean) [Leader]": "0.9510 ± 0.0526", "Exp C (BiLSTM Attn)": "0.9263 ± 0.0663"},
+        {"Metric": "Sensitivity (Recall)", "Exp A (Global Mean)": "0.7775 ± 0.0798", "Exp B (BiLSTM Mean) [Leader]": "0.9875 ± 0.0280", "Exp C (BiLSTM Attn)": "0.9342 ± 0.0817"},
+        {"Metric": "Specificity", "Exp A (Global Mean)": "0.9111 ± 0.1449", "Exp B (BiLSTM Mean) [Leader]": "0.8889 ± 0.1111", "Exp C (BiLSTM Attn)": "0.9111 ± 0.1449"},
+        {"Metric": "Precision", "Exp A (Global Mean)": "0.9458 ± 0.0828", "Exp B (BiLSTM Mean) [Leader]": "0.9404 ± 0.0588", "Exp C (BiLSTM Attn)": "0.9542 ± 0.0728"},
+        {"Metric": "ROC-AUC", "Exp A (Global Mean)": "0.8726 ± 0.0886", "Exp B (BiLSTM Mean) [Leader]": "0.9804 ± 0.0358", "Exp C (BiLSTM Attn)": "0.9664 ± 0.0635"},
+        {"Metric": "PR-AUC", "Exp A (Global Mean)": "0.9292 ± 0.0666", "Exp B (BiLSTM Mean) [Leader]": "0.9883 ± 0.0216", "Exp C (BiLSTM Attn)": "0.9767 ± 0.0449"},
     ]
     df = pd.DataFrame(data)
     st.dataframe(df, hide_index=True, width="stretch")

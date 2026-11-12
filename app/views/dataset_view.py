@@ -1,79 +1,98 @@
-"""
-PulmoVision — Dataset Explorer View (Page 2)
+"""app/views/dataset_view.py - Dataset Explorer View (Page 2).
+
 Provides interactive data exploration over approved development cohort metadata (122 patients, 3,132 slices).
+Utilizes ManifestAdapter for robust schema normalization, search, filtering, and provenance tracking.
 Strict quarantine: Zero access to sealed held-out test partition.
+Zero decorative emojis.
 """
 
+from typing import Optional
 import streamlit as st
 import pandas as pd
+
 from app.utils.data_loader import load_dev_manifest
+from app.utils.manifest_adapter import ManifestAdapter, REQUIRED_COLUMNS
 from app.components.charts import (
     render_class_distribution_chart,
-    render_sequence_length_histogram
+    render_sequence_length_histogram,
 )
+from app.components.header import render_page_header
 
 
 def render_dataset_view() -> None:
     """Renders the comprehensive dataset exploration page."""
-    st.markdown(
-        """
-        <div style="margin-bottom: 20px;">
-            <h2 style="margin: 0 0 6px 0; color: var(--pv-text-primary);">📂 COVID-CTset Development Cohort Explorer</h2>
-            <p style="margin: 0; color: var(--pv-text-secondary); font-size: 0.95rem;">
-                Exploring cohort demographics, anatomical deduplication provenance, and 16-bit radiodensity preprocessing.
-            </p>
-        </div>
-        """,
-        unsafe_allow_html=True
+    render_page_header(
+        title="COVID-CTset Development Cohort Explorer",
+        subtitle="Exploring cohort demographics, anatomical deduplication provenance, and 16-bit radiodensity preprocessing",
+        section="Scientific Research Suite",
     )
 
     df_manifest = load_dev_manifest()
+
+    if df_manifest.empty:
+        st.error(
+            "Development manifest could not be loaded. Please ensure "
+            "`data/metadata/splits/stage2_dev_deduplicated_manifest.csv` or `.json` exists."
+        )
+        return
+
+    # Validate schema
+    is_valid, missing_cols = ManifestAdapter.validate_manifest(df_manifest)
+    if not is_valid:
+        st.error(
+            f"Manifest schema validation failure: Missing required columns {missing_cols}. "
+            "Please check data integrity."
+        )
+        return
+
+    # Compute verified cohort statistics via ManifestAdapter
+    summary = ManifestAdapter.get_manifest_summary(df_manifest)
 
     # 1. High-Level Cohort Metrics Row
     col1, col2, col3, col4 = st.columns(4)
     with col1:
         st.markdown(
-            """
+            f"""
             <div class="pv-card" style="padding: 14px 16px;">
-                <div style="font-size: 0.76rem; text-transform: uppercase; color: var(--pv-text-secondary); font-weight: 600;">Development Cohort</div>
-                <div style="font-size: 1.6rem; font-weight: 700; font-family: var(--pv-font-mono); color: var(--pv-accent-primary);">122 Patients</div>
-                <div style="font-size: 0.74rem; color: var(--pv-text-muted);">77 COVID-19 / 45 Normal</div>
+                <div style="font-size: 0.74rem; text-transform: uppercase; color: var(--pv-text-secondary); font-weight: 600;">Development Cohort</div>
+                <div style="font-size: 1.55rem; font-weight: 700; font-family: var(--pv-font-mono); color: var(--pv-accent-primary);">{summary['unique_patients']} Patients</div>
+                <div style="font-size: 0.74rem; color: var(--pv-text-muted);">{summary['covid_patients']} COVID-19 / {summary['normal_patients']} Normal</div>
             </div>
             """,
-            unsafe_allow_html=True
+            unsafe_allow_html=True,
         )
     with col2:
         st.markdown(
-            """
+            f"""
             <div class="pv-card" style="padding: 14px 16px;">
-                <div style="font-size: 0.76rem; text-transform: uppercase; color: var(--pv-text-secondary); font-weight: 600;">Acquisition Series</div>
-                <div style="font-size: 1.6rem; font-weight: 700; font-family: var(--pv-font-mono); color: var(--pv-accent-secondary);">239 Series</div>
+                <div style="font-size: 0.74rem; text-transform: uppercase; color: var(--pv-text-secondary); font-weight: 600;">Acquisition Series</div>
+                <div style="font-size: 1.55rem; font-weight: 700; font-family: var(--pv-font-mono); color: var(--pv-accent-secondary);">{summary['unique_series']} Series</div>
                 <div style="font-size: 0.74rem; color: var(--pv-text-muted);">1–3 series per patient</div>
             </div>
             """,
-            unsafe_allow_html=True
+            unsafe_allow_html=True,
         )
     with col3:
         st.markdown(
-            """
+            f"""
             <div class="pv-card" style="padding: 14px 16px;">
-                <div style="font-size: 0.76rem; text-transform: uppercase; color: var(--pv-text-secondary); font-weight: 600;">Canonical Slices</div>
-                <div style="font-size: 1.6rem; font-weight: 700; font-family: var(--pv-font-mono); color: var(--pv-success);">3,132 Slices</div>
-                <div style="font-size: 0.74rem; color: var(--pv-text-muted);">604 duplicates resolved</div>
+                <div style="font-size: 0.74rem; text-transform: uppercase; color: var(--pv-text-secondary); font-weight: 600;">Canonical Slices</div>
+                <div style="font-size: 1.55rem; font-weight: 700; font-family: var(--pv-font-mono); color: var(--pv-success);">{summary['total_slices']:,} Slices</div>
+                <div style="font-size: 0.74rem; color: var(--pv-text-muted);">{summary['total_duplicates_resolved']} duplicate aliases resolved</div>
             </div>
             """,
-            unsafe_allow_html=True
+            unsafe_allow_html=True,
         )
     with col4:
         st.markdown(
             """
             <div class="pv-card" style="padding: 14px 16px;">
-                <div style="font-size: 0.76rem; text-transform: uppercase; color: var(--pv-text-secondary); font-weight: 600;">Test Set Quarantine</div>
-                <div style="font-size: 1.6rem; font-weight: 700; font-family: var(--pv-font-mono); color: var(--pv-error);">255 Patients</div>
-                <div style="font-size: 0.74rem; color: var(--pv-text-muted);">8,322 slices (100% sealed)</div>
+                <div style="font-size: 0.74rem; text-transform: uppercase; color: var(--pv-text-secondary); font-weight: 600;">Test Set Quarantine</div>
+                <div style="font-size: 1.55rem; font-weight: 700; font-family: var(--pv-font-mono); color: var(--pv-error);">255 Patients</div>
+                <div style="font-size: 0.74rem; color: var(--pv-text-muted);">8,322 slices (100% sealed partition)</div>
             </div>
             """,
-            unsafe_allow_html=True
+            unsafe_allow_html=True,
         )
 
     # 2. Interactive Charts Row
@@ -81,11 +100,17 @@ def render_dataset_view() -> None:
     col_chart1, col_chart2 = st.columns(2)
 
     with col_chart1:
-        st.markdown("<p style='font-size: 0.88rem; font-weight: 600; color: var(--pv-text-primary); margin-bottom: 6px;'>Patient Class Distribution</p>", unsafe_allow_html=True)
+        st.markdown(
+            "<p style='font-size: 0.88rem; font-weight: 600; color: var(--pv-text-primary); margin-bottom: 6px;'>Patient Class Distribution</p>",
+            unsafe_allow_html=True,
+        )
         render_class_distribution_chart(df_manifest)
 
     with col_chart2:
-        st.markdown("<p style='font-size: 0.88rem; font-weight: 600; color: var(--pv-text-primary); margin-bottom: 6px;'>Slices per Series (Sequence Length T)</p>", unsafe_allow_html=True)
+        st.markdown(
+            "<p style='font-size: 0.88rem; font-weight: 600; color: var(--pv-text-primary); margin-bottom: 6px;'>Slices per Series (Sequence Length T)</p>",
+            unsafe_allow_html=True,
+        )
         render_sequence_length_histogram(df_manifest)
 
     st.markdown("<div style='margin: 20px 0;'></div>", unsafe_allow_html=True)
@@ -114,7 +139,7 @@ def render_dataset_view() -> None:
             </div>
         </div>
         """,
-        unsafe_allow_html=True
+        unsafe_allow_html=True,
     )
 
     # 4. CT Preprocessing Pipeline
@@ -137,39 +162,49 @@ def render_dataset_view() -> None:
             </div>
         </div>
         """,
-        unsafe_allow_html=True
+        unsafe_allow_html=True,
     )
 
     # 5. Searchable Manifest Explorer (Approved Development Data Only)
     st.markdown("### Approved Development Manifest Explorer")
     st.caption("Inspect, filter, and search metadata for all 3,132 deduplicated development slices. Zero test data exposed.")
 
-    if not df_manifest.empty:
-        col_f1, col_f2 = st.columns([1, 2])
-        with col_f1:
-            label_filter = st.selectbox("Filter by Class Label", options=["All Classes", "COVID-19 (Label 1)", "Normal (Label 0)"])
-        with col_f2:
-            search_query = st.text_input("Search by Patient ID or Series ID", placeholder="e.g. patient100, SR_2")
-
-        filtered_df = df_manifest.copy()
-        if label_filter == "COVID-19 (Label 1)":
-            filtered_df = filtered_df[filtered_df["label"] == 1]
-        elif label_filter == "Normal (Label 0)":
-            filtered_df = filtered_df[filtered_df["label"] == 0]
-
-        if search_query:
-            query = search_query.strip().lower()
-            filtered_df = filtered_df[
-                filtered_df["patient_id"].astype(str).str.lower().str.contains(query) |
-                filtered_df["series_id"].astype(str).str.lower().str.contains(query)
-            ]
-
-        st.dataframe(
-            filtered_df[["patient_id", "series_id", "slice_idx", "label", "canonical_filename"]],
-            hide_index=True,
-            width="stretch"
+    col_f1, col_f2, col_f3 = st.columns([1, 2, 1])
+    with col_f1:
+        label_filter = st.selectbox(
+            "Filter by Class Label",
+            options=["All Classes", "COVID-19 (Label 1)", "Normal (Label 0)"],
+            key="dataset_label_filter",
         )
-        st.caption(f"Displaying **{len(filtered_df):,}** matching slices out of 3,132 total canonical development slices.")
-    else:
-        st.warning("Deduplicated development manifest file not found.")
+    with col_f2:
+        search_query = st.text_input(
+            "Search by Patient ID, Series ID, or Filename",
+            placeholder="e.g. patient100, SR_2, IM00010",
+            key="dataset_search_input",
+        )
+    with col_f3:
+        show_aliases = st.checkbox("Show Duplicate Aliases", value=False, key="dataset_show_aliases")
 
+    # Safe filtering via ManifestAdapter
+    filtered_df = ManifestAdapter.filter_manifest(
+        df_manifest,
+        label_filter=label_filter,
+        search_query=search_query,
+    )
+
+    # Define columns to display safely
+    display_cols = ["patient_id", "series_id", "slice_idx", "class_name", "canonical_filename"]
+    if show_aliases:
+        if "duplicate_count" in filtered_df.columns:
+            display_cols.append("duplicate_count")
+        if "duplicate_aliases" in filtered_df.columns:
+            display_cols.append("duplicate_aliases")
+
+    st.dataframe(
+        filtered_df[display_cols],
+        hide_index=True,
+        width="stretch",
+    )
+    st.caption(
+        f"Displaying **{len(filtered_df):,}** matching slices out of {len(df_manifest):,} total canonical development slices."
+    )

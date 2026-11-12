@@ -1,6 +1,8 @@
-"""
-PulmoVision — Dynamic CSS Theme Injector
-Injects semantic CSS custom properties and component rules based on the active theme.
+"""app/styles/theme.py - Dynamic CSS Theme Injector.
+
+Injects semantic CSS custom properties and component rules based on active theme.
+Ensures accessibility, consistent typography, clear active navigation indicators,
+and preserved pitch-black CT imaging canvas.
 """
 
 from typing import Dict, Any
@@ -9,8 +11,8 @@ from app.styles.tokens import get_theme
 
 
 def apply_theme(theme_name: str = "dark") -> None:
-    """
-    Injects custom CSS matching the chosen theme token dictionary.
+    """Injects custom CSS matching the chosen theme token dictionary.
+
     Ensures accessibility, consistent typography, and preserved dark CT canvas.
     """
     t = get_theme(theme_name)
@@ -47,13 +49,47 @@ def apply_theme(theme_name: str = "dark") -> None:
             font-family: var(--pv-font-sans);
         }}
 
-        /* Sidebar Styling */
+        /* Sidebar Container */
         section[data-testid="stSidebar"] {{
             background-color: var(--pv-bg-surface);
             border-right: 1px solid var(--pv-border);
         }}
         section[data-testid="stSidebar"] * {{
             color: var(--pv-text-primary);
+        }}
+
+        /* Navigation Radio Group Refinement */
+        section[data-testid="stSidebar"] div[role="radiogroup"] {{
+            gap: 4px;
+        }}
+        section[data-testid="stSidebar"] div[role="radiogroup"] > label {{
+            padding: 6px 12px;
+            border-radius: 6px;
+            border-left: 3px solid transparent;
+            transition: all 0.15s ease-in-out;
+            cursor: pointer;
+            margin: 0;
+        }}
+        section[data-testid="stSidebar"] div[role="radiogroup"] > label:hover {{
+            background-color: var(--pv-bg-elevated);
+        }}
+        section[data-testid="stSidebar"] div[role="radiogroup"] > label[data-checked="true"],
+        section[data-testid="stSidebar"] div[role="radiogroup"] > label:has(input:checked) {{
+            background-color: var(--pv-bg-elevated) !important;
+            border-left: 3px solid var(--pv-accent-primary) !important;
+            font-weight: 600;
+        }}
+        section[data-testid="stSidebar"] div[role="radiogroup"] > label[data-checked="true"] p,
+        section[data-testid="stSidebar"] div[role="radiogroup"] > label:has(input:checked) p {{
+            color: var(--pv-text-primary) !important;
+        }}
+
+        /* Segmented Control Theme Switcher */
+        [data-testid="stSegmentedControl"] {{
+            background-color: var(--pv-bg-elevated);
+            border: 1px solid var(--pv-border);
+            border-radius: 6px;
+            padding: 2px;
         }}
 
         /* Headers & Typography */
@@ -99,12 +135,12 @@ def apply_theme(theme_name: str = "dark") -> None:
             margin-bottom: 16px;
         }}
 
-        /* Research Status Badge */
+        /* Status Badges */
         .pv-badge {{
             display: inline-block;
             padding: 3px 10px;
             border-radius: 12px;
-            font-size: 0.75rem;
+            font-size: 0.74rem;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.05em;
@@ -141,7 +177,7 @@ def apply_theme(theme_name: str = "dark") -> None:
             color: var(--pv-warning);
         }}
 
-        /* Clinical Workstation Canvas (Preserved Dark Environment) */
+        /* Clinical Workstation Canvas (Preserved Pitch-Black Environment) */
         .pv-workstation-panel {{
             background-color: var(--pv-workstation-bg);
             border: 1px solid #1e293b;
@@ -195,4 +231,3 @@ def apply_theme(theme_name: str = "dark") -> None:
     </style>
     """
     st.markdown(css, unsafe_allow_html=True)
-

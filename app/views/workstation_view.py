@@ -1,36 +1,32 @@
-"""
-PulmoVision — Clinical CT Workstation View (Page 5)
-Interactive 3-column medical imaging workstation:
-Left: Upload & Validation | Center: Dark Canvas CT Viewport | Right: Real-Time AI Inference.
-Operates on raw 16-bit development TIFF files using the verified deployment checkpoint.
+"""app/views/workstation_view.py - Clinical CT Imaging Workstation View (Page 5).
+
+Provides a 3-column workstation layout:
+- Left: CT sequence upload, format validator, and pre-loaded sample series picker
+- Center: Pitch-black viewport (#000000) with isotropic aspect ratio preservation and axial slider
+- Right: Real-time inference using the verified deployment BiLSTM checkpoint on raw 16-bit TIFFs
+Zero decorative emojis; uses Material Symbols.
 """
 
+from typing import List, Dict, Any, Optional
 import os
 import glob
-import time
-from typing import List, Dict, Any, Optional
 import streamlit as st
 import numpy as np
 
-from app.utils.paths import RAW_DEV_DATA_DIR, STAGE2_DEPLOYMENT_CKPT
+from app.utils.paths import RAW_DEV_DATA_DIR
 from app.utils.data_loader import get_deployment_predictor
-from app.components.ct_viewer import render_ct_viewport
 from app.utils.validation import validate_ct_uploads
-from src.inference.sequence_validator import CTSequenceValidator, SequenceValidationError
+from app.components.ct_viewer import render_ct_viewport
+from app.components.header import render_page_header
+from src.inference.sequence_validator import CTSequenceValidator
 
 
 def render_workstation_view() -> None:
     """Renders the professional 3-column clinical CT workstation."""
-    st.markdown(
-        """
-        <div style="margin-bottom: 16px;">
-            <h2 style="margin: 0 0 4px 0; color: var(--pv-text-primary);">🩻 Clinical CT Imaging Workstation</h2>
-            <p style="margin: 0; color: var(--pv-text-secondary); font-size: 0.92rem;">
-                Volumetric axial slice inspection, patient/series validation, and research inference using the verified deployment BiLSTM model.
-            </p>
-        </div>
-        """,
-        unsafe_allow_html=True
+    render_page_header(
+        title="Clinical CT Imaging Workstation",
+        subtitle="Volumetric axial slice inspection, patient/series validation, and research inference using the verified deployment BiLSTM model",
+        section="Clinical Workstation Suite",
     )
 
     # Initialize predictor
@@ -79,7 +75,7 @@ def render_workstation_view() -> None:
                 1. Input CT Sequence
             </div>
             """,
-            unsafe_allow_html=True
+            unsafe_allow_html=True,
         )
 
         st.caption("Upload 16-bit TIFF cross-sections belonging to a single scan series:")
@@ -87,7 +83,7 @@ def render_workstation_view() -> None:
             "Upload CT Slices",
             type=["tif", "tiff", "png", "jpg", "jpeg", "npy"],
             accept_multiple_files=True,
-            label_visibility="collapsed"
+            label_visibility="collapsed",
         )
 
         if uploaded_files:
@@ -107,13 +103,16 @@ def render_workstation_view() -> None:
                     st.session_state["ws_inference_res"] = None
                     st.rerun()
             else:
-                st.error(f"❌ Validation Error: {err_msg}")
+                st.error(f"Validation Error: {err_msg}")
 
         st.divider()
 
         # One-Click Real Development Sample Buttons
-        st.markdown("<p style='font-size: 0.82rem; font-weight: 600; color: var(--pv-text-primary); margin-bottom: 6px;'>Pre-Loaded Development Scans:</p>", unsafe_allow_html=True)
-        
+        st.markdown(
+            "<p style='font-size: 0.82rem; font-weight: 600; color: var(--pv-text-primary); margin-bottom: 6px;'>Pre-Loaded Development Scans:</p>",
+            unsafe_allow_html=True,
+        )
+
         c_btn1, c_btn2 = st.columns(2)
         with c_btn1:
             if st.button("COVID Scan (pt100)", use_container_width=True):
@@ -153,11 +152,11 @@ def render_workstation_view() -> None:
                 <div style="color: var(--pv-accent-primary);">TOTAL SLICES: {len(st.session_state['ws_slices'])}</div>
             </div>
             """,
-            unsafe_allow_html=True
+            unsafe_allow_html=True,
         )
 
         if st.session_state["ws_warning"]:
-            st.warning(f"⚠️ {st.session_state['ws_warning']}")
+            st.warning(f"{st.session_state['ws_warning']}")
 
     # -------------------------------------------------------------
     # CENTER PANEL: CT VIEWPORT (DARK CANVAS)
@@ -169,7 +168,7 @@ def render_workstation_view() -> None:
                 2. Axial CT Cross-Section Viewport
             </div>
             """,
-            unsafe_allow_html=True
+            unsafe_allow_html=True,
         )
 
         render_ct_viewport(
@@ -177,7 +176,7 @@ def render_workstation_view() -> None:
             slice_indices=st.session_state["ws_slice_indices"],
             patient_id=st.session_state["ws_patient_id"],
             series_id=st.session_state["ws_series_id"],
-            key_prefix="ws_viewport"
+            key_prefix="ws_viewport",
         )
 
     # -------------------------------------------------------------
@@ -190,12 +189,12 @@ def render_workstation_view() -> None:
                 3. AI Sequence Inference
             </div>
             """,
-            unsafe_allow_html=True
+            unsafe_allow_html=True,
         )
 
         # Inference Action Button
         if len(st.session_state["ws_slices"]) > 0:
-            if st.button("⚡ Run Sequence Inference", type="primary", use_container_width=True):
+            if st.button(":material/play_arrow: Run Sequence Inference", type="primary", use_container_width=True):
                 with st.spinner("Extracting slice features & evaluating BiLSTM..."):
                     raw_inputs = st.session_state.get("ws_raw_inputs", st.session_state["ws_slices"])
                     res = predictor.predict_sequence(raw_inputs)
@@ -216,11 +215,11 @@ def render_workstation_view() -> None:
                         {res['predicted_class']}
                     </div>
                     <div style="font-size: 0.82rem; font-family: var(--pv-font-mono); color: var(--pv-text-secondary);">
-                        Score P({res['predicted_class']}): <strong>{prob_val * 100:.2f}%</strong>
+                        Predicted Score P({res['predicted_class']}): <strong>{prob_val * 100:.2f}%</strong>
                     </div>
                 </div>
                 """,
-                unsafe_allow_html=True
+                unsafe_allow_html=True,
             )
 
             # Technical Probability Metrics
@@ -233,13 +232,13 @@ def render_workstation_view() -> None:
             st.markdown(
                 f"""
                 <div style="background-color: var(--pv-bg-elevated); border: 1px solid var(--pv-border); border-radius: 6px; padding: 10px; font-size: 0.76rem; font-family: var(--pv-font-mono); margin-top: 10px;">
-                    <div>THRESHOLD APPLIED: <strong>&tau; = {res['threshold_applied']:.2f}</strong></div>
+                    <div>OPERATING THRESHOLD: <strong>&tau; = {res['threshold_applied']:.2f}</strong></div>
                     <div>SEQUENCE LENGTH: <strong>{res['num_slices']} slices</strong></div>
                     <div>TOTAL LATENCY: <strong>{res['inference_latency_ms']:.1f} ms</strong></div>
                     <div>PER-SLICE LATENCY: <strong>{res['per_slice_latency_ms']:.1f} ms/slice</strong></div>
                 </div>
                 """,
-                unsafe_allow_html=True
+                unsafe_allow_html=True,
             )
         else:
             st.info("Click 'Run Sequence Inference' to evaluate the loaded sequence with the BiLSTM deployment checkpoint.")
@@ -252,6 +251,5 @@ def render_workstation_view() -> None:
                 from an uncalibrated softmax objective. This tool is strictly investigational and must NOT be used for clinical diagnosis.
             </div>
             """,
-            unsafe_allow_html=True
+            unsafe_allow_html=True,
         )
-

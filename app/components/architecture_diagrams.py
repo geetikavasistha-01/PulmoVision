@@ -45,7 +45,7 @@ def render_stage2_architecture_diagram(model_key: str = "B") -> None:
             """
             <div class="pv-card" style="border-left: 4px solid var(--pv-accent-primary);">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                    <h4 style="margin: 0; color: var(--pv-text-primary);">Experiment B: EfficientNet-B0 + BiLSTM + Mean Pooling 🏆</h4>
+                    <h4 style="margin: 0; color: var(--pv-text-primary);">Experiment B: EfficientNet-B0 + BiLSTM + Mean Pooling [Selected Leader]</h4>
                     <span style="font-family: var(--pv-font-mono); font-size: 0.8rem; background: var(--pv-bg-elevated); padding: 3px 8px; border-radius: 4px; color: var(--pv-accent-primary);">
                         1,460,418 trainable params
                     </span>

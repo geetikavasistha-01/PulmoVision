@@ -27,7 +27,7 @@ from app.views.documentation_view import render_documentation_view
 # 1. Page Configuration
 st.set_page_config(
     page_title="PulmoVision — CT Sequence Intelligence & Research Platform",
-    page_icon="🫁",
+    page_icon=":material/medical_services:",
     layout="wide",
     initial_sidebar_state="expanded",
 )
