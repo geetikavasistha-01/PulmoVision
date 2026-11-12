@@ -49,12 +49,33 @@ def apply_theme(theme_name: str = "dark") -> None:
             font-family: var(--pv-font-sans);
         }}
 
+        /* Top Streamlit Header */
+        header[data-testid="stHeader"] {{
+            background-color: var(--pv-bg-app) !important;
+            border-bottom: 1px solid var(--pv-border-subtle) !important;
+        }}
+        header[data-testid="stHeader"] * {{
+            color: var(--pv-text-secondary) !important;
+        }}
+        [data-testid="stDecoration"] {{
+            display: none !important;
+        }}
+
         /* Sidebar Container */
         section[data-testid="stSidebar"] {{
-            background-color: var(--pv-bg-surface);
+            background-color: var(--pv-bg-surface) !important;
             border-right: 1px solid var(--pv-border);
         }}
-        section[data-testid="stSidebar"] * {{
+        section[data-testid="stSidebar"] p,
+        section[data-testid="stSidebar"] span,
+        section[data-testid="stSidebar"] label {{
+            color: var(--pv-text-secondary);
+        }}
+        section[data-testid="stSidebar"] h1,
+        section[data-testid="stSidebar"] h2,
+        section[data-testid="stSidebar"] h3,
+        section[data-testid="stSidebar"] h4,
+        section[data-testid="stSidebar"] strong {{
             color: var(--pv-text-primary);
         }}
 
@@ -86,10 +107,45 @@ def apply_theme(theme_name: str = "dark") -> None:
 
         /* Segmented Control Theme Switcher */
         [data-testid="stSegmentedControl"] {{
-            background-color: var(--pv-bg-elevated);
-            border: 1px solid var(--pv-border);
+            background-color: var(--pv-bg-elevated) !important;
+            border: 1px solid var(--pv-border) !important;
             border-radius: 6px;
             padding: 2px;
+        }}
+        [data-testid="stSegmentedControl"] button {{
+            background-color: transparent !important;
+            color: var(--pv-text-secondary) !important;
+            border: none !important;
+            border-radius: 4px !important;
+            font-weight: 500 !important;
+            font-size: 0.82rem !important;
+            transition: all 0.15s ease-in-out !important;
+        }}
+        [data-testid="stSegmentedControl"] button p,
+        [data-testid="stSegmentedControl"] button span {{
+            color: var(--pv-text-secondary) !important;
+        }}
+        [data-testid="stSegmentedControl"] button:hover {{
+            background-color: var(--pv-bg-card) !important;
+        }}
+        [data-testid="stSegmentedControl"] button:hover p,
+        [data-testid="stSegmentedControl"] button:hover span {{
+            color: var(--pv-text-primary) !important;
+        }}
+        [data-testid="stSegmentedControl"] button[aria-selected="true"],
+        [data-testid="stSegmentedControl"] button[data-checked="true"],
+        [data-testid="stSegmentedControl"] button[aria-checked="true"] {{
+            background-color: var(--pv-accent-primary) !important;
+            color: #ffffff !important;
+            font-weight: 600 !important;
+        }}
+        [data-testid="stSegmentedControl"] button[aria-selected="true"] p,
+        [data-testid="stSegmentedControl"] button[data-checked="true"] p,
+        [data-testid="stSegmentedControl"] button[aria-checked="true"] p,
+        [data-testid="stSegmentedControl"] button[aria-selected="true"] span,
+        [data-testid="stSegmentedControl"] button[data-checked="true"] span,
+        [data-testid="stSegmentedControl"] button[aria-checked="true"] span {{
+            color: #ffffff !important;
         }}
 
         /* Headers & Typography */
@@ -111,6 +167,95 @@ def apply_theme(theme_name: str = "dark") -> None:
 
         code, pre, .stCodeBlock {{
             font-family: var(--pv-font-mono) !important;
+        }}
+
+        /* Native Buttons & Download Buttons */
+        .stButton > button,
+        .stDownloadButton > button,
+        [data-testid="stDownloadButton"] > button {{
+            background-color: var(--pv-bg-elevated) !important;
+            color: var(--pv-text-primary) !important;
+            border: 1px solid var(--pv-border) !important;
+            border-radius: 6px !important;
+            font-weight: 500 !important;
+            padding: 6px 16px !important;
+            transition: all 0.15s ease-in-out !important;
+        }}
+        .stButton > button p,
+        .stDownloadButton > button p,
+        [data-testid="stDownloadButton"] > button p {{
+            color: var(--pv-text-primary) !important;
+        }}
+        .stButton > button:hover,
+        .stDownloadButton > button:hover,
+        [data-testid="stDownloadButton"] > button:hover {{
+            background-color: var(--pv-bg-card) !important;
+            border-color: var(--pv-accent-primary) !important;
+            color: var(--pv-accent-primary) !important;
+        }}
+        .stButton > button:hover p,
+        .stDownloadButton > button:hover p,
+        [data-testid="stDownloadButton"] > button:hover p {{
+            color: var(--pv-accent-primary) !important;
+        }}
+
+        /* Inputs & Textareas */
+        div[data-testid="stTextInput"] input,
+        div[data-testid="stNumberInput"] input,
+        div[data-testid="stTextArea"] textarea,
+        [data-baseweb="input"] {{
+            background-color: var(--pv-bg-card) !important;
+            color: var(--pv-text-primary) !important;
+            border: 1px solid var(--pv-border) !important;
+            border-radius: 6px !important;
+        }}
+        [data-baseweb="input"] input {{
+            color: var(--pv-text-primary) !important;
+            background-color: transparent !important;
+        }}
+        div[data-testid="stTextInput"] input::placeholder,
+        [data-baseweb="input"] input::placeholder {{
+            color: var(--pv-text-muted) !important;
+        }}
+        div[data-testid="stTextInput"] input:focus,
+        [data-baseweb="input"]:focus-within {{
+            border-color: var(--pv-accent-primary) !important;
+        }}
+
+        /* Selectbox & Popovers */
+        div[data-testid="stSelectbox"] > div > div,
+        [data-baseweb="select"] > div {{
+            background-color: var(--pv-bg-card) !important;
+            color: var(--pv-text-primary) !important;
+            border: 1px solid var(--pv-border) !important;
+            border-radius: 6px !important;
+        }}
+        [data-baseweb="select"] span,
+        [data-baseweb="select"] div {{
+            color: var(--pv-text-primary) !important;
+        }}
+        [data-baseweb="popover"],
+        ul[data-baseweb="menu"],
+        div[data-baseweb="popover"] > div {{
+            background-color: var(--pv-bg-surface) !important;
+            border: 1px solid var(--pv-border) !important;
+        }}
+        ul[data-baseweb="menu"] li,
+        div[data-baseweb="popover"] li {{
+            color: var(--pv-text-primary) !important;
+            background-color: transparent !important;
+        }}
+        ul[data-baseweb="menu"] li:hover,
+        div[data-baseweb="popover"] li:hover {{
+            background-color: var(--pv-bg-elevated) !important;
+            color: var(--pv-accent-primary) !important;
+        }}
+
+        /* Radio Buttons */
+        div[data-testid="stRadio"] label,
+        div[data-testid="stRadio"] label p,
+        div[data-testid="stRadio"] label span {{
+            color: var(--pv-text-primary) !important;
         }}
 
         /* Reusable Card Components */
@@ -219,14 +364,6 @@ def apply_theme(theme_name: str = "dark") -> None:
         .stTabs [aria-selected="true"] {{
             color: var(--pv-accent-primary) !important;
             border-bottom-color: var(--pv-accent-primary) !important;
-        }}
-
-        /* Button customization */
-        .stButton>button {{
-            border-radius: 6px;
-            font-weight: 600;
-            padding: 8px 18px;
-            transition: all 0.15s ease-in-out;
         }}
     </style>
     """
