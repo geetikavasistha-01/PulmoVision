@@ -39,7 +39,7 @@ async function main() {
   ]);
 
   // Give browser a moment to initialize
-  await sleep(1500);
+  await sleep(3000);
 
   try {
     const listRes = await fetch(`http://localhost:${PORT}/json/list`);

@@ -117,15 +117,15 @@ def render_sidebar() -> Tuple[str, str]:
             """
             <div style="background-color: var(--pv-bg-elevated); border: 1px solid var(--pv-border); border-radius: 6px; padding: 12px; font-size: 0.76rem;">
                 <div style="font-weight: 600; margin-bottom: 6px; color: var(--pv-text-primary); display: flex; align-items: center; justify-content: space-between;">
-                    <span>Deployment Model</span>
+                    <span>Inference Checkpoint</span>
                     <span style="font-size: 0.68rem; padding: 2px 6px; background-color: var(--pv-bg-surface); border-radius: 4px; border: 1px solid var(--pv-border);">STAGE 2</span>
                 </div>
                 <div style="font-family: var(--pv-font-mono); color: var(--pv-accent-primary); margin-bottom: 4px; font-size: 0.78rem;">effnet_b0_bilstm_mean</div>
                 <div style="color: var(--pv-text-secondary); margin-bottom: 8px;">1,460,418 trainable params</div>
                 <div style="border-top: 1px solid var(--pv-border); padding-top: 6px; font-family: var(--pv-font-mono); font-size: 0.70rem; line-height: 1.5;">
-                    <div>DEV COHORT: 122 patients</div>
-                    <div>TEST COHORT: 255 pts (SEALED)</div>
-                    <div>SHA-256: <span style="color: var(--pv-accent-secondary);">0bd81731...</span></div>
+                    <div>Development cohort: 122 patients</div>
+                    <div style="color: var(--pv-warning);">Independent holdout cohort: 255 patients &mdash; SEALED, NOT EVALUATED</div>
+                    <div style="margin-top: 4px;">SHA-256: <span title="Click to copy full SHA-256: 0bd817319d99e0fbb22a318c458d9f86df77297f7bc4f5ec88f845e80ff1caed" style="color: var(--pv-accent-secondary); cursor: pointer; text-decoration: underline dotted;" onclick="navigator.clipboard.writeText('0bd817319d99e0fbb22a318c458d9f86df77297f7bc4f5ec88f845e80ff1caed'); const orig = this.innerText; this.innerText = 'Copied!'; setTimeout(() => { this.innerText = orig; }, 1800);">0bd81731...</span></div>
                 </div>
             </div>
             """,

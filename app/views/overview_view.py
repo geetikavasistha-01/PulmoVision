@@ -45,6 +45,43 @@ def render_overview_view() -> None:
     st.caption("Pooled out-of-fold performance across all 122 development patients (5 outer folds).")
     render_leader_benchmark_cards()
 
+    # 3b. Inference Checkpoint Details
+    st.markdown(
+        """
+        <div class="pv-card" style="padding: 16px 20px; margin-bottom: 24px; border-left: 4px solid var(--pv-accent-primary);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <div style="font-weight: 600; font-size: 0.95rem; color: var(--pv-text-primary);">
+                    Inference Checkpoint Details
+                </div>
+                <span class="pv-badge pv-badge-verified">STAGE 2 FROZEN</span>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; font-family: var(--pv-font-mono); font-size: 0.80rem;">
+                <div>
+                    <div style="color: var(--pv-text-muted); font-size: 0.70rem; text-transform: uppercase; margin-bottom: 3px;">Model Identifier</div>
+                    <div style="color: var(--pv-accent-primary); font-weight: 600;">effnet_b0_bilstm_mean</div>
+                </div>
+                <div>
+                    <div style="color: var(--pv-text-muted); font-size: 0.70rem; text-transform: uppercase; margin-bottom: 3px;">Trainable Parameters</div>
+                    <div style="color: var(--pv-text-primary);">1,460,418</div>
+                </div>
+                <div>
+                    <div style="color: var(--pv-text-muted); font-size: 0.70rem; text-transform: uppercase; margin-bottom: 3px;">Development Cohort</div>
+                    <div style="color: var(--pv-text-primary);">122 patients</div>
+                </div>
+                <div>
+                    <div style="color: var(--pv-text-muted); font-size: 0.70rem; text-transform: uppercase; margin-bottom: 3px;">Independent Holdout Cohort</div>
+                    <div style="color: var(--pv-warning); font-weight: 600;">255 patients &mdash; SEALED, NOT EVALUATED</div>
+                </div>
+            </div>
+            <div style="border-top: 1px solid var(--pv-border); margin-top: 12px; padding-top: 8px; font-family: var(--pv-font-mono); font-size: 0.76rem; color: var(--pv-text-secondary); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+                <span>CHECKPOINT SHA-256: <span title="Click to copy full SHA-256: 0bd817319d99e0fbb22a318c458d9f86df77297f7bc4f5ec88f845e80ff1caed" style="color: var(--pv-accent-secondary); cursor: pointer; text-decoration: underline dotted; font-weight: 600;" onclick="navigator.clipboard.writeText('0bd817319d99e0fbb22a318c458d9f86df77297f7bc4f5ec88f845e80ff1caed'); const orig = this.innerText; this.innerText = 'Copied full SHA-256!'; setTimeout(() => { this.innerText = orig; }, 1800);">0bd81731...</span></span>
+                <span style="font-size: 0.70rem; color: var(--pv-text-muted);">(Click shortened hash to copy full 64-char string)</span>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
     # 4. Central Research Question & Rationale
     col_q, col_why = st.columns([1, 1])
 
@@ -139,7 +176,7 @@ def render_overview_view() -> None:
                 </div>
                 <div style="color: var(--pv-accent-primary); font-size: 1.2rem;">&rarr;</div>
                 <div style="background-color: var(--pv-bg-elevated); border: 1px solid var(--pv-accent-primary); border-radius: 6px; padding: 12px; text-align: center; flex: 1;">
-                    <div style="font-size: 0.75rem; color: var(--pv-accent-primary); font-family: var(--pv-font-mono);">DEPLOYMENT</div>
+                    <div style="font-size: 0.75rem; color: var(--pv-accent-primary); font-family: var(--pv-font-mono);">INFERENCE</div>
                     <div style="font-weight: 600; font-size: 0.85rem; color: var(--pv-text-primary); margin: 4px 0;">Research Inference</div>
                     <div style="font-size: 0.72rem; color: var(--pv-text-secondary);">Frozen Checkpoint<br>122 dev fit &bull; tau=0.50</div>
                 </div>
