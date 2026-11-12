@@ -1,0 +1,383 @@
+"""app/styles/theme.py - Dynamic CSS Theme Injector.
+
+Injects semantic CSS custom properties and component rules based on active theme.
+Ensures accessibility, consistent typography, clear active navigation indicators,
+and preserved pitch-black CT imaging canvas.
+"""
+
+from typing import Dict, Any
+import streamlit as st
+from app.styles.tokens import get_theme
+
+
+def apply_theme(theme_name: str = "dark") -> None:
+    """Injects custom CSS matching the chosen theme token dictionary.
+
+    Ensures accessibility, consistent typography, and preserved dark CT canvas.
+    """
+    t = get_theme(theme_name)
+
+    css = f"""
+    <style>
+        /* CSS Variables derived from tokens */
+        :root {{
+            --pv-bg-app: {t['bg_app']};
+            --pv-bg-surface: {t['bg_surface']};
+            --pv-bg-elevated: {t['bg_elevated']};
+            --pv-bg-card: {t['bg_card']};
+            --pv-border: {t['border']};
+            --pv-border-subtle: {t['border_subtle']};
+            --pv-text-primary: {t['text_primary']};
+            --pv-text-secondary: {t['text_secondary']};
+            --pv-text-muted: {t['text_muted']};
+            --pv-accent-primary: {t['accent_primary']};
+            --pv-accent-secondary: {t['accent_secondary']};
+            --pv-success: {t['success']};
+            --pv-warning: {t['warning']};
+            --pv-error: {t['error']};
+            --pv-info: {t['info']};
+            --pv-workstation-bg: {t['workstation_bg']};
+            --pv-font-sans: {t['font_sans']};
+            --pv-font-mono: {t['font_mono']};
+            --pv-shadow-card: {t['shadow_card']};
+        }}
+
+        /* Global App Background & Text */
+        .stApp {{
+            background-color: var(--pv-bg-app);
+            color: var(--pv-text-primary);
+            font-family: var(--pv-font-sans);
+        }}
+
+        /* Top Streamlit Header */
+        header[data-testid="stHeader"] {{
+            background-color: var(--pv-bg-app) !important;
+            border-bottom: 1px solid var(--pv-border-subtle) !important;
+        }}
+        header[data-testid="stHeader"] * {{
+            color: var(--pv-text-secondary) !important;
+        }}
+        [data-testid="stDecoration"] {{
+            display: none !important;
+        }}
+
+        /* Sidebar Container */
+        section[data-testid="stSidebar"] {{
+            background-color: var(--pv-bg-surface) !important;
+            border-right: 1px solid var(--pv-border);
+        }}
+        section[data-testid="stSidebar"] p,
+        section[data-testid="stSidebar"] span,
+        section[data-testid="stSidebar"] label {{
+            color: var(--pv-text-secondary);
+        }}
+        section[data-testid="stSidebar"] h1,
+        section[data-testid="stSidebar"] h2,
+        section[data-testid="stSidebar"] h3,
+        section[data-testid="stSidebar"] h4,
+        section[data-testid="stSidebar"] strong {{
+            color: var(--pv-text-primary);
+        }}
+
+        /* Sidebar Hidden Utility Bridges */
+        section[data-testid="stSidebar"] [data-testid="stCustomComponentV1"],
+        section[data-testid="stSidebar"] iframe[height="0"] {{
+            position: absolute !important;
+            width: 0 !important;
+            height: 0 !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            border: none !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+        }}
+
+        /* Navigation Radio Group Refinement */
+        section[data-testid="stSidebar"] div[role="radiogroup"] {{
+            gap: 4px;
+        }}
+        section[data-testid="stSidebar"] div[role="radiogroup"] > label {{
+            padding: 6px 12px;
+            border-radius: 6px;
+            border-left: 3px solid transparent;
+            transition: all 0.15s ease-in-out;
+            cursor: pointer;
+            margin: 0;
+        }}
+        section[data-testid="stSidebar"] div[role="radiogroup"] > label:hover {{
+            background-color: var(--pv-bg-elevated);
+        }}
+        section[data-testid="stSidebar"] div[role="radiogroup"] > label[data-checked="true"],
+        section[data-testid="stSidebar"] div[role="radiogroup"] > label:has(input:checked) {{
+            background-color: var(--pv-bg-elevated) !important;
+            border-left: 3px solid var(--pv-accent-primary) !important;
+            font-weight: 600;
+        }}
+        section[data-testid="stSidebar"] div[role="radiogroup"] > label[data-checked="true"] p,
+        section[data-testid="stSidebar"] div[role="radiogroup"] > label:has(input:checked) p {{
+            color: var(--pv-text-primary) !important;
+        }}
+
+        /* Segmented Control Theme Switcher */
+        [data-testid="stSegmentedControl"] {{
+            background-color: var(--pv-bg-elevated) !important;
+            border: 1px solid var(--pv-border) !important;
+            border-radius: 6px;
+            padding: 2px;
+        }}
+        [data-testid="stSegmentedControl"] button {{
+            background-color: transparent !important;
+            color: var(--pv-text-secondary) !important;
+            border: none !important;
+            border-radius: 4px !important;
+            font-weight: 500 !important;
+            font-size: 0.82rem !important;
+            transition: all 0.15s ease-in-out !important;
+        }}
+        [data-testid="stSegmentedControl"] button p,
+        [data-testid="stSegmentedControl"] button span {{
+            color: var(--pv-text-secondary) !important;
+        }}
+        [data-testid="stSegmentedControl"] button:hover {{
+            background-color: var(--pv-bg-card) !important;
+        }}
+        [data-testid="stSegmentedControl"] button:hover p,
+        [data-testid="stSegmentedControl"] button:hover span {{
+            color: var(--pv-text-primary) !important;
+        }}
+        [data-testid="stSegmentedControl"] button[aria-selected="true"],
+        [data-testid="stSegmentedControl"] button[data-checked="true"],
+        [data-testid="stSegmentedControl"] button[aria-checked="true"] {{
+            background-color: var(--pv-accent-primary) !important;
+            color: #ffffff !important;
+            font-weight: 600 !important;
+        }}
+        [data-testid="stSegmentedControl"] button[aria-selected="true"] p,
+        [data-testid="stSegmentedControl"] button[data-checked="true"] p,
+        [data-testid="stSegmentedControl"] button[aria-checked="true"] p,
+        [data-testid="stSegmentedControl"] button[aria-selected="true"] span,
+        [data-testid="stSegmentedControl"] button[data-checked="true"] span,
+        [data-testid="stSegmentedControl"] button[aria-checked="true"] span {{
+            color: #ffffff !important;
+        }}
+
+        /* Headers & Typography */
+        h1, h2, h3, h4, h5, h6 {{
+            color: var(--pv-text-primary) !important;
+            font-family: var(--pv-font-sans);
+            font-weight: 600;
+            letter-spacing: -0.015em;
+        }}
+
+        p, span, label, li {{
+            color: var(--pv-text-secondary);
+            font-family: var(--pv-font-sans);
+        }}
+
+        strong, b {{
+            color: var(--pv-text-primary);
+        }}
+
+        code, pre, .stCodeBlock {{
+            font-family: var(--pv-font-mono) !important;
+        }}
+
+        /* Native Buttons & Download Buttons */
+        .stButton > button,
+        .stDownloadButton > button,
+        [data-testid="stDownloadButton"] > button {{
+            background-color: var(--pv-bg-elevated) !important;
+            color: var(--pv-text-primary) !important;
+            border: 1px solid var(--pv-border) !important;
+            border-radius: 6px !important;
+            font-weight: 500 !important;
+            padding: 6px 16px !important;
+            transition: all 0.15s ease-in-out !important;
+        }}
+        .stButton > button p,
+        .stDownloadButton > button p,
+        [data-testid="stDownloadButton"] > button p {{
+            color: var(--pv-text-primary) !important;
+        }}
+        .stButton > button:hover,
+        .stDownloadButton > button:hover,
+        [data-testid="stDownloadButton"] > button:hover {{
+            background-color: var(--pv-bg-card) !important;
+            border-color: var(--pv-accent-primary) !important;
+            color: var(--pv-accent-primary) !important;
+        }}
+        .stButton > button:hover p,
+        .stDownloadButton > button:hover p,
+        [data-testid="stDownloadButton"] > button:hover p {{
+            color: var(--pv-accent-primary) !important;
+        }}
+
+        /* Inputs & Textareas */
+        div[data-testid="stTextInput"] input,
+        div[data-testid="stNumberInput"] input,
+        div[data-testid="stTextArea"] textarea,
+        [data-baseweb="input"] {{
+            background-color: var(--pv-bg-card) !important;
+            color: var(--pv-text-primary) !important;
+            border: 1px solid var(--pv-border) !important;
+            border-radius: 6px !important;
+        }}
+        [data-baseweb="input"] input {{
+            color: var(--pv-text-primary) !important;
+            background-color: transparent !important;
+        }}
+        div[data-testid="stTextInput"] input::placeholder,
+        [data-baseweb="input"] input::placeholder {{
+            color: var(--pv-text-muted) !important;
+        }}
+        div[data-testid="stTextInput"] input:focus,
+        [data-baseweb="input"]:focus-within {{
+            border-color: var(--pv-accent-primary) !important;
+        }}
+
+        /* Selectbox & Popovers */
+        div[data-testid="stSelectbox"] > div > div,
+        [data-baseweb="select"] > div {{
+            background-color: var(--pv-bg-card) !important;
+            color: var(--pv-text-primary) !important;
+            border: 1px solid var(--pv-border) !important;
+            border-radius: 6px !important;
+        }}
+        [data-baseweb="select"] span,
+        [data-baseweb="select"] div {{
+            color: var(--pv-text-primary) !important;
+        }}
+        [data-baseweb="popover"],
+        ul[data-baseweb="menu"],
+        div[data-baseweb="popover"] > div {{
+            background-color: var(--pv-bg-surface) !important;
+            border: 1px solid var(--pv-border) !important;
+        }}
+        ul[data-baseweb="menu"] li,
+        div[data-baseweb="popover"] li {{
+            color: var(--pv-text-primary) !important;
+            background-color: transparent !important;
+        }}
+        ul[data-baseweb="menu"] li:hover,
+        div[data-baseweb="popover"] li:hover {{
+            background-color: var(--pv-bg-elevated) !important;
+            color: var(--pv-accent-primary) !important;
+        }}
+
+        /* Radio Buttons */
+        div[data-testid="stRadio"] label,
+        div[data-testid="stRadio"] label p,
+        div[data-testid="stRadio"] label span {{
+            color: var(--pv-text-primary) !important;
+        }}
+
+        /* Reusable Card Components */
+        .pv-card {{
+            background-color: var(--pv-bg-card);
+            border: 1px solid var(--pv-border);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: var(--pv-shadow-card);
+            transition: border-color 0.15s ease-in-out;
+        }}
+        .pv-card:hover {{
+            border-color: var(--pv-accent-primary);
+        }}
+
+        .pv-card-highlight {{
+            background-color: var(--pv-bg-elevated);
+            border: 1px solid var(--pv-accent-primary);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }}
+
+        /* Status Badges */
+        .pv-badge {{
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.74rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-right: 8px;
+        }}
+        .pv-badge-prototype {{
+            background-color: rgba(245, 158, 11, 0.15);
+            color: var(--pv-warning);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }}
+        .pv-badge-verified {{
+            background-color: rgba(16, 185, 129, 0.15);
+            color: var(--pv-success);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }}
+        .pv-badge-quarantine {{
+            background-color: rgba(239, 68, 68, 0.15);
+            color: var(--pv-error);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }}
+
+        /* Research Prototype Banner */
+        .pv-disclaimer-banner {{
+            background-color: var(--pv-bg-elevated);
+            border-left: 4px solid var(--pv-warning);
+            border-radius: 6px;
+            padding: 12px 18px;
+            margin-bottom: 24px;
+            font-size: 0.88rem;
+            line-height: 1.45;
+            color: var(--pv-text-secondary);
+        }}
+        .pv-disclaimer-banner strong {{
+            color: var(--pv-warning);
+        }}
+
+        /* Clinical Workstation Canvas (Preserved Pitch-Black Environment) */
+        .pv-workstation-panel {{
+            background-color: var(--pv-workstation-bg);
+            border: 1px solid #1e293b;
+            border-radius: 8px;
+            padding: 18px;
+            color: #f1f5f9;
+        }}
+        .pv-workstation-panel p, .pv-workstation-panel span {{
+            color: #94a3b8;
+        }}
+        .pv-workstation-panel strong {{
+            color: #ffffff;
+        }}
+
+        /* Metric Indicators */
+        [data-testid="stMetricValue"] {{
+            color: var(--pv-accent-primary) !important;
+            font-family: var(--pv-font-sans);
+            font-weight: 700;
+        }}
+        [data-testid="stMetricLabel"] {{
+            color: var(--pv-text-secondary) !important;
+            font-size: 0.82rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }}
+
+        /* Tab styling */
+        .stTabs [data-baseweb="tab-list"] {{
+            border-bottom: 1px solid var(--pv-border);
+            gap: 16px;
+        }}
+        .stTabs [data-baseweb="tab"] {{
+            padding: 10px 16px;
+            font-size: 0.92rem;
+            font-weight: 500;
+            color: var(--pv-text-secondary);
+        }}
+        .stTabs [aria-selected="true"] {{
+            color: var(--pv-accent-primary) !important;
+            border-bottom-color: var(--pv-accent-primary) !important;
+        }}
+    </style>
+    """
+    st.markdown(css, unsafe_allow_html=True)

@@ -1,0 +1,27 @@
+# PulmoVision Training Configuration
+data:
+  target_size: [224, 224]
+  in_channels: 3               # 2.5D triplet [Z-1, Z, Z+1]
+  batch_size: 16
+  num_workers: 0               # Safe for macOS multi-threading
+  window_range: [200.0, 1800.0]
+
+model:
+  name: "efficientnet_b0"      # Primary candidate
+  num_classes: 2
+  pretrained: true
+  dropout: 0.3
+
+training:
+  epochs: 10
+  learning_rate: 0.0003
+  weight_decay: 0.0001
+  early_stopping_patience: 3
+  # Class weights for ~1:3 imbalance [Normal: 0.67, COVID: 2.0]
+  class_weights: [0.67, 2.0]
+  device: "mps"                # Auto-fallbacks to cpu if unavailable
+
+checkpoint:
+  save_dir: "models"
+  filename: "best_model.pth"
+

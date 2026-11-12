@@ -1,0 +1,1841 @@
+{
+  "display_name": "EfficientNet-B0 2.5D",
+  "frozen_threshold": 0.2,
+  "test_duration_sec": 173.95214915275574,
+  "slice_metrics": {
+    "accuracy": 0.9687575102138909,
+    "sensitivity_recall": 0.8722943722943723,
+    "sensitivity_ci_95": [
+      0.8387607342918738,
+      0.8996879482379218
+    ],
+    "specificity": 0.9744274809160305,
+    "specificity_ci_95": [
+      0.97069911416005,
+      0.9776923372529923
+    ],
+    "precision": 0.6672185430463576,
+    "f1_covid": 0.7560975609756097,
+    "f1_normal": 0.9833097958659649,
+    "macro_f1": 0.8697036784207872,
+    "balanced_accuracy": 0.9233609266052014,
+    "tp": 403,
+    "tn": 7659,
+    "fp": 201,
+    "fn": 59,
+    "total_samples": 8322
+  },
+  "patient_metrics": {
+    "accuracy": 0.9411764705882353,
+    "sensitivity_recall": 0.9444444444444444,
+    "sensitivity_ci_95": [
+      0.7424275442669556,
+      0.9901247807931356
+    ],
+    "specificity": 0.9409282700421941,
+    "specificity_ci_95": [
+      0.9033012556590322,
+      0.9644895913882235
+    ],
+    "precision": 0.5483870967741935,
+    "f1_covid": 0.6938775510204082,
+    "f1_normal": 0.9674620390455533,
+    "macro_f1": 0.8306697950329807,
+    "balanced_accuracy": 0.9426863572433193,
+    "tp": 17,
+    "tn": 223,
+    "fp": 14,
+    "fn": 1,
+    "total_samples": 255,
+    "strategy": "positive_slice_ratio",
+    "threshold": 0.2,
+    "total_patients": 255,
+    "per_patient_summary": {
+      "patient100": {
+        "true_label": 1,
+        "pred_label": 1,
+        "slice_count": 6,
+        "positive_slices": 3,
+        "agg_score": 0.5
+      },
+      "patient101": {
+        "true_label": 1,
+        "pred_label": 1,
+        "slice_count": 28,
+        "positive_slices": 23,
+        "agg_score": 0.8214285714285714
+      },
+      "patient103": {
+        "true_label": 1,
+        "pred_label": 1,
+        "slice_count": 16,
+        "positive_slices": 14,
+        "agg_score": 0.875
+      },
+      "patient105": {
+        "true_label": 1,
+        "pred_label": 1,
+        "slice_count": 39,
+        "positive_slices": 16,
+        "agg_score": 0.41025641025641024
+      },
+      "patient10": {
+        "true_label": 1,
+        "pred_label": 1,
+        "slice_count": 32,
+        "positive_slices": 32,
+        "agg_score": 1.0
+      },
+      "patient115": {
+        "true_label": 1,
+        "pred_label": 1,
+        "slice_count": 64,
+        "positive_slices": 61,
+        "agg_score": 0.953125
+      },
+      "patient117": {
+        "true_label": 1,
+        "pred_label": 1,
+        "slice_count": 15,
+        "positive_slices": 15,
+        "agg_score": 1.0
+      },
+      "patient118": {
+        "true_label": 1,
+        "pred_label": 1,
+        "slice_count": 67,
+        "positive_slices": 64,
+        "agg_score": 0.9552238805970149
+      },
+      "patient119": {
+        "true_label": 1,
+        "pred_label": 1,
+        "slice_count": 9,
+        "positive_slices": 8,
+        "agg_score": 0.8888888888888888
+      },
+      "patient11": {
+        "true_label": 1,
+        "pred_label": 0,
+        "slice_count": 1,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient120": {
+        "true_label": 1,
+        "pred_label": 1,
+        "slice_count": 17,
+        "positive_slices": 13,
+        "agg_score": 0.7647058823529411
+      },
+      "patient121": {
+        "true_label": 1,
+        "pred_label": 1,
+        "slice_count": 20,
+        "positive_slices": 7,
+        "agg_score": 0.35
+      },
+      "patient122": {
+        "true_label": 1,
+        "pred_label": 1,
+        "slice_count": 12,
+        "positive_slices": 12,
+        "agg_score": 1.0
+      },
+      "patient13": {
+        "true_label": 1,
+        "pred_label": 1,
+        "slice_count": 22,
+        "positive_slices": 22,
+        "agg_score": 1.0
+      },
+      "patient15": {
+        "true_label": 1,
+        "pred_label": 1,
+        "slice_count": 33,
+        "positive_slices": 33,
+        "agg_score": 1.0
+      },
+      "patient16": {
+        "true_label": 1,
+        "pred_label": 1,
+        "slice_count": 19,
+        "positive_slices": 18,
+        "agg_score": 0.9473684210526315
+      },
+      "patient17": {
+        "true_label": 1,
+        "pred_label": 1,
+        "slice_count": 15,
+        "positive_slices": 15,
+        "agg_score": 1.0
+      },
+      "patient18": {
+        "true_label": 1,
+        "pred_label": 1,
+        "slice_count": 47,
+        "positive_slices": 47,
+        "agg_score": 1.0
+      },
+      "patient192": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 52,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient193": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 33,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient194": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 62,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient195": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 23,
+        "positive_slices": 1,
+        "agg_score": 0.043478260869565216
+      },
+      "patient196": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 56,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient197": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 62,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient198": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 16,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient199": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 64,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient200": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 54,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient201": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 76,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient202": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 72,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient203": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 62,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient204": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 70,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient205": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 48,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient206": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 60,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient207": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 66,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient208": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 60,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient209": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 32,
+        "positive_slices": 1,
+        "agg_score": 0.03125
+      },
+      "patient210": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 64,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient212": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 54,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient213": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 42,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient214": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 18,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient215": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 62,
+        "positive_slices": 4,
+        "agg_score": 0.06451612903225806
+      },
+      "patient216": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 30,
+        "positive_slices": 3,
+        "agg_score": 0.1
+      },
+      "patient217": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 74,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient218": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 78,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient219": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 48,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient220": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 42,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient221": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 16,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient222": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 76,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient223": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 20,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient224": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 64,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient225": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 58,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient226": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 64,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient227": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 29,
+        "positive_slices": 1,
+        "agg_score": 0.034482758620689655
+      },
+      "patient228": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 56,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient229": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 60,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient230": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 25,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient231": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 64,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient232": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 34,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient233": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 68,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient234": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 52,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient235": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 62,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient236": {
+        "true_label": 0,
+        "pred_label": 1,
+        "slice_count": 10,
+        "positive_slices": 2,
+        "agg_score": 0.2
+      },
+      "patient237": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 28,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient238": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 36,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient239": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 70,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient240": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 56,
+        "positive_slices": 5,
+        "agg_score": 0.08928571428571429
+      },
+      "patient241": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 46,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient242": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 40,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient243": {
+        "true_label": 0,
+        "pred_label": 1,
+        "slice_count": 18,
+        "positive_slices": 7,
+        "agg_score": 0.3888888888888889
+      },
+      "patient244": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 35,
+        "positive_slices": 1,
+        "agg_score": 0.02857142857142857
+      },
+      "patient245": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 68,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient246": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 62,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient247": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 64,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient248": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 64,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient249": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 64,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient250": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 26,
+        "positive_slices": 1,
+        "agg_score": 0.038461538461538464
+      },
+      "patient251": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 32,
+        "positive_slices": 1,
+        "agg_score": 0.03125
+      },
+      "patient252": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 60,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient253": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 58,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient254": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 27,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient255": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 64,
+        "positive_slices": 1,
+        "agg_score": 0.015625
+      },
+      "patient256": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 70,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient257": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 44,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient258": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 15,
+        "positive_slices": 1,
+        "agg_score": 0.06666666666666667
+      },
+      "patient259": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 36,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient260": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 24,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient262": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 25,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient263": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 37,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient264": {
+        "true_label": 0,
+        "pred_label": 1,
+        "slice_count": 8,
+        "positive_slices": 5,
+        "agg_score": 0.625
+      },
+      "patient265": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 23,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient266": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 38,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient267": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 36,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient268": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 31,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient269": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 24,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient270": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 40,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient271": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 13,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient272": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 28,
+        "positive_slices": 3,
+        "agg_score": 0.10714285714285714
+      },
+      "patient273": {
+        "true_label": 0,
+        "pred_label": 1,
+        "slice_count": 26,
+        "positive_slices": 13,
+        "agg_score": 0.5
+      },
+      "patient274": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 27,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient275": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 36,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient276": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 11,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient277": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 16,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient278": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 31,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient279": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 36,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient280": {
+        "true_label": 0,
+        "pred_label": 1,
+        "slice_count": 29,
+        "positive_slices": 6,
+        "agg_score": 0.20689655172413793
+      },
+      "patient281": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 38,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient282": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 36,
+        "positive_slices": 1,
+        "agg_score": 0.027777777777777776
+      },
+      "patient283": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 15,
+        "positive_slices": 1,
+        "agg_score": 0.06666666666666667
+      },
+      "patient284": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 32,
+        "positive_slices": 1,
+        "agg_score": 0.03125
+      },
+      "patient285": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 22,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient286": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 35,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient287": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 15,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient288": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 29,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient289": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 33,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient290": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 12,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient291": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 32,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient292": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 9,
+        "positive_slices": 1,
+        "agg_score": 0.1111111111111111
+      },
+      "patient293": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 31,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient294": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 31,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient295": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 24,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient296": {
+        "true_label": 0,
+        "pred_label": 1,
+        "slice_count": 8,
+        "positive_slices": 4,
+        "agg_score": 0.5
+      },
+      "patient297": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 39,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient298": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 31,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient299": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 13,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient300": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 8,
+        "positive_slices": 1,
+        "agg_score": 0.125
+      },
+      "patient301": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 14,
+        "positive_slices": 2,
+        "agg_score": 0.14285714285714285
+      },
+      "patient302": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 17,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient303": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 14,
+        "positive_slices": 1,
+        "agg_score": 0.07142857142857142
+      },
+      "patient304": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 14,
+        "positive_slices": 1,
+        "agg_score": 0.07142857142857142
+      },
+      "patient305": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 23,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient306": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 38,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient307": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 37,
+        "positive_slices": 1,
+        "agg_score": 0.02702702702702703
+      },
+      "patient308": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 27,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient309": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 28,
+        "positive_slices": 1,
+        "agg_score": 0.03571428571428571
+      },
+      "patient310": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 24,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient311": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 12,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient312": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 34,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient313": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 29,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient314": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 22,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient315": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 19,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient316": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 13,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient317": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 33,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient318": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 32,
+        "positive_slices": 1,
+        "agg_score": 0.03125
+      },
+      "patient319": {
+        "true_label": 0,
+        "pred_label": 1,
+        "slice_count": 14,
+        "positive_slices": 3,
+        "agg_score": 0.21428571428571427
+      },
+      "patient320": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 27,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient321": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 32,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient322": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 35,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient323": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 33,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient324": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 21,
+        "positive_slices": 2,
+        "agg_score": 0.09523809523809523
+      },
+      "patient325": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 31,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient326": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 28,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient327": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 30,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient328": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 22,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient329": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 36,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient331": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 17,
+        "positive_slices": 1,
+        "agg_score": 0.058823529411764705
+      },
+      "patient332": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 13,
+        "positive_slices": 1,
+        "agg_score": 0.07692307692307693
+      },
+      "patient333": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 21,
+        "positive_slices": 1,
+        "agg_score": 0.047619047619047616
+      },
+      "patient334": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 31,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient335": {
+        "true_label": 0,
+        "pred_label": 1,
+        "slice_count": 10,
+        "positive_slices": 4,
+        "agg_score": 0.4
+      },
+      "patient336": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 22,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient337": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 23,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient338": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 32,
+        "positive_slices": 3,
+        "agg_score": 0.09375
+      },
+      "patient339": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 27,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient340": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 31,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient341": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 26,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient342": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 27,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient343": {
+        "true_label": 0,
+        "pred_label": 1,
+        "slice_count": 26,
+        "positive_slices": 12,
+        "agg_score": 0.46153846153846156
+      },
+      "patient344": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 34,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient345": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 37,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient346": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 26,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient347": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 25,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient348": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 9,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient349": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 37,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient350": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 22,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient351": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 25,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient352": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 32,
+        "positive_slices": 2,
+        "agg_score": 0.0625
+      },
+      "patient354": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 27,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient355": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 31,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient356": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 29,
+        "positive_slices": 3,
+        "agg_score": 0.10344827586206896
+      },
+      "patient358": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 24,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient359": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 24,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient360": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 29,
+        "positive_slices": 1,
+        "agg_score": 0.034482758620689655
+      },
+      "patient361": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 25,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient362": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 35,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient363": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 26,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient364": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 24,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient365": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 24,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient366": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 25,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient367": {
+        "true_label": 0,
+        "pred_label": 1,
+        "slice_count": 24,
+        "positive_slices": 19,
+        "agg_score": 0.7916666666666666
+      },
+      "patient368": {
+        "true_label": 0,
+        "pred_label": 1,
+        "slice_count": 24,
+        "positive_slices": 5,
+        "agg_score": 0.20833333333333334
+      },
+      "patient369": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 15,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient370": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 17,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient371": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 24,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient372": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 23,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient373": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 25,
+        "positive_slices": 3,
+        "agg_score": 0.12
+      },
+      "patient374": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 24,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient375": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 28,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient376": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 26,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient377": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 27,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient378": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 24,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient379": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 32,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient380": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 34,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient381": {
+        "true_label": 0,
+        "pred_label": 1,
+        "slice_count": 30,
+        "positive_slices": 26,
+        "agg_score": 0.8666666666666667
+      },
+      "patient382": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 25,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient383": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 32,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient384": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 17,
+        "positive_slices": 1,
+        "agg_score": 0.058823529411764705
+      },
+      "patient385": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 33,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient386": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 28,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient387": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 30,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient388": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 22,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient389": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 35,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient390": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 33,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient391": {
+        "true_label": 0,
+        "pred_label": 1,
+        "slice_count": 15,
+        "positive_slices": 7,
+        "agg_score": 0.4666666666666667
+      },
+      "patient392": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 20,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient393": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 37,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient394": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 36,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient395": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 18,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient396": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 31,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient397": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 28,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient398": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 28,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient399": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 27,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient400": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 30,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient401": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 37,
+        "positive_slices": 1,
+        "agg_score": 0.02702702702702703
+      },
+      "patient402": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 32,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient403": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 26,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient404": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 27,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient405": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 20,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient406": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 34,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient407": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 37,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient408": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 12,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient409": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 39,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient410": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 27,
+        "positive_slices": 1,
+        "agg_score": 0.037037037037037035
+      },
+      "patient411": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 8,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient412": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 31,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient413": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 28,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient414": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 34,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient415": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 18,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient416": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 32,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient417": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 29,
+        "positive_slices": 1,
+        "agg_score": 0.034482758620689655
+      },
+      "patient418": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 30,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient419": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 39,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient420": {
+        "true_label": 0,
+        "pred_label": 1,
+        "slice_count": 31,
+        "positive_slices": 26,
+        "agg_score": 0.8387096774193549
+      },
+      "patient421": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 27,
+        "positive_slices": 4,
+        "agg_score": 0.14814814814814814
+      },
+      "patient422": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 37,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient423": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 26,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient424": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 37,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient425": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 41,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient427": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 40,
+        "positive_slices": 1,
+        "agg_score": 0.025
+      },
+      "patient428": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 34,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient429": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 32,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient430": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 29,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient431": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 32,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient432": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 28,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      },
+      "patient433": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 28,
+        "positive_slices": 1,
+        "agg_score": 0.03571428571428571
+      },
+      "patient434": {
+        "true_label": 0,
+        "pred_label": 0,
+        "slice_count": 28,
+        "positive_slices": 0,
+        "agg_score": 0.0
+      }
+    }
+  }
+}
