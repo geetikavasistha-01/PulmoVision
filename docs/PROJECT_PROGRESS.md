@@ -193,6 +193,52 @@
 
 ---
 
-## Next Milestone: Stage 2 Architecture Research
-Stage 1 baselines are fully trained, verified, and benchmarked on real data.  
-Stage 2 experimental research branches (`research/cnn-lstm`, `research/3d-cnn`, `research/transformers`) will follow per [`docs/research_strategy.md`](file:///Users/geetikavasistha/PulmoVision/docs/research_strategy.md).
+## Stage 2 Sequence Intelligence & Platform Deployment (v2.0.0)
+
+- [x] **Stage 2A — Forensic Anatomical De-Duplication Protocol:**
+  - Audited 3,736 slices across 122 development patients; identified and resolved 604 duplicate slice alias entries.
+  - Published verified deduplicated manifest (`data/metadata/splits/stage2_dev_deduplicated_manifest.csv`) with 3,132 unique physical slices across 239 CT acquisition series.
+  - Maintained strict quarantine on the 255-patient holdout set (`test1.csv`), preserving zero test data contamination.
+- [x] **Stage 2B — High-Throughput Image Feature Extraction:**
+  - Extracted 1,280-dimensional feature representations using frozen ImageNet-pretrained EfficientNet-B0 backbone.
+  - Persisted embeddings to cached feature stores with deterministic SHA-256 verification hashes.
+- [x] **Stage 2C — Controlled Architecture Experiments (5-Fold Patient-Stratified CV):**
+  - **Exp A — CNN-BiLSTM (Last Step):** Macro F1 $90.96\%$, ROC-AUC $94.63\%$, Sensitivity $94.81\%$, Specificity $84.44\%$.
+  - **Exp B — CNN-BiLSTM (Mean Pooling) [Selected Production Model]:**
+    - Macro F1 **$94.61\%$**, ROC-AUC **$96.88\%$**, Sensitivity **$98.70\%$** ($76/77$ COVID-19 detected, $1$ FN), Specificity **$88.89\%$** ($40/45$ Normal detected, $5$ FP).
+    - Trainable parameters: $1,460,418$ ($2 \times$ BiLSTM layers, hidden size $128$ per direction, mean pooling head).
+    - Verified checkpoint SHA-256: `0bd817319d99e0fbb22a318c458d9f86df77297f7bc4f5ec88f845e80ff1caed`.
+  - **Exp C — CNN-BiLSTM (Bahdanau Additive Attention):** Macro F1 $92.74\%$, ROC-AUC $95.99\%$, Sensitivity $97.40\%$, Specificity $84.44\%$.
+  - Published full research report: [`reports/research/PULMOVISION_STAGE_2_RESEARCH_REPORT.md`](file:///Users/geetikavasistha/PulmoVision/reports/research/PULMOVISION_STAGE_2_RESEARCH_REPORT.md).
+- [x] **Stage 2D — 7-Page Modular Research Workstation:**
+  - Built 7 unified modules in [`app/views/`](file:///Users/geetikavasistha/PulmoVision/app/views/):
+    1. **Research Overview:** Non-technical plain-language landing page with 3-step visual workflow, live metrics, and ethical disclaimers.
+    2. **Dataset Explorer:** Sequence length distributions, deduplication audit tables, and slice inspector.
+    3. **Model Laboratory:** Architecture schematics, layer dimensions, parameter budgets, and attention formulas.
+    4. **Experiment Analytics:** Interactive ROC curves, confusion matrices, and fold-level cross-validation performance.
+    5. **CT Workstation:** Live 2.5D research inference pipeline with window leveling and confidence gauge.
+    6. **Explainability:** Grad-CAM activation heatmaps with anatomical localization caveats.
+    7. **Research Documentation:** In-app scientific manuscripts, protocol audits, and forensic verification logs.
+  - Dual design themes: Clinical Dark (`#0a0e17`) and Laboratory Light (`#f8fafc`) with preserved pitch-black CT viewport (`#000000`).
+  - Zero unicode emojis enforced across the platform (Material Symbols icons used exclusively).
+- [x] **Stage 2E — Automated Test Suite & Release Verification:**
+  - Complete automated test suite: **97 / 97 passing tests (100% green)** across units, integration, UI modules, and quarantine checks.
+  - Zero trailing whitespace (`git diff --check` clean).
+  - Released and tagged: **`v2.0.0`** on branch `main`.
+
+---
+
+## Deliverables & Documentation Index
+
+| Asset | Path | Description |
+|---|---|---|
+| **Web Application** | [`app/streamlit_app.py`](file:///Users/geetikavasistha/PulmoVision/app/streamlit_app.py) | 7-page research workstation with dual themes |
+| **Stage 2 Checkpoint** | `models/best_model.pth` | EfficientNet-B0 + BiLSTM Mean ($1.46\text{M}$ params, SHA-256 verified) |
+| **Stage 2 Research Report** | [`reports/research/PULMOVISION_STAGE_2_RESEARCH_REPORT.md`](file:///Users/geetikavasistha/PulmoVision/reports/research/PULMOVISION_STAGE_2_RESEARCH_REPORT.md) | Comprehensive primary scientific manuscript |
+| **Deduplicated Manifest** | [`data/metadata/splits/stage2_dev_deduplicated_manifest.csv`](file:///Users/geetikavasistha/PulmoVision/data/metadata/splits/stage2_dev_deduplicated_manifest.csv) | 3,132 unique development CT slices |
+| **Stage 1 Baselines Report** | [`reports/experiments/EVALUATION_REPORT.md`](file:///Users/geetikavasistha/PulmoVision/reports/experiments/EVALUATION_REPORT.md) | Baseline models evaluation on test cohort |
+| **Deduplication Audit** | [`reports/dataset_audit/STAGE2_DEDUPLICATION_AUDIT.md`](file:///Users/geetikavasistha/PulmoVision/reports/dataset_audit/STAGE2_DEDUPLICATION_AUDIT.md) | Forensic analysis of 604 resolved duplicate aliases |
+| **Model Card** | [`docs/model_card.md`](file:///Users/geetikavasistha/PulmoVision/docs/model_card.md) | Ethical, data, and performance card |
+| **System Architecture** | [`docs/architecture.md`](file:///Users/geetikavasistha/PulmoVision/docs/architecture.md) | System design & dataflow specifications |
+| **Research Strategy** | [`docs/research_strategy.md`](file:///Users/geetikavasistha/PulmoVision/docs/research_strategy.md) | Two-stage exploration protocol |
+| **Automated Tests** | [`tests/`](file:///Users/geetikavasistha/PulmoVision/tests/) | 97/97 tests passing (100% green) |
