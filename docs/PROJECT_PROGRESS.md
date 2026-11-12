@@ -1,10 +1,16 @@
 # PulmoVision — Master Progress Tracker
 
 ## Current Status
-🎉 **PHASE 3 COMPLETE: FULL BASELINE EXPERIMENTAL BENCHMARK CONDUCTED**  
-- Official COVID-CTset Fold 1 archive (12,058 16-bit TIFF slices) verified and extracted.
-- Sequential benchmark of 4 architectures (Custom CNN 2D, ResNet50 2D, ResNet50 2.5D, EfficientNet-B0 2.5D) completed.
-- Full comparative research evaluation report published: `reports/experiments/EVALUATION_REPORT.md`.
+🎉 **STAGE 2 RESEARCH & COMPLETE PRODUCT REDESIGN DELIVERED**  
+- Official Stage 2 5-fold outer cross-validation with inner validation holdouts conducted across 3 architectures (15 total runs).
+- Architecture B confirmed leader: **0.9461 Macro F1**, **0.9688 ROC-AUC**, **98.7% Sensitivity** (76/77 COVID-19 patients detected).
+- Complete product-level redesign delivered: Modular hybrid Scientific AI Research Laboratory + Clinical Imaging Workstation.
+- Dual visual themes implemented: **Clinical Dark** and **Laboratory Light**, with high-contrast pitch-black radiological CT viewport invariant.
+- All 7 destinations fully implemented and verified: Research Overview, Dataset Explorer, Model Laboratory, Experiment Analytics, CT Workstation, Explainability & Boundaries, and Research Documentation.
+- Automated testing: **95 / 95 tests passing (100% green)** in 13.22 seconds across data, deduplication, architectures, patient-balanced weighting, sequence validation, manifest adapter, and UI modules.
+- UI Refinement & Acceptance: Restored Dataset Explorer via `ManifestAdapter`, standardized Material Symbols across navigation (0 unicode emojis), and verified CT Workstation on real 16-bit development TIFF sequences.
+- Comprehensive Implementation Reports published: `reports/experiments/FINAL_APPLICATION_IMPLEMENTATION_REPORT.md` and `reports/experiments/FINAL_UI_IMPLEMENTATION_REPORT.md`.
+- Provenance & Quarantine: Sealed held-out test partition (`test1.csv`) preserved unopened with zero read exposure.
 
 ## Overall Progress
 - **Module 0 — Project Foundations:** ✅ Completed
@@ -20,10 +26,27 @@
 - **Module 10 — Streamlit Application:** ✅ Completed
 - **Module 11 — Deployment & Optimisation:** ✅ Completed
 - **Module 12 — Testing & Portfolio Packaging:** ✅ Completed
+- **Stage 2 Research — CNN-BiLSTM Sequence Modelling:** ✅ Completed
 
 ---
 
 ## Detailed Milestone Checklist
+
+### Stage 2 Research — CNN-BiLSTM Sequence Modelling & Deployment
+- [x] **Deduplication Audit:** Forensic SHA256 audit resolved 604 redundant slice files; preserved exact canonical records (3,132 unique development slices, 122 patients).
+- [x] **Patient-Balanced Optimization:** Implemented equal patient weighting per optimizer update ($1/N_p$ per series, grouped per patient) in `src/evaluation/nested_cv.py`.
+- [x] **5-Fold Cross-Validation Benchmark:** Completed 15 runs across Architectures A (Mean Pooling), B (BiLSTM + Mean Pooling), and C (BiLSTM + Additive Attention).
+- [x] **Cross-Validation Leader:** Architecture B confirmed development leader (Macro F1: $0.9461$, ROC-AUC: $0.9688$, Sensitivity: $98.70\%$, Specificity: $88.89\%$).
+- [x] **Deployment Model Artifact:** Trained explicitly labeled standalone deployment model `models/stage2_bilstm_deployment.pth` on development cohort.
+- [x] **Inference & Sequence Validation Engine:** Implemented `src/inference/sequence_validator.py` and `src/inference/sequence_predictor.py`.
+- [x] **Streamlit Research Platform:** Upgraded `app/streamlit_app.py` to 7 rich interactive pages with craniocaudal slider, sequence inference, explainability boundaries, and embedded research report.
+- [x] **Comprehensive Research Report:** Published 14-section formal manuscript in `reports/research/PULMOVISION_STAGE_2_RESEARCH_REPORT.md`.
+- [x] **Full Regression Test Suite:** **81/81 tests passing** across data, deduplication, architectures, patient-balanced weighting, real-TIFF inference, sequence validation, and UI modules.
+- [x] **Final Consistency Audit:** Completed and published forensic consistency audit (`reports/experiments/FINAL_IMPLEMENTATION_AUDIT.md`) with official **PASS** verdict.
+- [x] **Product Redesign & Modular Decomposition:** Re-architected Streamlit application into modular components, views, styles, and utilities.
+- [x] **Dual Theme & Clinical Canvas:** Deployed Clinical Dark and Laboratory Light themes with pitch-black (`#000000`) radiological CT inspection viewport.
+- [x] **Visual Evidence Capture:** Automated CDP capture of 8 full-resolution screenshots in `reports/figures/`.
+- [x] **Final Application Implementation Report:** Published in `reports/experiments/FINAL_APPLICATION_IMPLEMENTATION_REPORT.md`.
 
 ### Module 0 — Project Foundations
 - [x] Understand project objectives & 2.5D paradigm
