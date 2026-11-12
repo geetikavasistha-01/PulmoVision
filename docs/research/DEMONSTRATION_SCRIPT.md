@@ -73,3 +73,4 @@
 > The platform seamlessly switches between Clinical Dark and Laboratory Light modes, maintaining consistent typography and semantic indicators.
 > 
 > With 95 passing automated unit and regression tests, zero emojis, and complete research documentation embedded directly in the application, PulmoVision demonstrates how rigorous ML engineering and medical imaging software can unite in an open research platform. Thank you."
+

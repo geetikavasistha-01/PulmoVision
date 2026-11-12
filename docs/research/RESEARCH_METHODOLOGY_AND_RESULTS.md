@@ -130,3 +130,4 @@ A 5-fold outer cross-validation protocol with nested inner validation splits was
    Experiment B slightly outperformed Experiment C on Macro F1 ($0.9461$ vs $0.9211$) and Sensitivity ($98.70\%$ vs $93.51\%$). On small patient cohorts ($N=122$), additive attention parameters ($W_a, v_a$) are susceptible to mild overfitting, whereas global mean pooling over contextualized recurrent states acts as an effective regularizer.
 3. **Clinical Screening Utility:**
    In pulmonary viral screening, the clinical cost of a false negative (discharging an infected patient into the community) vastly outweighs a false positive (which triggers confirmatory RT-PCR testing). Experiment B's $98.70\%$ sensitivity with only 1 false negative makes it the clear developmental choice.
+

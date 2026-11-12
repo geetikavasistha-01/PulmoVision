@@ -84,3 +84,4 @@ Grad-CAM (Gradient-Weighted Class Activation Mapping) computes the gradients of 
 ### Data Privacy & Patient Confidentiality
 - Medical imaging data contains sensitive protected health information (PHI).
 - PulmoVision enforces complete de-identification: all raw DICOM headers and identifying patient metadata were scrubbed prior to feature extraction, with slices cataloged purely by anonymous study identifiers.
+
