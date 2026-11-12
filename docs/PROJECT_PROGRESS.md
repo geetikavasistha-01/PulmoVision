@@ -27,6 +27,17 @@
 
 ## Detailed Milestone Checklist
 
+### Stage 2 Research — CNN-BiLSTM Sequence Modelling & Deployment
+- [x] **Deduplication Audit:** Forensic SHA256 audit resolved 604 redundant slice files; preserved exact canonical records (3,132 unique development slices, 122 patients).
+- [x] **Patient-Balanced Optimization:** Implemented equal patient weighting per optimizer update ($1/N_p$ per series, grouped per patient) in `src/evaluation/nested_cv.py`.
+- [x] **5-Fold Cross-Validation Benchmark:** Completed 15 runs across Architectures A (Mean Pooling), B (BiLSTM + Mean Pooling), and C (BiLSTM + Additive Attention).
+- [x] **Cross-Validation Leader:** Architecture B confirmed development leader (Macro F1: $0.9461$, ROC-AUC: $0.9688$, Sensitivity: $98.70\%$, Specificity: $88.89\%$).
+- [x] **Deployment Model Artifact:** Trained explicitly labeled standalone deployment model `models/stage2_bilstm_deployment.pth` on development cohort.
+- [x] **Inference & Sequence Validation Engine:** Implemented `src/inference/sequence_validator.py` and `src/inference/sequence_predictor.py`.
+- [x] **Streamlit Research Platform:** Upgraded `app/streamlit_app.py` to 7 rich interactive pages with craniocaudal slider, sequence inference, explainability boundaries, and embedded research report.
+- [x] **Comprehensive Research Report:** Published 14-section formal manuscript in `reports/research/PULMOVISION_STAGE_2_RESEARCH_REPORT.md`.
+- [x] **Full Regression Test Suite:** **71/71 tests passing** across data, deduplication, architectures, patient-balanced weighting, and inference.
+
 ### Module 0 — Project Foundations
 - [x] Understand project objectives & 2.5D paradigm
 - [x] Clarify research prototype vs clinical diagnostic boundary
