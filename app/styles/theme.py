@@ -79,6 +79,19 @@ def apply_theme(theme_name: str = "dark") -> None:
             color: var(--pv-text-primary);
         }}
 
+        /* Sidebar Hidden Utility Bridges */
+        section[data-testid="stSidebar"] [data-testid="stCustomComponentV1"],
+        section[data-testid="stSidebar"] iframe[height="0"] {{
+            position: absolute !important;
+            width: 0 !important;
+            height: 0 !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            border: none !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+        }}
+
         /* Navigation Radio Group Refinement */
         section[data-testid="stSidebar"] div[role="radiogroup"] {{
             gap: 4px;

@@ -203,3 +203,61 @@ def test_strict_quarantine_no_test_partition_access():
             assert token not in content, (
                 f"VIOLATION: Quarantined token '{token}' referenced in {py_file}"
             )
+
+
+def test_overview_view_redesign_structure():
+    """Verify that Overview page contains all required accessible headings and sections."""
+    overview_file = REPO_ROOT / "app" / "views" / "overview_view.py"
+    assert overview_file.is_file()
+    content = overview_file.read_text(encoding="utf-8")
+
+    expected_strings = [
+        "Understanding Lung CT Scans with Artificial Intelligence",
+        "How It Works",
+        "The Data Behind the Research",
+        "How Did the Model Perform?",
+        "What AI Model Did We Build?",
+        "What Makes This Research Interesting?",
+        "Important Research Limitations",
+        "Explore the Project",
+        "Research prototype only",
+        "Not validated or approved for clinical diagnosis",
+        "Stage 2 research completed",
+        "Independent test set sealed",
+        "Development Patients",
+        "Acquisition Series",
+        "Unique CT Images",
+        "Independent Holdout",
+        "Macro F1 Score",
+        "ROC-AUC Score",
+        "Sensitivity",
+        "Specificity",
+    ]
+    for exp_str in expected_strings:
+        assert exp_str in content, f"Missing expected heading or text '{exp_str}' in overview_view.py"
+
+
+def test_sidebar_inference_checkpoint_card_structure():
+    """Verify that the sidebar Inference Checkpoint card has all required elements."""
+    nav_file = REPO_ROOT / "app" / "components" / "navigation.py"
+    assert nav_file.is_file()
+    content = nav_file.read_text(encoding="utf-8")
+
+    expected_elements = [
+        "Inference Checkpoint",
+        "STAGE 2",
+        "effnet_b0_bilstm_mean",
+        "1,460,418 trainable parameters",
+        "Development cohort",
+        "122 patients",
+        "Independent holdout dataset",
+        "255 patients",
+        "SEALED",
+        "Not evaluated. Reserved for independent testing.",
+        "CHECKPOINT SHA-256",
+        "0bd81731...ff1caed",
+        "0bd817319d99e0fbb22a318c458d9f86df77297f7bc4f5ec88f845e80ff1caed",
+        "pv-copy-hash-btn",
+    ]
+    for elem in expected_elements:
+        assert elem in content, f"Missing expected element '{elem}' in navigation.py"
