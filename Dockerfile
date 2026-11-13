@@ -31,9 +31,9 @@ RUN groupadd -g 1000 pulmo && \
     useradd -u 1000 -g pulmo -m -s /bin/bash pulmo
 
 # 4. Install Pinned Deployment Python Dependencies
-COPY requirements-deploy.txt /app/requirements-deploy.txt
+COPY requirements.txt /app/requirements.txt
 RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir -r /app/requirements-deploy.txt
+    pip install --no-cache-dir -r /app/requirements.txt
 
 # 5. Pre-bake ImageNet-1K EfficientNet-B0 Weights (Air-gap offline readiness)
 RUN mkdir -p /app/.cache/torch && \
