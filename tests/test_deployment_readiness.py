@@ -16,13 +16,15 @@ EXPECTED_CKPT_SHA256 = "0bd817319d99e0fbb22a318c458d9f86df77297f7bc4f5ec88f845e8
 
 
 def test_root_entrypoint_shim_exists_and_points_to_canonical():
-    """Verify root streamlit_app.py exists and points to app/streamlit_app.py."""
-    shim = REPO_ROOT / "streamlit_app.py"
+    """Verify root entrypoint shims (streamlit_app.py and app.py) exist and point to app/streamlit_app.py."""
     canonical = REPO_ROOT / "app" / "streamlit_app.py"
-    assert shim.is_file(), "Root streamlit_app.py shim missing!"
     assert canonical.is_file(), "Canonical app/streamlit_app.py missing!"
-    content = shim.read_text()
-    assert "app/streamlit_app.py" in content or "run_path" in content
+    
+    for shim_name in ["streamlit_app.py", "app.py"]:
+        shim = REPO_ROOT / shim_name
+        assert shim.is_file(), f"Root {shim_name} shim missing!"
+        content = shim.read_text()
+        assert "app/streamlit_app.py" in content or "run_path" in content
 
 
 def test_requirements_hygiene():
