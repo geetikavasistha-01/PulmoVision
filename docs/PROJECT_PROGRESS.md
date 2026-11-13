@@ -7,8 +7,8 @@
 - Complete product-level redesign delivered: Modular hybrid Scientific AI Research Laboratory + Clinical Imaging Workstation.
 - Dual visual themes implemented: **Clinical Dark** and **Laboratory Light**, with high-contrast pitch-black radiological CT viewport invariant.
 - All 7 destinations fully implemented and verified: Research Overview, Dataset Explorer, Model Laboratory, Experiment Analytics, CT Workstation, Explainability & Boundaries, and Research Documentation.
-- Automated testing: **102 / 102 tests passing (100% green)** across data, deduplication, architectures, patient-balanced weighting, sequence validation, manifest adapter, Docker configuration, and Streamlit AppTest navigation.
-- UI Refinement & Acceptance: Resolved `StreamlitWidgetAlreadyInstantiatedError` by de-coupling radio widget instantiation from external session state changes and syncing pre-widget lifecycle.
+- Automated testing: **103 / 103 tests passing (100% green)** across data, deduplication, architectures, patient-balanced weighting, sequence validation, manifest adapter, Docker configuration, and Streamlit AppTest navigation.
+- UI Refinement & Acceptance: Resolved `StreamlitWidgetAlreadyInstantiatedError` and redesigned Research Documentation "By Section" reader with interactive progress tracking, bidirectional controls, collapsible Table of Contents, and reading statistics.
 - Stage 3A Docker Packaging: Created reproducible multi-stage Docker build, pre-baking EfficientNet-B0 weights, dropping to non-root `pulmo:1000`, setting up health checks, and validating CPU inference fallback.
 - Comprehensive Deployment Guide published: `docs/docker_deployment.md`.
 - Provenance & Quarantine: Sealed held-out test partition (`test1.csv`) preserved unopened with zero read exposure.
