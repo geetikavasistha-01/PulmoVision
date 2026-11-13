@@ -1,32 +1,36 @@
 # PulmoVision — Master Progress Tracker
 
 ## Current Status
-🎉 **STAGE 2 RESEARCH & COMPLETE PRODUCT REDESIGN DELIVERED**  
+**STAGE 3B STREAMLIT COMMUNITY CLOUD DEPLOYMENT READINESS DELIVERED**  
 - Official Stage 2 5-fold outer cross-validation with inner validation holdouts conducted across 3 architectures (15 total runs).
 - Architecture B confirmed leader: **0.9461 Macro F1**, **0.9688 ROC-AUC**, **98.7% Sensitivity** (76/77 COVID-19 patients detected).
 - Complete product-level redesign delivered: Modular hybrid Scientific AI Research Laboratory + Clinical Imaging Workstation.
 - Dual visual themes implemented: **Clinical Dark** and **Laboratory Light**, with high-contrast pitch-black radiological CT viewport invariant.
 - All 7 destinations fully implemented and verified: Research Overview, Dataset Explorer, Model Laboratory, Experiment Analytics, CT Workstation, Explainability & Boundaries, and Research Documentation.
-- Automated testing: **95 / 95 tests passing (100% green)** in 13.22 seconds across data, deduplication, architectures, patient-balanced weighting, sequence validation, manifest adapter, and UI modules.
-- UI Refinement & Acceptance: Restored Dataset Explorer via `ManifestAdapter`, standardized Material Symbols across navigation (0 unicode emojis), and verified CT Workstation on real 16-bit development TIFF sequences.
-- Comprehensive Implementation Reports published: `reports/experiments/FINAL_APPLICATION_IMPLEMENTATION_REPORT.md` and `reports/experiments/FINAL_UI_IMPLEMENTATION_REPORT.md`.
+- Automated testing: **108 / 108 tests passing (100% green)** across data, deduplication, architectures, patient-balanced weighting, sequence validation, manifest adapter, Docker configuration, Streamlit AppTest navigation, and Cloud deployment readiness.
+- UI Refinement & Acceptance: Resolved sidebar destination radio lock and migrated clipboard bridge from legacy `components.html` to direct `st.html(unsafe_allow_javascript=True)`, eliminating browser console iframe sandbox and deprecated permissions policy warnings.
+- Stage 3A Docker Packaging: Created reproducible multi-stage Docker build, pre-baking EfficientNet-B0 weights, dropping to non-root `pulmo:1000`, setting up health checks, and validating CPU inference fallback.
+- Stage 3B Streamlit Community Cloud Readiness: Root entrypoint shim `streamlit_app.py`, clean production `requirements.txt` with headless OpenCV and no dev/audio packages, `packages.txt` for Debian graphics libraries, explicit bit-for-bit SHA-256 checkpoint validation (`0bd81731...`), memory footprint verified at ~468.8 MB (well within 2.7 GB free tier limit).
+- Comprehensive Deployment Guides published: `docs/docker_deployment.md` and `docs/STREAMLIT_CLOUD_DEPLOYMENT_READINESS.md`.
 - Provenance & Quarantine: Sealed held-out test partition (`test1.csv`) preserved unopened with zero read exposure.
 
 ## Overall Progress
-- **Module 0 — Project Foundations:** ✅ Completed
-- **Module 1 — Development Environment:** ✅ Completed
-- **Module 2 — Dataset Discovery & Audit:** ✅ Completed
-- **Module 3 — Medical Image Processing:** ✅ Completed
-- **Module 4 — Understanding CNNs:** ✅ Completed
-- **Module 5 — 2.5D Modelling & Stacking:** ✅ Completed
-- **Module 6 — Transfer Learning:** ✅ Completed
-- **Module 7 — Model Training:** ✅ Completed
-- **Module 8 — Model Evaluation:** ✅ Completed
-- **Module 9 — Explainable AI (Grad-CAM):** ✅ Completed
-- **Module 10 — Streamlit Application:** ✅ Completed
-- **Module 11 — Deployment & Optimisation:** ✅ Completed
-- **Module 12 — Testing & Portfolio Packaging:** ✅ Completed
-- **Stage 2 Research — CNN-BiLSTM Sequence Modelling:** ✅ Completed
+- **Module 0 — Project Foundations:** [x] Completed
+- **Module 1 — Development Environment:** [x] Completed
+- **Module 2 — Dataset Discovery & Audit:** [x] Completed
+- **Module 3 — Medical Image Processing:** [x] Completed
+- **Module 4 — Understanding CNNs:** [x] Completed
+- **Module 5 — 2.5D Modelling & Stacking:** [x] Completed
+- **Module 6 — Transfer Learning:** [x] Completed
+- **Module 7 — Model Training:** [x] Completed
+- **Module 8 — Model Evaluation:** [x] Completed
+- **Module 9 — Explainable AI (Grad-CAM):** [x] Completed
+- **Module 10 — Streamlit Application:** [x] Completed
+- **Module 11 — Deployment & Optimisation:** [x] Completed
+- **Module 12 — Testing & Portfolio Packaging:** [x] Completed
+- **Stage 2 Research — CNN-BiLSTM Sequence Modelling:** [x] Completed
+- **Stage 3A — Docker Containerization & Production Packaging:** [x] Completed
+- **Stage 3B — Streamlit Community Cloud Deployment Preparation:** [x] Completed
 
 ---
 

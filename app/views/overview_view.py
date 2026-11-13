@@ -552,6 +552,7 @@ def render_overview_view() -> None:
 
     def _route_to_page(target_name: str) -> None:
         st.session_state["current_page"] = target_name
+        st.session_state["last_synced_page"] = target_name
         st.query_params["page"] = target_name
         for name, icon in DESTINATIONS:
             if name == target_name:

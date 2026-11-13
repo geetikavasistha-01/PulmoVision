@@ -42,6 +42,7 @@ models/*.pkl
 *.pth
 *.pt
 *.onnx
+!models/stage2_bilstm_deployment.pth
 
 # MLflow
 mlruns/

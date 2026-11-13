@@ -7,7 +7,6 @@ and platform provenance metadata.
 from typing import Tuple
 import textwrap
 import streamlit as st
-import streamlit.components.v1 as components
 
 
 DESTINATIONS = [
@@ -32,11 +31,33 @@ def render_sidebar() -> Tuple[str, str]:
         query_theme = st.query_params.get("theme", "dark")
         st.session_state["theme"] = "light" if str(query_theme).lower() == "light" else "dark"
 
+    nav_labels = [f"{icon} {name}" for name, icon in DESTINATIONS]
     query_page = st.query_params.get("page", None)
-    if query_page and any(name == query_page for name, _ in DESTINATIONS):
-        st.session_state["current_page"] = query_page
-    elif "current_page" not in st.session_state:
-        st.session_state["current_page"] = "Research Overview"
+
+    # First-time app load initialization
+    if "main_nav_radio" not in st.session_state:
+        initial_page = (
+            query_page if query_page and any(name == query_page for name, _ in DESTINATIONS)
+            else "Research Overview"
+        )
+        initial_label = next(
+            (f"{icon} {name}" for name, icon in DESTINATIONS if name == initial_page),
+            nav_labels[0]
+        )
+        st.session_state["main_nav_radio"] = initial_label
+        st.session_state["current_page"] = initial_page
+        st.session_state["last_synced_page"] = initial_page
+    elif query_page and query_page != st.session_state.get("last_synced_page"):
+        # Handle external manual changes to browser URL query param
+        if any(name == query_page for name, _ in DESTINATIONS):
+            matched_label = next(
+                (f"{icon} {name}" for name, icon in DESTINATIONS if name == query_page),
+                None
+            )
+            if matched_label:
+                st.session_state["main_nav_radio"] = matched_label
+                st.session_state["current_page"] = query_page
+                st.session_state["last_synced_page"] = query_page
 
     with st.sidebar:
         # Header Brand Identity
@@ -92,29 +113,17 @@ def render_sidebar() -> Tuple[str, str]:
             unsafe_allow_html=True
         )
 
-        nav_labels = [f"{icon} {name}" for name, icon in DESTINATIONS]
-        
-        # Match current index
-        current_nav_label = next(
-            (f"{icon} {name}" for name, icon in DESTINATIONS if name == st.session_state["current_page"]),
-            nav_labels[0]
-        )
-
-        # Pre-synchronize radio state before widget instantiation
-        if st.session_state.get("main_nav_radio") != current_nav_label:
-            st.session_state["main_nav_radio"] = current_nav_label
-
         selected_nav = st.radio(
             "Destinations",
             options=nav_labels,
-            index=nav_labels.index(current_nav_label),
             label_visibility="collapsed",
             key="main_nav_radio"
         )
 
-        # Extract base destination name
+        # Extract base destination name and synchronize state
         destination = next((name for name, _ in DESTINATIONS if name in selected_nav), "Research Overview")
         st.session_state["current_page"] = destination
+        st.session_state["last_synced_page"] = destination
         st.query_params["page"] = destination
 
         st.markdown("<div style='margin: 18px 0 12px 0; border-top: 1px solid var(--pv-border);'></div>", unsafe_allow_html=True)
@@ -177,32 +186,31 @@ def render_sidebar() -> Tuple[str, str]:
             unsafe_allow_html=True,
         )
 
-        # Non-rendering clipboard bridge
-        components.html(
+        # Non-rendering native clipboard bridge (direct DOM injection, no iframe)
+        st.html(
             """
             <script>
             (function() {
-                const parentDoc = window.parent.document;
                 function attachClipboard() {
-                    const btn = parentDoc.getElementById('pv-copy-hash-btn');
+                    const btn = document.getElementById('pv-copy-hash-btn');
                     if (!btn || btn.dataset.bound === 'true') return;
                     btn.dataset.bound = 'true';
                     btn.addEventListener('click', function(e) {
                         e.preventDefault();
                         const hash = btn.getAttribute('data-clipboard') || '0bd817319d99e0fbb22a318c458d9f86df77297f7bc4f5ec88f845e80ff1caed';
-                        if (window.parent.navigator && window.parent.navigator.clipboard) {
-                            window.parent.navigator.clipboard.writeText(hash).catch(function() {
-                                const ta = parentDoc.createElement('textarea');
+                        if (navigator && navigator.clipboard) {
+                            navigator.clipboard.writeText(hash).catch(function() {
+                                const ta = document.createElement('textarea');
                                 ta.value = hash;
-                                parentDoc.body.appendChild(ta);
+                                document.body.appendChild(ta);
                                 ta.select();
-                                parentDoc.execCommand('copy');
-                                parentDoc.body.removeChild(ta);
+                                document.execCommand('copy');
+                                document.body.removeChild(ta);
                             });
                         }
-                        const copyIcon = parentDoc.getElementById('pv-copy-svg');
-                        const checkIcon = parentDoc.getElementById('pv-check-svg');
-                        const statusText = parentDoc.getElementById('pv-copy-status');
+                        const copyIcon = document.getElementById('pv-copy-svg');
+                        const checkIcon = document.getElementById('pv-check-svg');
+                        const statusText = document.getElementById('pv-copy-status');
                         if (copyIcon && checkIcon) {
                             copyIcon.style.display = 'none';
                             checkIcon.style.display = 'inline-block';
@@ -226,8 +234,7 @@ def render_sidebar() -> Tuple[str, str]:
             })();
             </script>
             """,
-            height=0,
-            width=0,
+            unsafe_allow_javascript=True,
         )
 
         st.markdown(

@@ -29,11 +29,20 @@ class PretrainedFeatureExtractor:
     - Yields 1280-dimensional slice embeddings.
     """
     WEIGHTS_ID = "EfficientNet_B0_Weights.IMAGENET1K_V1"
+    EXPECTED_WEIGHTS_HASH = "7f5810bc"
     IMAGENET_MEAN = [0.485, 0.456, 0.406]
     IMAGENET_STD = [0.229, 0.224, 0.225]
 
     def __init__(self, device: Optional[torch.device] = None):
-        self.device = device or torch.device("mps" if torch.backends.mps.is_available() else "cpu")
+        if device is None:
+            if torch.cuda.is_available():
+                self.device = torch.device("cuda")
+            elif torch.backends.mps.is_available():
+                self.device = torch.device("mps")
+            else:
+                self.device = torch.device("cpu")
+        else:
+            self.device = device
         
         # Load external ImageNet-1K weights only
         weights = EfficientNet_B0_Weights.IMAGENET1K_V1

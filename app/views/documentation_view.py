@@ -139,20 +139,213 @@ def render_documentation_view() -> None:
         st.markdown(content)
     else:
         # Split content into major numbered sections (## X.)
-        sections = content.split("\n## ")
-        intro_part = sections[0]
-        st.markdown(intro_part)
+        raw_sections = content.split("\n## ")
+        intro_part = raw_sections[0].strip()
 
-        section_dict = {}
-        for sec in sections[1:]:
-            first_line = sec.split("\n", 1)[0]
-            sec_title = f"Section: {first_line}"
-            sec_body = "## " + sec
-            section_dict[sec_title] = sec_body
+        parsed_sections = []
+        if intro_part:
+            parsed_sections.append({
+                "badge": "OVERVIEW",
+                "title": "0. Document Overview & Executive Disclaimer",
+                "content": intro_part,
+                "char_count": len(intro_part),
+                "read_time": max(1, len(intro_part) // 900),
+            })
 
-        if section_dict:
-            selected_sec = st.selectbox("Select Section to Review:", list(section_dict.keys()), key="doc_section_picker")
-            if selected_sec:
-                st.markdown(section_dict[selected_sec])
-        else:
+        for i, sec in enumerate(raw_sections[1:], start=1):
+            lines = sec.split("\n", 1)
+            sec_title = lines[0].strip()
+            sec_content = lines[1].strip() if len(lines) > 1 else ""
+            parsed_sections.append({
+                "badge": f"SECTION {i:02d}",
+                "title": sec_title,
+                "content": sec_content,
+                "char_count": len(sec),
+                "read_time": max(1, len(sec) // 900),
+            })
+
+        if not parsed_sections:
             st.markdown(content)
+            return
+
+        section_titles = [s["title"] for s in parsed_sections]
+
+        # Reset selection if document changes
+        if st.session_state.get("doc_last_active_title") != doc_title:
+            st.session_state["doc_last_active_title"] = doc_title
+            default_label = section_titles[1] if len(section_titles) > 1 else section_titles[0]
+            st.session_state["doc_section_picker"] = default_label
+        elif (
+            "doc_section_picker" not in st.session_state
+            or st.session_state["doc_section_picker"] not in section_titles
+        ):
+            default_label = section_titles[1] if len(section_titles) > 1 else section_titles[0]
+            st.session_state["doc_section_picker"] = default_label
+
+        curr_title = st.session_state["doc_section_picker"]
+        curr_idx = section_titles.index(curr_title)
+        active_sec = parsed_sections[curr_idx]
+
+        def _set_section_idx(idx: int) -> None:
+            clamped = max(0, min(len(section_titles) - 1, idx))
+            st.session_state["doc_section_picker"] = section_titles[clamped]
+
+        # ---------------------------------------------------------------------
+        # 1. Section Navigator Console
+        # ---------------------------------------------------------------------
+        st.markdown(
+            f"""
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span style="font-size: 0.76rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--pv-text-muted);">
+                    Manuscript Section Navigator
+                </span>
+                <span style="font-size: 0.74rem; font-family: var(--pv-font-mono); color: var(--pv-accent-primary); font-weight: 600;">
+                    {curr_idx + 1} of {len(parsed_sections)} Sections
+                </span>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+        col_prev, col_select, col_next = st.columns([1, 3.2, 1])
+
+        with col_prev:
+            st.button(
+                ":material/arrow_back: Previous",
+                disabled=(curr_idx == 0),
+                use_container_width=True,
+                key="doc_btn_prev_top",
+                on_click=_set_section_idx,
+                args=(curr_idx - 1,),
+            )
+
+        with col_select:
+            st.selectbox(
+                "Select Section to Review:",
+                options=section_titles,
+                key="doc_section_picker",
+                label_visibility="collapsed",
+            )
+
+        with col_next:
+            st.button(
+                "Next :material/arrow_forward:",
+                disabled=(curr_idx >= len(parsed_sections) - 1),
+                use_container_width=True,
+                key="doc_btn_next_top",
+                on_click=_set_section_idx,
+                args=(curr_idx + 1,),
+            )
+
+        # Progress strip
+        progress_ratio = (curr_idx + 1) / len(parsed_sections)
+        st.progress(
+            progress_ratio,
+            text=f"Reading Progress: Section {curr_idx + 1} of {len(parsed_sections)} ({int(progress_ratio * 100)}%)",
+        )
+
+        # ---------------------------------------------------------------------
+        # 2. Collapsible Table of Contents & Quick Jump
+        # ---------------------------------------------------------------------
+        with st.expander(
+            f":material/toc: Table of Contents & Quick Jump ({len(parsed_sections)} Sections)",
+            expanded=False,
+        ):
+            st.markdown(
+                "<p style='font-size: 0.82rem; color: var(--pv-text-secondary); margin-bottom: 12px;'>"
+                "Select any section below to jump directly into the manuscript text:</p>",
+                unsafe_allow_html=True,
+            )
+            toc_col1, toc_col2 = st.columns(2)
+            for i, sec in enumerate(parsed_sections):
+                target_col = toc_col1 if i % 2 == 0 else toc_col2
+                is_active = (i == curr_idx)
+                label = f"{sec['title']}"
+                if is_active:
+                    label = f"• {label} (Current)"
+                with target_col:
+                    st.button(
+                        label,
+                        key=f"toc_jump_{i}",
+                        use_container_width=True,
+                        disabled=is_active,
+                        on_click=_set_section_idx,
+                        args=(i,),
+                    )
+
+        st.markdown("<div style='margin-bottom: 20px;'></div>", unsafe_allow_html=True)
+
+        # Search Query notification within active section
+        if search_query:
+            query_lower = search_query.lower()
+            in_sec_count = active_sec["content"].lower().count(query_lower)
+            if in_sec_count > 0:
+                st.info(f":material/search: Found {in_sec_count} match(es) for '{search_query}' in this section.")
+            else:
+                other_matches = [
+                    s["title"] for s in parsed_sections if query_lower in s["content"].lower()
+                ]
+                if other_matches:
+                    match_list = ", ".join(other_matches[:3])
+                    st.warning(f"'{search_query}' not found in this section. Found in: {match_list}...")
+
+        # ---------------------------------------------------------------------
+        # 3. Main Section Reading Canvas
+        # ---------------------------------------------------------------------
+        st.markdown(
+            f"""
+            <div class="pv-card" style="padding: 26px 30px; border-left: 4px solid var(--pv-accent-primary); margin-bottom: 24px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span style="font-size: 0.70rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; background-color: var(--pv-bg-surface); color: var(--pv-accent-primary); border: 1px solid var(--pv-border);">
+                            {active_sec['badge']}
+                        </span>
+                        <span style="font-size: 0.80rem; color: var(--pv-text-muted);">
+                            ~{active_sec['read_time']} min read &bull; {active_sec['char_count']:,} characters
+                        </span>
+                    </div>
+                    <div style="font-size: 0.74rem; color: var(--pv-text-secondary); font-family: var(--pv-font-mono);">
+                        {doc_filename}
+                    </div>
+                </div>
+                <h2 style="font-size: 1.65rem; font-weight: 700; color: var(--pv-text-primary); margin: 0 0 16px 0; letter-spacing: -0.02em; line-height: 1.3;">
+                    {active_sec['title']}
+                </h2>
+                <div style="border-top: 1px solid var(--pv-border); margin-bottom: 22px;"></div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+        # Render Section Body
+        st.markdown(active_sec["content"])
+
+        # ---------------------------------------------------------------------
+        # 4. Bottom Directional Navigation
+        # ---------------------------------------------------------------------
+        st.markdown(
+            "<div style='border-top: 1px solid var(--pv-border); margin: 32px 0 20px 0;'></div>",
+            unsafe_allow_html=True,
+        )
+
+        col_b_prev, col_b_space, col_b_next = st.columns([1.5, 0.2, 1.5])
+        with col_b_prev:
+            if curr_idx > 0:
+                p_title = parsed_sections[curr_idx - 1]["title"]
+                st.button(
+                    f":material/arrow_back: Previous: {p_title}",
+                    use_container_width=True,
+                    key="doc_btn_prev_bot",
+                    on_click=_set_section_idx,
+                    args=(curr_idx - 1,),
+                )
+        with col_b_next:
+            if curr_idx < len(parsed_sections) - 1:
+                n_title = parsed_sections[curr_idx + 1]["title"]
+                st.button(
+                    f"Next: {n_title} :material/arrow_forward:",
+                    use_container_width=True,
+                    key="doc_btn_next_bot",
+                    on_click=_set_section_idx,
+                    args=(curr_idx + 1,),
+                )
