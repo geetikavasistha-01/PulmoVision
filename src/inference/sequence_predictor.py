@@ -7,6 +7,7 @@ Image Sequence -> Validation -> Preprocessing -> EfficientNet-B0 Features -> BiL
 import os
 from pathlib import Path
 import time
+import hashlib
 from typing import List, Dict, Any, Tuple, Optional, Union
 import numpy as np
 import torch
@@ -24,6 +25,7 @@ class SequencePredictor:
     End-to-end patient-level inference service using the Stage 2 BiLSTM model.
     """
     CLASS_NAMES = ["Normal", "COVID-19"]
+    EXPECTED_CHECKPOINT_SHA256 = "0bd817319d99e0fbb22a318c458d9f86df77297f7bc4f5ec88f845e80ff1caed"
 
     def __init__(
         self,
@@ -32,10 +34,10 @@ class SequencePredictor:
         threshold: float = 0.50,
     ):
         if device is None:
-            if torch.backends.mps.is_available():
-                self.device = torch.device("mps")
-            elif torch.cuda.is_available():
+            if torch.cuda.is_available():
                 self.device = torch.device("cuda")
+            elif torch.backends.mps.is_available():
+                self.device = torch.device("mps")
             else:
                 self.device = torch.device("cpu")
         else:
@@ -53,15 +55,34 @@ class SequencePredictor:
             dropout=0.3,
         ).to(self.device)
 
+        self.checkpoint_path = checkpoint_path
+        self.checkpoint_loaded = False
+        self.checkpoint_sha256 = None
+        self.checksum_verified = False
         self.checkpoint_metadata = {}
+
         if os.path.exists(checkpoint_path):
+            hasher = hashlib.sha256()
+            with open(checkpoint_path, "rb") as f:
+                for chunk in iter(lambda: f.read(65536), b""):
+                    hasher.update(chunk)
+            self.checkpoint_sha256 = hasher.hexdigest()
+            if self.checkpoint_sha256 == self.EXPECTED_CHECKPOINT_SHA256:
+                self.checksum_verified = True
+            else:
+                print(
+                    f"[SequencePredictor Warning] Checkpoint checksum mismatch: "
+                    f"found {self.checkpoint_sha256}, expected {self.EXPECTED_CHECKPOINT_SHA256}"
+                )
+
             ckpt = torch.load(checkpoint_path, map_location=self.device, weights_only=False)
             if "state_dict" in ckpt:
                 self.model.load_state_dict(ckpt["state_dict"])
                 self.checkpoint_metadata = {k: v for k, v in ckpt.items() if k != "state_dict"}
             else:
                 self.model.load_state_dict(ckpt)
-            print(f"[SequencePredictor] Loaded deployment weights from {checkpoint_path}")
+            self.checkpoint_loaded = True
+            print(f"[SequencePredictor] Loaded deployment weights from {checkpoint_path} (SHA-256 verified: {self.checksum_verified})")
         else:
             print(f"[SequencePredictor Warning] Checkpoint {checkpoint_path} not found. Running with initialized weights.")
 

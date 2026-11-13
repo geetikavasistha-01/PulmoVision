@@ -196,6 +196,17 @@ def render_workstation_view() -> None:
         )
 
         # Inference Action Button
+        ckpt_status = "Verified Checkpoint" if getattr(predictor, "checksum_verified", False) else "Active Checkpoint"
+        ckpt_hash_short = predictor.checkpoint_sha256[:8] if getattr(predictor, "checkpoint_sha256", None) else "N/A"
+        st.markdown(
+            f"""
+            <div style="font-size: 0.72rem; font-family: var(--pv-font-mono); color: var(--pv-text-muted); margin-bottom: 8px;">
+                Model: <strong>Stage 2 BiLSTM</strong> | Status: <strong style="color: {'#10b981' if getattr(predictor, 'checksum_verified', False) else 'var(--pv-text-secondary)'};">{ckpt_status} ({ckpt_hash_short})</strong>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
         if len(st.session_state["ws_slices"]) > 0:
             if st.button(":material/play_arrow: Run Sequence Inference", type="primary", use_container_width=True):
                 with st.spinner("Extracting slice features & evaluating BiLSTM..."):

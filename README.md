@@ -16,7 +16,7 @@ PulmoVision is an educational and scientific research prototype that investigate
 - **Patient-Balanced Optimization:** Enforced equitable patient loss weighting ($w_i = 1 / N_p$ per series, grouped per patient) to prevent gradient dominance from over-sampled CT series.
 - **Strict Sealed Holdout Quarantine:** The official test partition (`test1.csv`) remains 100% sealed, unopened, unread, and untouched throughout development and validation.
 - **Enterprise Modular Workstation:** Re-architected into 7 dedicated view destinations, 7 reusable component libraries, dual visual themes (**Clinical Dark** and **Laboratory Light**), and a pitch-black (`#000000`) radiological viewport invariant with zero unicode emojis.
-- **Automated QA & Regression:** Comprehensive test suite of **95 / 95 passing tests (100% green)** across data, deduplication, architectures, patient weighting, sequence validation, manifest schema adapters, and UI modules.
+- **Automated QA & Regression:** Comprehensive test suite of **108 / 108 passing tests (100% green)** across data, deduplication, architectures, patient weighting, sequence validation, manifest schema adapters, deployment readiness, and UI modules.
 
 ---
 
@@ -116,13 +116,31 @@ PulmoVision/
 
 ---
 
-## Local Setup & Quickstart
+## Quickstart & Deployment Options
 
-### Prerequisites
+### Option 1: Streamlit Community Cloud (Recommended for Cloud Hosting)
+
+PulmoVision is fully pre-configured for one-click deployment on Streamlit Community Cloud:
+
+- **App Entrypoint:** `streamlit_app.py` (root entrypoint shim delegating to `app/streamlit_app.py`)
+- **Python Version:** 3.10, 3.11, or 3.12
+- **Resource Footprint:** ~468 MB peak RAM (well within free tier 2.7 GB limit)
+- **Inference Speed:** ~150 ms/slice on standard free-tier CPU cores
+
+**Steps to Deploy:**
+1. Fork or push this repository to GitHub.
+2. Sign in to [Streamlit Community Cloud](https://share.streamlit.io/).
+3. Click **New app**, select your repository and branch (`main` or `feature/docker-deployment`).
+4. Set Main file path to `streamlit_app.py` (auto-detected).
+5. Click **Deploy!**
+
+### Option 2: Local Python Environment
+
+#### Prerequisites
 - macOS (Apple Silicon MPS accelerated) or Linux / Windows (CUDA or CPU)
 - Python 3.10 to 3.13
 
-### 1. Clone & Set Up Virtual Environment
+#### 1. Clone & Set Up Virtual Environment
 ```bash
 git clone https://github.com/geetikavasistha-01/PulmoVision.git
 cd PulmoVision
@@ -133,19 +151,34 @@ pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-### 2. Launch the Research Workstation
+#### 2. Launch the Research Workstation
 ```bash
 streamlit run app/streamlit_app.py
 ```
 Open [http://localhost:8501](http://localhost:8501) in your browser. The application supports toggling between **Clinical Dark** and **Laboratory Light** themes via the sidebar control.
 
-### 3. Run Automated Tests
+#### 3. Run Automated Tests
 ```bash
-# Execute full 95-test suite
+# Install development test dependencies
+pip install -r requirements-dev.txt
+
+# Execute full 108-test regression suite
 pytest tests/ -v
 
 # Run targeted acceptance verification on real TIFF CT sequence
 python scripts/verify_acceptance.py
+```
+
+### Option 3: Docker Container Deployment
+
+Run the isolated, production-hardened container locally:
+
+```bash
+# Build and run with Docker Compose
+docker compose up --build
+
+# Access the running workstation at:
+# http://localhost:8501
 ```
 
 ---
