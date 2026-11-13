@@ -7,7 +7,6 @@ and platform provenance metadata.
 from typing import Tuple
 import textwrap
 import streamlit as st
-import streamlit.components.v1 as components
 
 
 DESTINATIONS = [
@@ -187,32 +186,31 @@ def render_sidebar() -> Tuple[str, str]:
             unsafe_allow_html=True,
         )
 
-        # Non-rendering clipboard bridge
-        components.html(
+        # Non-rendering native clipboard bridge (direct DOM injection, no iframe)
+        st.html(
             """
             <script>
             (function() {
-                const parentDoc = window.parent.document;
                 function attachClipboard() {
-                    const btn = parentDoc.getElementById('pv-copy-hash-btn');
+                    const btn = document.getElementById('pv-copy-hash-btn');
                     if (!btn || btn.dataset.bound === 'true') return;
                     btn.dataset.bound = 'true';
                     btn.addEventListener('click', function(e) {
                         e.preventDefault();
                         const hash = btn.getAttribute('data-clipboard') || '0bd817319d99e0fbb22a318c458d9f86df77297f7bc4f5ec88f845e80ff1caed';
-                        if (window.parent.navigator && window.parent.navigator.clipboard) {
-                            window.parent.navigator.clipboard.writeText(hash).catch(function() {
-                                const ta = parentDoc.createElement('textarea');
+                        if (navigator && navigator.clipboard) {
+                            navigator.clipboard.writeText(hash).catch(function() {
+                                const ta = document.createElement('textarea');
                                 ta.value = hash;
-                                parentDoc.body.appendChild(ta);
+                                document.body.appendChild(ta);
                                 ta.select();
-                                parentDoc.execCommand('copy');
-                                parentDoc.body.removeChild(ta);
+                                document.execCommand('copy');
+                                document.body.removeChild(ta);
                             });
                         }
-                        const copyIcon = parentDoc.getElementById('pv-copy-svg');
-                        const checkIcon = parentDoc.getElementById('pv-check-svg');
-                        const statusText = parentDoc.getElementById('pv-copy-status');
+                        const copyIcon = document.getElementById('pv-copy-svg');
+                        const checkIcon = document.getElementById('pv-check-svg');
+                        const statusText = document.getElementById('pv-copy-status');
                         if (copyIcon && checkIcon) {
                             copyIcon.style.display = 'none';
                             checkIcon.style.display = 'inline-block';
@@ -236,8 +234,7 @@ def render_sidebar() -> Tuple[str, str]:
             })();
             </script>
             """,
-            height=0,
-            width=0,
+            unsafe_allow_javascript=True,
         )
 
         st.markdown(
