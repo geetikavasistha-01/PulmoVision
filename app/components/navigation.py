@@ -32,11 +32,33 @@ def render_sidebar() -> Tuple[str, str]:
         query_theme = st.query_params.get("theme", "dark")
         st.session_state["theme"] = "light" if str(query_theme).lower() == "light" else "dark"
 
+    nav_labels = [f"{icon} {name}" for name, icon in DESTINATIONS]
     query_page = st.query_params.get("page", None)
-    if query_page and any(name == query_page for name, _ in DESTINATIONS):
-        st.session_state["current_page"] = query_page
-    elif "current_page" not in st.session_state:
-        st.session_state["current_page"] = "Research Overview"
+
+    # First-time app load initialization
+    if "main_nav_radio" not in st.session_state:
+        initial_page = (
+            query_page if query_page and any(name == query_page for name, _ in DESTINATIONS)
+            else "Research Overview"
+        )
+        initial_label = next(
+            (f"{icon} {name}" for name, icon in DESTINATIONS if name == initial_page),
+            nav_labels[0]
+        )
+        st.session_state["main_nav_radio"] = initial_label
+        st.session_state["current_page"] = initial_page
+        st.session_state["last_synced_page"] = initial_page
+    elif query_page and query_page != st.session_state.get("last_synced_page"):
+        # Handle external manual changes to browser URL query param
+        if any(name == query_page for name, _ in DESTINATIONS):
+            matched_label = next(
+                (f"{icon} {name}" for name, icon in DESTINATIONS if name == query_page),
+                None
+            )
+            if matched_label:
+                st.session_state["main_nav_radio"] = matched_label
+                st.session_state["current_page"] = query_page
+                st.session_state["last_synced_page"] = query_page
 
     with st.sidebar:
         # Header Brand Identity
@@ -92,18 +114,6 @@ def render_sidebar() -> Tuple[str, str]:
             unsafe_allow_html=True
         )
 
-        nav_labels = [f"{icon} {name}" for name, icon in DESTINATIONS]
-        
-        # Match current index
-        current_nav_label = next(
-            (f"{icon} {name}" for name, icon in DESTINATIONS if name == st.session_state["current_page"]),
-            nav_labels[0]
-        )
-
-        # Pre-synchronize radio state before widget instantiation
-        if "main_nav_radio" not in st.session_state or st.session_state.get("main_nav_radio") != current_nav_label:
-            st.session_state["main_nav_radio"] = current_nav_label
-
         selected_nav = st.radio(
             "Destinations",
             options=nav_labels,
@@ -111,9 +121,10 @@ def render_sidebar() -> Tuple[str, str]:
             key="main_nav_radio"
         )
 
-        # Extract base destination name
+        # Extract base destination name and synchronize state
         destination = next((name for name, _ in DESTINATIONS if name in selected_nav), "Research Overview")
         st.session_state["current_page"] = destination
+        st.session_state["last_synced_page"] = destination
         st.query_params["page"] = destination
 
         st.markdown("<div style='margin: 18px 0 12px 0; border-top: 1px solid var(--pv-border);'></div>", unsafe_allow_html=True)

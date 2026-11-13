@@ -37,9 +37,15 @@ def test_streamlit_app_destination_card_navigation() -> None:
 def test_documentation_section_navigation() -> None:
     """Verify Research Documentation 'By Section' navigator, TOC jump, and Prev/Next buttons."""
     at = AppTest.from_file(APP_ENTRYPOINT, default_timeout=30)
-    at.session_state["current_page"] = "Research Documentation"
     at.run()
     assert len(at.exception) == 0
+
+    # Navigate to Research Documentation via the sidebar radio
+    nav_radio = next(r for r in at.radio if r.key == "main_nav_radio")
+    doc_opt = [o for o in nav_radio.options if "Research Documentation" in o][0]
+    nav_radio.set_value(doc_opt).run()
+    assert len(at.exception) == 0
+    assert at.session_state["current_page"] == "Research Documentation"
 
     # Switch to By Section mode
     mode_radio = next(r for r in at.radio if r.key == "doc_view_mode")
@@ -71,4 +77,28 @@ def test_documentation_section_navigation() -> None:
         assert len(at.exception) == 0
         picker = next(s for s in at.selectbox if s.key == "doc_section_picker")
         assert "Deduplication" in picker.value
+
+
+def test_bidirectional_sidebar_navigation_last_to_first_page() -> None:
+    """Verify bidirectional sidebar navigation, specifically jumping from last page to first page."""
+    at = AppTest.from_file(APP_ENTRYPOINT, default_timeout=30)
+    at.run()
+    assert len(at.exception) == 0
+    assert at.session_state["current_page"] == "Research Overview"
+
+    radio = next(r for r in at.radio if r.key == "main_nav_radio")
+    doc_opt = [o for o in radio.options if "Research Documentation" in o][0]
+    overview_opt = [o for o in radio.options if "Research Overview" in o][0]
+
+    # 1. Jump to last page (Research Documentation)
+    radio.set_value(doc_opt).run()
+    assert len(at.exception) == 0
+    assert at.session_state["current_page"] == "Research Documentation"
+
+    # 2. Jump from last page back to first page (Research Overview)
+    radio = next(r for r in at.radio if r.key == "main_nav_radio")
+    radio.set_value(overview_opt).run()
+    assert len(at.exception) == 0
+    assert at.session_state["current_page"] == "Research Overview"
+
 
