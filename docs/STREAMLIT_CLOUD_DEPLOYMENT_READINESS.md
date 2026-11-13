@@ -128,7 +128,7 @@ Click **New app** and specify:
 - **Repository:** `geetikavasistha-01/PulmoVision` (or your fork)
 - **Branch:** `feature/docker-deployment` (or `main` when merged)
 - **Main file path:** `streamlit_app.py` (or `app/streamlit_app.py`)
-- **App URL:** Customize if desired (e.g., `pulmovision.streamlit.app`)
+- **App URL:** `https://pulmovision-lungctscan-ai.streamlit.app/?page=Research+Overview`
 
 ### Step 4: Advanced Settings (Optional)
 Under **Advanced settings**:

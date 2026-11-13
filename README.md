@@ -2,6 +2,9 @@
 
 **Thoracic CT Sequence Intelligence & AI Medical Imaging Research Platform**
 
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://pulmovision-lungctscan-ai.streamlit.app/?page=Research+Overview)
+**Live Application:** [pulmovision-lungctscan-ai.streamlit.app](https://pulmovision-lungctscan-ai.streamlit.app/?page=Research+Overview)
+
 PulmoVision is an educational and scientific research prototype that investigates 2.5D deep sequence modeling across multi-slice thoracic CT scans. By coupling frozen 2D convolutional feature extraction (EfficientNet-B0) with recurrent sequence aggregation (Bidirectional LSTM), the platform models anatomical continuity along the craniocaudal axis while maintaining computational efficiency and parameter economy on standard hardware.
 
 > **Research Prototype Disclaimer:** PulmoVision is strictly an academic research and educational prototype. It is **NOT** a certified medical diagnostic device, clinical decision-support system, or medical diagnostic tool. Predictions and model scores represent uncalibrated empirical research outputs and must never be utilized for patient diagnosis, clinical triage, or treatment planning.
@@ -118,10 +121,9 @@ PulmoVision/
 
 ## Quickstart & Deployment Options
 
-### Option 1: Streamlit Community Cloud (Recommended for Cloud Hosting)
+### Option 1: Streamlit Community Cloud (Live Demo & Cloud Hosting)
 
-PulmoVision is fully pre-configured for one-click deployment on Streamlit Community Cloud:
-
+- **Live Workstation:** [pulmovision-lungctscan-ai.streamlit.app](https://pulmovision-lungctscan-ai.streamlit.app/?page=Research+Overview)
 - **App Entrypoint:** `streamlit_app.py` (root entrypoint shim delegating to `app/streamlit_app.py`)
 - **Python Version:** 3.10, 3.11, or 3.12
 - **Resource Footprint:** ~468 MB peak RAM (well within free tier 2.7 GB limit)
