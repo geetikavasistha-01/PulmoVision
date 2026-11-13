@@ -1,15 +1,16 @@
 # PulmoVision — Master Progress Tracker
 
 ## Current Status
-🎉 **STAGE 2 RESEARCH & COMPLETE PRODUCT REDESIGN DELIVERED**  
+🎉 **STAGE 3A CONTAINERIZATION & UI NAVIGATION RESILIENCE DELIVERED**  
 - Official Stage 2 5-fold outer cross-validation with inner validation holdouts conducted across 3 architectures (15 total runs).
 - Architecture B confirmed leader: **0.9461 Macro F1**, **0.9688 ROC-AUC**, **98.7% Sensitivity** (76/77 COVID-19 patients detected).
 - Complete product-level redesign delivered: Modular hybrid Scientific AI Research Laboratory + Clinical Imaging Workstation.
 - Dual visual themes implemented: **Clinical Dark** and **Laboratory Light**, with high-contrast pitch-black radiological CT viewport invariant.
 - All 7 destinations fully implemented and verified: Research Overview, Dataset Explorer, Model Laboratory, Experiment Analytics, CT Workstation, Explainability & Boundaries, and Research Documentation.
-- Automated testing: **95 / 95 tests passing (100% green)** in 13.22 seconds across data, deduplication, architectures, patient-balanced weighting, sequence validation, manifest adapter, and UI modules.
-- UI Refinement & Acceptance: Restored Dataset Explorer via `ManifestAdapter`, standardized Material Symbols across navigation (0 unicode emojis), and verified CT Workstation on real 16-bit development TIFF sequences.
-- Comprehensive Implementation Reports published: `reports/experiments/FINAL_APPLICATION_IMPLEMENTATION_REPORT.md` and `reports/experiments/FINAL_UI_IMPLEMENTATION_REPORT.md`.
+- Automated testing: **102 / 102 tests passing (100% green)** across data, deduplication, architectures, patient-balanced weighting, sequence validation, manifest adapter, Docker configuration, and Streamlit AppTest navigation.
+- UI Refinement & Acceptance: Resolved `StreamlitWidgetAlreadyInstantiatedError` by de-coupling radio widget instantiation from external session state changes and syncing pre-widget lifecycle.
+- Stage 3A Docker Packaging: Created reproducible multi-stage Docker build, pre-baking EfficientNet-B0 weights, dropping to non-root `pulmo:1000`, setting up health checks, and validating CPU inference fallback.
+- Comprehensive Deployment Guide published: `docs/docker_deployment.md`.
 - Provenance & Quarantine: Sealed held-out test partition (`test1.csv`) preserved unopened with zero read exposure.
 
 ## Overall Progress
@@ -27,6 +28,7 @@
 - **Module 11 — Deployment & Optimisation:** ✅ Completed
 - **Module 12 — Testing & Portfolio Packaging:** ✅ Completed
 - **Stage 2 Research — CNN-BiLSTM Sequence Modelling:** ✅ Completed
+- **Stage 3A — Docker Containerization & Production Packaging:** ✅ Completed
 
 ---
 

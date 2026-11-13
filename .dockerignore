@@ -1,0 +1,51 @@
+# PulmoVision — Docker Build Context Exclusions
+
+# Version Control
+.git/
+.github/
+.gitignore
+
+# Virtual Environments
+venv/
+.venv/
+env/
+
+# Python Bytecode & Caches
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Raw Datasets & Quarantined Partitions
+# CRITICAL INVARIANT: Never copy raw DICOM/TIFF archives or holdout test manifests into image
+data/raw/
+data/interim/
+data/processed/
+data/metadata/Annotation/
+data/metadata/Annotation/CSV/test1.csv
+
+# Large Model Checkpoints (Retain only stage2_bilstm_deployment.pth)
+models/best_model.pth
+models/*.pt
+models/*.onnx
+models/*.pkl
+
+# Experiment Logs & MLflow
+mlruns/
+*.log
+
+# Temporary & OS Artifacts
+.DS_Store
+Thumbs.db
+tmp/
+temp/
+*.tmp
+
+# Developer IDEs & Secrets
+.idea/
+.vscode/
+.env*
+.streamlit/secrets.toml

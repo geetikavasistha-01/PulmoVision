@@ -13,7 +13,7 @@ import glob
 import streamlit as st
 import numpy as np
 
-from app.utils.paths import RAW_DEV_DATA_DIR
+from app.utils.paths import RAW_DEV_DATA_DIR, DEMO_SAMPLES_DIR
 from app.utils.data_loader import get_deployment_predictor
 from app.utils.validation import validate_ct_uploads
 from app.components.ct_viewer import render_ct_viewport
@@ -50,6 +50,9 @@ def render_workstation_view() -> None:
     if not st.session_state["ws_slices"]:
         sample_pattern = str(RAW_DEV_DATA_DIR / "*patient100_SR_2*.tif")
         sample_files = sorted(glob.glob(sample_pattern))[:5]
+        if not sample_files:
+            demo_pattern = str(DEMO_SAMPLES_DIR / "*patient100_SR_2*.tif")
+            sample_files = sorted(glob.glob(demo_pattern))[:5]
         if sample_files:
             try:
                 ordered_inputs, meta = CTSequenceValidator.validate_and_order_sequence(sample_files)

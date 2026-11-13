@@ -21,6 +21,7 @@ REPORTS_DIR = REPO_ROOT / "reports"
 METADATA_DIR = DATA_DIR / "metadata"
 PROCESSED_DATA_DIR = DATA_DIR / "processed"
 RAW_DEV_DATA_DIR = DATA_DIR / "raw" / "TrainValidation"
+DEMO_SAMPLES_DIR = DATA_DIR / "demo_samples"
 SPLITS_DIR = METADATA_DIR / "splits"
 
 # Canonical Model Checkpoints

@@ -5,6 +5,7 @@ Image Sequence -> Validation -> Preprocessing -> EfficientNet-B0 Features -> BiL
 """
 
 import os
+from pathlib import Path
 import time
 from typing import List, Dict, Any, Tuple, Optional, Union
 import numpy as np
@@ -70,11 +71,12 @@ class SequencePredictor:
         """Loads uploaded file or path into 2D numpy array."""
         if isinstance(image_input, np.ndarray):
             arr = image_input
-        elif isinstance(image_input, str):
-            if image_input.endswith(".npy"):
-                arr = np.load(image_input)
+        elif isinstance(image_input, (str, Path, os.PathLike)):
+            str_path = str(image_input)
+            if str_path.endswith(".npy"):
+                arr = np.load(str_path)
             else:
-                img = Image.open(image_input)
+                img = Image.open(str_path)
                 arr = np.array(img)
         elif hasattr(image_input, "read"):
             # UploadedFile in Streamlit or file-like object

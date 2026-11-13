@@ -1,0 +1,36 @@
+# =============================================================================
+# PulmoVision — Docker Compose Orchestration (Stage 3A)
+# =============================================================================
+# Single-command local container execution:
+#   docker compose up --build
+# =============================================================================
+
+version: '3.8'
+
+services:
+  pulmovision:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: pulmovision:2.0.0
+    container_name: pulmovision-workstation
+    ports:
+      - "8501:8501"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - STREAMLIT_SERVER_PORT=8501
+      - STREAMLIT_SERVER_ADDRESS=0.0.0.0
+      - PULMO_DEVICE=cpu
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8501/_stcore/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+        reservations:
+          memory: 1G

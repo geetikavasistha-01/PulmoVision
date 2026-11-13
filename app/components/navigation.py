@@ -101,13 +101,12 @@ def render_sidebar() -> Tuple[str, str]:
         )
 
         # Pre-synchronize radio state before widget instantiation
-        if st.session_state.get("main_nav_radio") != current_nav_label:
+        if "main_nav_radio" not in st.session_state or st.session_state.get("main_nav_radio") != current_nav_label:
             st.session_state["main_nav_radio"] = current_nav_label
 
         selected_nav = st.radio(
             "Destinations",
             options=nav_labels,
-            index=nav_labels.index(current_nav_label),
             label_visibility="collapsed",
             key="main_nav_radio"
         )
