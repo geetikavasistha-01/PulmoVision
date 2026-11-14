@@ -4,7 +4,8 @@
 
 [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://pulmovision-lungctscan-ai.streamlit.app/?page=Research+Overview)
 **Live Application:** [pulmovision-lungctscan-ai.streamlit.app](https://pulmovision-lungctscan-ai.streamlit.app/?page=Research+Overview)
-![Uploading image.png…]()
+<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/2c3c5bd2-7eba-4a81-b616-acb8ab819952" />
+
 
 PulmoVision is an educational and scientific research prototype that investigates 2.5D deep sequence modeling across multi-slice thoracic CT scans. By coupling frozen 2D convolutional feature extraction (EfficientNet-B0) with recurrent sequence aggregation (Bidirectional LSTM), the platform models anatomical continuity along the craniocaudal axis while maintaining computational efficiency and parameter economy on standard hardware.
 
