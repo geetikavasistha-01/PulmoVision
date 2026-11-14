@@ -1,4 +1,5 @@
-# PulmoVision
+# PulmoVision 
+<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/89d8cec9-89b3-4df5-b546-3a3b16cf20b0" />
 
 **Thoracic CT Sequence Intelligence & AI Medical Imaging Research Platform**
 
